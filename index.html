@@ -1,1471 +1,1770 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ระบบสารสนเทศเพื่อการประเมินผลการดำเนินงานและกิจกรรม</title>
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts (Sarabun) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Sarabun', sans-serif;
-    }
-    /* ซ่อน scrollbar สำเร็จรูปเพื่อความมินิมอล */
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบสารสนเทศเพื่อการประเมินผลการดำเนินงานและกิจกรรม - โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Sarabun) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #fbfbfb;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .limit-2-lines {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;  
+            overflow: hidden;
+        }
+    </style>
 </head>
-<body class="bg-neutral-50 min-h-screen text-slate-800 flex flex-col justify-between selection:bg-emerald-100 selection:text-emerald-900">
+<body class="min-h-screen text-slate-850 flex flex-col justify-between selection:bg-emerald-100 selection:text-emerald-950">
 
-  <!-- ส่วนแจ้งเตือนแบบกำหนดเอง (Custom Toast Notification) -->
-  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full px-4 md:px-0"></div>
+    <!-- Container สำหรับแจ้งเตือนแบบกำหนดเอง (Custom Toast Notification) -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full px-4 md:px-0"></div>
 
-  <!-- กล่องยืนยันการทำรายการแบบเป็นทางการ (Custom Confirmation Modal) -->
-  <div id="confirm-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-all duration-300">
-    <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl border border-slate-100 transform scale-95 transition-all">
-      <div class="flex items-center gap-3.5 mb-4">
-        <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-500 text-lg font-bold" id="confirm-icon">⚠️</div>
-        <h3 id="confirm-title" class="text-base font-bold text-slate-900">ยืนยันการดำเนินการ</h3>
-      </div>
-      <p id="confirm-msg" class="text-slate-500 text-xs leading-relaxed">กรุณาตรวจสอบความถูกต้องของข้อมูลก่อนยืนยันการบันทึกเข้าสู่ระบบสารสนเทศ</p>
-      <div class="flex justify-end gap-2 mt-6">
-        <button id="confirm-cancel-btn" class="px-4 py-2 bg-slate-50 hover:bg-slate-100 rounded-xl text-xs font-semibold text-slate-500 transition-colors">ยกเลิก</button>
-        <button id="confirm-ok-btn" class="px-4 py-2 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-semibold transition-colors">ยืนยันทำรายการ</button>
-      </div>
+    <!-- กล่องยืนยันการทำรายการแบบเป็นทางการ (Custom Confirmation Modal) -->
+    <div id="confirm-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-all duration-300">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-slate-100 transform scale-95 transition-all">
+            <div class="flex items-center gap-3.5 mb-4 border-b border-slate-100 pb-3">
+                <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 text-sm font-bold" id="confirm-icon">!</div>
+                <h3 id="confirm-title" class="text-sm font-bold text-slate-900">ยืนยันการดำเนินการ</h3>
+            </div>
+            <p id="confirm-msg" class="text-slate-500 text-xs leading-relaxed">กรุณาตรวจสอบความถูกต้องของข้อมูลก่อนยืนยันการบันทึกเข้าสู่ระบบสารสนเทศ</p>
+            <div class="flex justify-end gap-2 mt-6">
+                <button id="confirm-cancel-btn" class="px-4 py-2 bg-slate-55 hover:bg-slate-100 rounded-lg text-xs font-semibold text-slate-500 transition-colors">ยกเลิก</button>
+                <button id="confirm-ok-btn" class="px-4 py-2 bg-emerald-800 hover:bg-emerald-900 text-white rounded-lg text-xs font-semibold transition-colors">ยืนยันทำรายการ</button>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- ใหม่! กล่องสำหรับแก้ไขข้อมูลบุคลากรแบบครบวงจรสำหรับแอดมิน (Admin Edit Personnel Modal) -->
-  <div id="user-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl border border-slate-100">
-      <div class="flex justify-between items-center mb-4 border-b pb-3">
-        <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
-          <span class="text-emerald-800">👤</span>
-          <span>แก้ไขข้อมูลบุคลากร</span>
-        </h3>
-        <button onclick="closeUserModal()" class="text-slate-450 hover:text-slate-650 text-sm">✕</button>
-      </div>
-      <input type="hidden" id="edit-user-original-email">
-      
-      <div class="space-y-4">
-        <div>
-          <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1">รหัสพนักงาน</label>
-          <input type="text" id="edit-user-empId" placeholder="เช่น YW-001" class="w-full border border-slate-200 rounded-xl px-3.5 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
-        </div>
-        <div>
-          <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1">ชื่อ-นามสกุล</label>
-          <input type="text" id="edit-user-name" placeholder="ชื่อ และ นามสกุล" class="w-full border border-slate-200 rounded-xl px-3.5 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
-        </div>
-        <div>
-          <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1">อีเมลเข้าใช้งาน (@yuwapat.ac.th)</label>
-          <input type="email" id="edit-user-email" placeholder="sombat@yuwapat.ac.th" class="w-full border border-slate-200 rounded-xl px-3.5 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
-        </div>
-        <div>
-          <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1">ตำแหน่งงาน / บทบาทสิทธิ์</label>
-          <select id="edit-user-role" class="w-full border border-slate-200 rounded-xl px-3.5 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800 cursor-pointer">
-            <option value="Staff">คุณครู/บุคลากรทั่วไป</option>
-            <option value="Executive">ผู้บริหาร</option>
-            <option value="Head_Admin">หัวหน้าฝ่ายบริหารทั่วไป</option>
-            <option value="Head_Academic">หัวหน้าฝ่ายวิชาการ</option>
-            <option value="Head_QA">หัวหน้าฝ่ายประกันคุณภาพภายใน</option>
-            <option value="Head_Student">หัวหน้าฝ่ายกิจการนักเรียน</option>
-            <option value="Admin">ผู้ดูแลระบบกลาง (Admin)</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1">รหัสผ่านสำหรับเข้าใช้งาน (ขั้นต่ำ 6 ตัวอักษร)</label>
-          <input type="text" id="edit-user-password" placeholder="กำหนดรหัสผ่านอย่างน้อย 6 ตัวอักษร" class="w-full border border-slate-200 rounded-xl px-3.5 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
-        </div>
-      </div>
-      
-      <div class="flex justify-end gap-2 mt-6 border-t pt-4">
-        <button onclick="closeUserModal()" class="px-4 py-2 bg-slate-50 hover:bg-slate-100 rounded-xl text-xs font-semibold text-slate-500 transition-colors">ยกเลิก</button>
-        <button onclick="saveUserProfile()" class="px-4 py-2 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-semibold transition-colors">บันทึกข้อมูลบุคลากร</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== 1. หน้าเข้าสู่ระบบ (LOGIN SCREEN) ==================== -->
-  <div id="login-screen" class="flex-grow flex items-center justify-center p-6 bg-slate-50">
-    <div class="bg-white rounded-3xl p-8 max-w-lg w-full shadow-xl border border-slate-100 relative overflow-hidden">
-      <!-- เส้นประดับหัวล็อกอินสไตล์ทางการ -->
-      <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-800 via-emerald-700 to-yellow-400"></div>
-      
-      <div class="text-center mb-6 mt-4">
-        <div class="w-16 h-16 rounded-2xl bg-emerald-800 flex items-center justify-center text-yellow-400 font-bold text-2xl shadow-md mx-auto mb-4">
-          ED
-        </div>
-        <span class="bg-emerald-50 text-emerald-800 border border-emerald-100 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">งานประกันคุณภาพการศึกษา</span>
-        <h2 class="text-base font-bold text-slate-800 mt-3">เข้าสู่ระบบสารสนเทศประเมินโครงการ</h2>
-        <p class="text-slate-400 text-[11px] mt-1">กรุณาระบุที่อยู่อีเมลและรหัสผ่าน</p>
-      </div>
-
-      <form onsubmit="handleLogin(event)" class="space-y-4">
-        <div>
-          <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">ที่อยู่อีเมล</label>
-          <input type="email" id="login-email" required placeholder="เช่น somchai@yuwapat.ac.th" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
-        </div>
-        <div>
-          <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">รหัสผ่าน</label>
-          <input type="password" id="login-password" required placeholder="รหัสผ่านเริ่มต้นคือ yw123456" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
-        </div>
-        <button type="submit" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-3 rounded-xl text-xs transition-colors shadow-md mt-6">
-          เข้าสู่ระบบสารสนเทศ
-        </button>
-      </form>
-
-      <!-- แนะนำบัญชีผู้ใช้จำลองเพื่อความสะดวกในการทดลองและตรวจผลลัพธ์ -->
-      <div class="mt-6 pt-6 border-t border-slate-100">
-        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-3 text-center">คลิกเพื่อกรอกบัญชีผู้ใช้ทดสอบอัตโนมัติ (รหัสผ่านเริ่มต้นคือ yw123456):</p>
-        
-        <div class="space-y-4">
-          <!-- กลุ่มผู้บริหาร -->
-          <div>
-            <span class="text-[8px] text-amber-600 font-bold uppercase tracking-wider block mb-1">💼 ฝ่ายบริหาร (2 ท่าน)</span>
-            <div class="grid grid-cols-2 gap-2 text-[9px]">
-              <button onclick="autofillLogin('director@yuwapat.ac.th')" class="bg-amber-50 hover:bg-amber-100 p-2 rounded-lg text-left text-amber-950 transition-colors border border-amber-100">
-                <span class="font-bold block">👤 ดร.วิชัย (ผอ. YW-002)</span> director@yuwapat.ac.th
-              </button>
-              <button onclick="autofillLogin('executive2@yuwapat.ac.th')" class="bg-amber-50 hover:bg-amber-100 p-2 rounded-lg text-left text-amber-950 transition-colors border border-amber-100">
-                <span class="font-bold block">👤 รองฯ ปรีชา (YW-003)</span> executive2@yuwapat.ac.th
-              </button>
+    <!-- กล่องสำหรับแก้ไขข้อมูลบุคลากรแบบครบวงจรสำหรับแอดมิน (Admin Edit Personnel Modal) -->
+    <div id="user-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-slate-100">
+            <div class="flex justify-between items-center mb-4 border-b pb-3">
+                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+                    <span class="text-emerald-800">👤</span>
+                    <span>แก้ไขข้อมูลและสิทธิ์บุคลากร</span>
+                </h3>
+                <button onclick="closeUserModal()" class="text-slate-400 hover:text-slate-600 text-xs font-bold">✕</button>
             </div>
-          </div>
-
-          <!-- กลุ่มหัวหน้าฝ่าย 4 คน -->
-          <div>
-            <span class="text-[8px] text-purple-600 font-bold uppercase tracking-wider block mb-1">📊 หัวหน้าฝ่ายหลัก (4 คน)</span>
-            <div class="grid grid-cols-2 gap-2 text-[9px]">
-              <button onclick="autofillLogin('head_admin@yuwapat.ac.th')" class="bg-teal-50 hover:bg-teal-100 p-2 rounded-lg text-left text-teal-950 transition-colors border border-teal-100">
-                <span class="font-bold block">👤 หัวหน้าพชร (YW-004)</span> head_admin@yuwapat.ac.th
-              </button>
-              <button onclick="autofillLogin('head_academic@yuwapat.ac.th')" class="bg-blue-50 hover:bg-blue-100 p-2 rounded-lg text-left text-blue-950 transition-colors border border-blue-100">
-                <span class="font-bold block">👤 หัวหน้านงลักษณ์ (YW-005)</span> head_academic@yuwapat.ac.th
-              </button>
-              <button onclick="autofillLogin('head_qa@yuwapat.ac.th')" class="bg-purple-50 hover:bg-purple-100 p-2 rounded-lg text-left text-purple-950 transition-colors border border-purple-100">
-                <span class="font-bold block">👤 หัวหน้าพรรณิภา (YW-006)</span> head_qa@yuwapat.ac.th
-              </button>
-              <button onclick="autofillLogin('head_student@yuwapat.ac.th')" class="bg-indigo-50 hover:bg-indigo-100 p-2 rounded-lg text-left text-indigo-950 transition-colors border border-indigo-100">
-                <span class="font-bold block">👤 หัวหน้าเกรียงไกร (YW-007)</span> head_student@yuwapat.ac.th
-              </button>
-            </div>
-          </div>
-
-          <!-- แอดมินและคณะครู -->
-          <div>
-            <span class="text-[8px] text-slate-500 font-bold uppercase tracking-wider block mb-1">👥 ครูผู้สอน / ผู้ดูแลระบบ</span>
-            <div class="grid grid-cols-2 gap-2 text-[9px]">
-              <button onclick="autofillLogin('somchai@yuwapat.ac.th')" class="bg-slate-50 hover:bg-slate-100 p-2 rounded-lg text-left text-slate-755 transition-colors">
-                <span class="font-bold block">👤 ครูสมชาย (YW-009)</span> somchai@yuwapat.ac.th
-              </button>
-              <button onclick="autofillLogin('somsri@yuwapat.ac.th')" class="bg-slate-50 hover:bg-slate-100 p-2 rounded-lg text-left text-slate-755 transition-colors">
-                <span class="font-bold block">👤 ครูสมศรี (YW-010)</span> somsri@yuwapat.ac.th
-              </button>
-              <button onclick="autofillLogin('owner_ai@yuwapat.ac.th')" class="bg-emerald-50 hover:bg-emerald-100 p-2 rounded-lg text-left text-emerald-950 transition-colors border border-emerald-100 col-span-2">
-                <span class="font-bold block">👤 ครูสมหญิง (เจ้าของงาน AI / YW-008)</span> owner_ai@yuwapat.ac.th
-              </button>
-              <button onclick="autofillLogin('admin@yuwapat.ac.th')" class="bg-slate-900 hover:bg-slate-800 p-2 rounded-lg text-left text-white transition-colors col-span-2">
-                <span class="font-bold block text-yellow-400">🔑 แอดมินสมศักดิ์ (YW-001)</span> admin@yuwapat.ac.th
-              </button>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== 2. หน้าหลักของโปรแกรมเมื่อลงทะเบียนเข้าใช้แล้ว ==================== -->
-  <div id="main-dashboard" class="hidden flex-col justify-between min-h-screen">
-    <!-- ส่วนหัวเว็บแบบประเมินผลใหม่ มินิมอล & มีประสิทธิภาพ (พัฒนามาจากภาพ image_5cf8df.png) -->
-    <header class="bg-white border-b border-slate-100 shadow-sm">
-      <!-- แถบประดับสีเขียวเข้มและสีเหลืองสดที่ขอบบนสุดเพื่อความภูมิฐาน -->
-      <div class="h-1.5 bg-gradient-to-r from-emerald-800 via-emerald-700 to-yellow-400"></div>
-      
-      <div class="max-w-6xl mx-auto px-6 py-5 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-        <div class="flex items-center gap-4">
-          <!-- โลโก้สถาบันสไตล์ Flat-Minimal -->
-          <div class="w-12 h-12 rounded-xl bg-emerald-800 flex items-center justify-center text-yellow-400 font-bold text-lg shadow-sm">
-            ED
-          </div>
-          <div>
-            <div class="flex items-center gap-2 flex-wrap">
-              <span class="bg-emerald-50 text-emerald-800 border border-emerald-100 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">ระบบสารสนเทศ</span>
-              <span class="text-slate-400 text-xs font-medium">| งานประกันคุณภาพการศึกษา ยุวพัทธ์</span>
-            </div>
-            <h1 class="text-lg font-bold tracking-tight text-slate-800 mt-0.5">ระบบประเมินความพึงพอใจการจัดโครงการและกิจกรรม</h1>
-          </div>
-        </div>
-        
-        <!-- บล็อกแสดงผู้ใช้งานที่เข้าสู่ระบบ -->
-        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto bg-slate-50 p-3 rounded-xl border border-slate-200/60">
-          <div class="flex flex-col">
-            <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">บัญชีปัจจุบัน:</span>
-            <span id="userProfileDisplay" class="text-xs text-slate-800 font-bold">กำลังโหลด...</span>
-          </div>
-          
-          <div class="hidden sm:block w-px h-8 bg-slate-200"></div>
-
-          <button onclick="handleLogout()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 text-[10px] font-bold px-3 py-2 rounded-lg transition-colors border border-rose-100">
-            ออกจากระบบ
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <!-- เนื้อหาหลักของระบบ -->
-    <main class="max-w-6xl mx-auto px-6 py-8 flex-grow w-full">
-      
-      <!-- เมนูนำทางแบบมินิมอล -->
-      <div class="flex border-b border-slate-200 mb-8 overflow-x-auto no-scrollbar gap-1">
-        <button onclick="switchTab('evaluate-tab')" id="btn-evaluate-tab" class="py-3.5 px-5 font-semibold border-b-2 border-emerald-800 text-emerald-800 text-xs focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-          <span>ทำแบบประเมินโครงการ</span>
-          <span id="pendingBadge" class="px-2 py-0.5 text-[9px] bg-yellow-400 text-slate-900 font-bold rounded-full">0</span>
-        </button>
-        <button onclick="switchTab('report-tab')" id="btn-report-tab" class="py-3.5 px-5 font-semibold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-xs focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2"></path></svg>
-          <span>สรุปรายงานผลการประเมิน</span>
-        </button>
-        <button onclick="switchTab('history-tab')" id="btn-history-tab" class="py-3.5 px-5 font-semibold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-xs focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          <span>สถิติดำเนินการย้อนหลัง 3 ปี</span>
-        </button>
-        <button onclick="switchTab('admin-tab')" id="btn-admin-tab" class="py-3.5 px-5 font-semibold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-xs focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-          <span>บริหารจัดการระบบสารสนเทศ</span>
-          <span class="text-[8px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-full">แอดมิน</span>
-        </button>
-      </div>
-
-      <!-- 2.1 ส่วนหน้าแบบประเมินผลกิจกรรม -->
-      <section id="evaluate-tab" class="tab-content block">
-        <div class="bg-emerald-50/40 border-l-4 border-emerald-800 p-4 rounded-r-xl mb-6 text-xs text-emerald-900 leading-relaxed">
-          <strong class="text-emerald-950 font-bold">คำชี้แจงด้านความเป็นส่วนตัว:</strong> รายการประเมินโครงการที่ท่านตอบแบบประเมินความพึงพอใจเรียบร้อยแล้ว 
-          จะถูกบันทึกเข้าระบบประเมินสถาบันและ <strong class="text-emerald-950 underline">ซ่อนออกจากหน้าต่างประเมินของท่านโดยอัตโนมัติ</strong> เพื่อความกระชับในการทำระบบงานสถิติ
-        </div>
-        
-        <div id="evaluationList" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- แบบสอบถามจะเข้าสู่ตารางด้วย JS -->
-        </div>
-        
-        <div id="noEvaluations" class="hidden text-center py-20 bg-white rounded-2xl border border-slate-150 shadow-sm">
-          <div class="w-12 h-12 rounded-full bg-emerald-50 text-emerald-800 flex items-center justify-center mx-auto mb-4 font-bold text-lg">✓</div>
-          <h3 class="text-sm font-bold text-slate-800">เสร็จสิ้นภารกิจการประเมิน</h3>
-          <p class="text-slate-400 mt-1 text-xs">ท่านได้ตอบแบบประเมินความพึงพอใจครบทุกรายการที่มีในระบบเรียบร้อยแล้ว ขอขอบพระคุณ</p>
-        </div>
-      </section>
-
-      <!-- 2.2 ส่วนสรุปรายงานผลคะแนนปัจจุบัน (พร้อมเกณฑ์ร้อยละแบบระบุเงื่อนไข) -->
-      <section id="report-tab" class="tab-content hidden">
-        <div class="bg-amber-50/40 border-l-4 border-amber-500 p-4 rounded-r-xl mb-6 text-xs text-slate-700 leading-relaxed">
-          <strong class="text-slate-900 font-bold">เกณฑ์การคำนวณร้อยละความพึงพอใจ:</strong> คะแนนระดับ <span class="bg-emerald-100 text-emerald-800 px-1 rounded font-bold">4-5</span> คิดเป็นพึงพอใจร้อยละ 100 ต่อคน ส่วนระดับ <span class="bg-rose-100 text-rose-800 px-1 rounded font-bold">1-2-3</span> จะถูกคิดแยกเป็นจำนวนหัวจากครูบุคลากรทั้งหมด
-          <br><strong class="text-amber-800">ตัวอย่าง:</strong> ผู้ประเมินทั้งหมด 50 คน หากมีผู้ส่งคะแนนระดับ 3 มา 1 คน (และให้ 4 หรือ 5 จำนวน 49 คน) คะแนนความพึงพอใจของกิจกรรมจะเท่ากับ **ร้อยละ 98.00**
-        </div>
-        
-        <div id="reportList" class="space-y-6">
-          <!-- รายงานประเมินจะเข้าด้วย JS -->
-        </div>
-      </section>
-
-      <!-- 2.3 ส่วนรายงานสถิตย้อนหลัง 3 ปี (พัฒนาตามสไตล์กราฟในภาพ image_5c93a2.png แต่แปลงเป็นหน่วยร้อยละ) -->
-      <section id="history-tab" class="tab-content hidden">
-        <div class="bg-emerald-50/40 border-l-4 border-emerald-800 p-4 rounded-r-xl mb-6 text-xs text-emerald-900 leading-relaxed">
-          <strong class="text-emerald-950 font-bold">ข้อมูลสถิติมูลฐานสะสม:</strong> ตารางแสดงผลสถิติดำเนินงานเปรียบเทียบระดับความพึงพอใจย้อนหลัง 3 ปีการศึกษา เพื่อนำข้อมูลมาใช้วิเคราะห์ประเมินตามมาตรฐานแผนยุทธศาสตร์สถิติสถานศึกษาประจำปี
-        </div>
-
-        <div id="historyList" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- รายการสถิติเปรียบเทียบย้อนหลังรายกิจกรรมจะเข้าด้วย JS -->
-        </div>
-      </section>
-
-      <!-- 2.4 ส่วนบริหารจัดการระบบสารสนเทศ (Admin Only) -->
-      <section id="admin-tab" class="tab-content hidden">
-        <!-- กรณีไม่มีสิทธิ์เข้าถึงส่วนนี้ -->
-        <div id="adminAccessDenied" class="hidden bg-slate-50 border border-slate-200 p-10 rounded-2xl text-center max-w-lg mx-auto my-8">
-          <div class="w-12 h-12 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto text-lg mb-4">🔒</div>
-          <h3 class="text-sm font-bold text-slate-800">การเข้าถึงถูกจำกัดสิทธิ์</h3>
-          <p class="text-slate-400 mt-2 text-xs leading-relaxed">
-            หน้าต่างบริหารจัดการระบบสารสนเทศและการเปิดฟอร์มประเมินใหม่ สงวนสิทธิ์เฉพาะผู้ดูแลระบบกลางเท่านั้น <br>
-            โปรดเข้าใช้งานด้วยบัญชีผู้ดูแลระบบกลางเพื่อดำเนินการตรวจสอบโครงสร้างข้อมูล
-          </p>
-        </div>
-
-        <div id="adminPanel" class="space-y-8">
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <input type="hidden" id="edit-user-original-email">
             
-            <!-- คอลัมน์ด้านซ้าย: รวมแบบฟอร์มเพิ่มกิจกรรม และ แบบฟอร์มเพิ่มบุคลากรใหม่ -->
-            <div class="space-y-6 lg:col-span-1">
-              
-              <!-- แบบฟอร์มเพิ่มกิจกรรมตัวใหม่ -->
-              <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 h-fit">
-                <h3 class="text-xs font-bold text-slate-800 mb-4 border-b pb-3 flex items-center gap-2">
-                  <span class="text-amber-500 font-bold">➕</span>
-                  <span class="text-slate-800">เปิดกิจกรรมประเมินใหม่</span>
-                </h3>
-                <form id="addActivityForm" onsubmit="createNewActivity(event)" class="space-y-4">
-                  <div>
-                    <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">ระบุชื่อโครงการ / กิจกรรม</label>
-                    <input type="text" id="newActName" required placeholder="เช่น โครงการพัฒนาทักษะวิชาชีพครูสู่ศตวรรษที่ 21" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
-                  </div>
-                  <div>
-                    <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">วัตถุประสงค์โครงการ</label>
-                    <textarea id="newActObjectives" rows="3" placeholder="เช่น 1. เพื่อพัฒนาทักษะการเรียนรู้&#10;2. เพื่อส่งเสริมความสามัคคีในทีมงาน" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800"></textarea>
-                  </div>
-                  <div>
-                    <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">ผู้รับผิดชอบโครงการ (ผู้ตรวจสอบสิทธิ์)</label>
-                    <select id="newActOwner" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800 cursor-pointer">
-                      <!-- จะเติมข้อมูลผ่าน JS -->
-                    </select>
-                    <p class="text-[9px] text-slate-400 mt-2.5 leading-relaxed">
-                      * ผู้รับผิดชอบที่ได้รับการเลือกจะได้รับสิทธิ์ในการเข้าถึงข้อมูลการประเมินแบบระบุตัวตนรายบุคคล
-                    </p>
-                  </div>
-
-                  <!-- กำหนดคะแนนย้อนหลัง 3 ปี -->
-                  <div class="border-t border-slate-150 pt-3">
-                    <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-2">กำหนดค่าร้อยละความพึงพอใจย้อนหลัง (เพื่อแสดงในกราฟสถิติ)</label>
-                    <div class="grid grid-cols-3 gap-2">
-                      <div>
-                        <span class="block text-[8px] text-slate-400 mb-0.5">ปี 2566 (%)</span>
-                        <input type="number" step="0.01" min="0" max="100" id="history2566" required value="85.00" class="w-full border border-slate-200 rounded-lg p-1.5 text-center text-xs focus:outline-none focus:ring-1 focus:ring-emerald-850">
-                      </div>
-                      <div>
-                        <span class="block text-[8px] text-slate-400 mb-0.5">ปี 2567 (%)</span>
-                        <input type="number" step="0.01" min="0" max="100" id="history2567" required value="88.00" class="w-full border border-slate-200 rounded-lg p-1.5 text-center text-xs focus:outline-none focus:ring-1 focus:ring-emerald-850">
-                      </div>
-                      <div>
-                        <span class="block text-[8px] text-slate-400 mb-0.5">ปี 2568 (%)</span>
-                        <input type="number" step="0.01" min="0" max="100" id="history2568" required value="92.00" class="w-full border border-slate-200 rounded-lg p-1.5 text-center text-xs focus:outline-none focus:ring-1 focus:ring-emerald-850">
-                      </div>
-                    </div>
-                  </div>
-
-                  <button type="submit" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-2.5 rounded-xl text-xs transition-colors shadow-sm">
-                    บันทึกและเปิดใช้งานระบบประเมิน
-                  </button>
-                </form>
-              </div>
-
-              <!-- แบบฟอร์มลงทะเบียนเพิ่มบุคลากรรายบุคคลพร้อมรหัสพนักงานและเงื่อนไขความปลอดภัยรหัสผ่าน 6 ตัว -->
-              <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 h-fit">
-                <h3 class="text-xs font-bold text-slate-800 mb-4 border-b pb-3 flex items-center gap-2">
-                  <span class="text-emerald-800 font-bold">👤</span>
-                  <span class="text-slate-800">ลงทะเบียนบุคลากรใหม่</span>
-                </h3>
-                <form id="addUserForm" onsubmit="createNewUser(event)" class="space-y-4">
-                  <div>
+            <div class="space-y-4">
+                <div>
                     <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">รหัสพนักงาน</label>
-                    <input type="text" id="newUserEmpId" required placeholder="เช่น YW-011" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
-                  </div>
-                  <div>
-                    <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">ชื่อ - นามสกุล</label>
-                    <input type="text" id="newUserName" required placeholder="เช่น นายสมบัติ ดีงาม" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
-                  </div>
-                  <div>
+                    <input type="text" id="edit-user-empId" placeholder="เช่น YW-001" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
+                </div>
+                <div>
+                    <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">ชื่อ-นามสกุล</label>
+                    <input type="text" id="edit-user-name" placeholder="ชื่อ และ นามสกุล" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
+                </div>
+                <div>
                     <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">อีเมลเข้าใช้งาน (@yuwapat.ac.th)</label>
-                    <input type="email" id="newUserEmail" required placeholder="เช่น sombat@yuwapat.ac.th" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
-                  </div>
-                  <div>
+                    <input type="email" id="edit-user-email" placeholder="sombat@yuwapat.ac.th" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
+                </div>
+                <div>
                     <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">ตำแหน่งงาน / บทบาทสิทธิ์</label>
-                    <select id="newUserRole" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800 cursor-pointer">
-                      <option value="Staff">คุณครู/บุคลากรทั่วไป</option>
-                      <option value="Executive">ผู้บริหาร</option>
-                      <option value="Head_Admin">หัวหน้าฝ่ายบริหารทั่วไป</option>
-                      <option value="Head_Academic">หัวหน้าฝ่ายวิชาการ</option>
-                      <option value="Head_QA">หัวหน้าฝ่ายประกันคุณภาพภายใน</option>
-                      <option value="Head_Student">หัวหน้าฝ่ายกิจการนักเรียน</option>
-                      <option value="Admin">ผู้ดูแลระบบกลาง (Admin)</option>
+                    <select id="edit-user-role" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800 cursor-pointer">
+                        <option value="Staff">คุณครู/บุคลากรทั่วไป</option>
+                        <option value="Executive">ผู้บริหาร</option>
+                        <option value="Head_Admin">หัวหน้าฝ่ายบริหารทั่วไป</option>
+                        <option value="Head_Academic">หัวหน้าฝ่ายวิชาการ</option>
+                        <option value="Head_QA">หัวหน้าฝ่ายประกันคุณภาพภายใน</option>
+                        <option value="Head_Student">หัวหน้าฝ่ายกิจการนักเรียน</option>
+                        <option value="Admin">ผู้ดูแลระบบกลาง (Admin)</option>
                     </select>
-                  </div>
-                  <div>
-                    <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">รหัสผ่าน (ขั้นต่ำ 6 ตัวอักษร)</label>
-                    <input type="text" id="newUserPassword" required value="yw123456" placeholder="กำหนดรหัสผ่านขั้นต่ำ 6 ตัวอักษร" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
-                  </div>
-                  <button type="submit" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-2.5 rounded-xl text-xs transition-colors shadow-sm">
-                    ลงทะเบียนเข้าฐานระบบ
-                  </button>
-                </form>
-              </div>
-
-            </div>
-
-            <!-- คอลัมน์ด้านขวา (lg:col-span-2): ตารางจัดการสารสนเทศ -->
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 lg:col-span-2 space-y-6">
-              
-              <!-- ตารางจัดการสิทธิ์กิจกรรมในระบบ -->
-              <div>
-                <h3 class="text-xs font-bold text-slate-800 mb-3 flex items-center gap-2">
-                  <span class="text-emerald-800 font-bold">📋</span>
-                  <span>สารสนเทศโครงการทั้งหมดในระบบ</span>
-                </h3>
-                <div class="overflow-x-auto border border-slate-100 rounded-xl mb-6">
-                  <table class="min-w-full text-xs text-left">
-                    <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-150">
-                      <tr>
-                        <th class="px-4 py-3">รหัสสถิติ</th>
-                        <th class="px-4 py-3">ชื่อโครงการ / กิจกรรม</th>
-                        <th class="px-4 py-3">ผู้ควบคุมสิทธิ์</th>
-                        <th class="px-4 py-3 text-center">การจัดการ</th>
-                      </tr>
-                    </thead>
-                    <tbody id="adminActivitiesTable" class="divide-y divide-slate-100">
-                      <!-- แถวจะถูกโหลดด้วย JS -->
-                    </tbody>
-                  </table>
                 </div>
-              </div>
-
-              <!-- ตารางข้อมูลบุคลากรและการเปลี่ยนรหัสผ่าน พร้อมปุ่มแก้ไขข้อมูลใหม่ -->
-              <div>
-                <h3 class="text-xs font-bold text-slate-800 mb-3 flex items-center gap-2">
-                  <span class="text-emerald-800 font-bold">🔑</span>
-                  <span>สารสนเทศและการแก้ไขข้อมูลบุคลากรรายคน</span>
-                </h3>
-                <div class="overflow-x-auto border border-slate-100 rounded-xl">
-                  <table class="min-w-full text-xs text-left">
-                    <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-150">
-                      <tr>
-                        <th class="px-4 py-3">รหัสพนักงาน</th>
-                        <th class="px-4 py-3">ชื่อ-นามสกุล</th>
-                        <th class="px-4 py-3">อีเมลเข้าใช้งาน</th>
-                        <th class="px-4 py-3">ตำแหน่ง / บทบาท</th>
-                        <th class="px-4 py-3">รหัสปัจจุบัน</th>
-                        <th class="px-4 py-3 text-center">การจัดการ</th>
-                      </tr>
-                    </thead>
-                    <tbody id="adminUsersTable" class="divide-y divide-slate-100">
-                      <!-- แถวจะถูกโหลดด้วย JS -->
-                    </tbody>
-                  </table>
+                <div>
+                    <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">รหัสผ่านสำหรับเข้าใช้งาน (อย่างน้อย 6 ตัวอักษร)</label>
+                    <input type="text" id="edit-user-password" placeholder="กำหนดรหัสผ่านอย่างน้อย 6 ตัวอักษร" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
                 </div>
-              </div>
-
-            </div>
-
-          </div>
-
-          <!-- บล็อกรีเซ็ตระบบข้อมูลตัวอย่าง -->
-          <div class="border-t border-slate-200 pt-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div>
-              <h4 class="font-bold text-rose-600 text-xs flex items-center gap-1.5">
-                <span>🔄 คืนค่าข้อมูลสารสนเทศเริ่มต้น</span>
-              </h4>
-              <p class="text-[9px] text-slate-400 mt-0.5">กดยืนยันเพื่อกู้คืนชุดกิจกรรมและผลประเมินตัวอย่างดั้งเดิมทั้งหมดเพื่อใช้สำหรับการนำเสนอ</p>
-            </div>
-            <button onclick="confirmResetSystem()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 text-[10px] px-3.5 py-2 rounded-lg font-bold transition-colors">
-              คืนค่าระบบทั้งหมด
-            </button>
-          </div>
-        </div>
-      </section>
-
-    </main>
-
-    <footer class="text-center py-8 text-slate-400 text-[10px] border-t border-slate-100 bg-white tracking-wider">
-      หากมีข้อสงสัยหรือระบบขัดข้อง โปรดติดต่อฝ่ายไอที โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์
-    </footer>
-  </div>
-
-  <!-- JavaScript & Script logic of system -->
-  <script>
-    // --- ฐานข้อมูลตั้งต้นสำหรับระบบทดสอบแอปพลิเคชัน (เพิ่มรหัสพนักงาน และรหัสผ่านขั้นต่ำ 6 ตัวอักษร) ---
-    const defaultUsers = [
-      { email: "admin@yuwapat.ac.th", name: "นายสมศักดิ์ ปัญญาดี", role: "Admin", password: "yw123456", empId: "YW-001" },
-      
-      // ผู้บริหาร 2 ท่าน
-      { email: "director@yuwapat.ac.th", name: "ดร.วิชัย รักเรียน", role: "Executive", password: "yw123456", empId: "YW-002" },
-      { email: "executive2@yuwapat.ac.th", name: "นายปรีชา นึกดี", role: "Executive", password: "yw123456", empId: "YW-003" },
-      
-      // หัวหน้าฝ่ายหลัก 4 ท่าน
-      { email: "head_admin@yuwapat.ac.th", name: "นายพชร แก้วกมล", role: "Head_Admin", password: "yw123456", empId: "YW-004" },
-      { email: "head_academic@yuwapat.ac.th", name: "นางสาวนงลักษณ์ พึ่งสอน", role: "Head_Academic", password: "yw123456", empId: "YW-005" },
-      { email: "head_qa@yuwapat.ac.th", name: "นางพรรณิภา ประกันดี", role: "Head_QA", password: "yw123456", empId: "YW-006" },
-      { email: "head_student@yuwapat.ac.th", name: "นายเกรียงไกร มีเดช", role: "Head_Student", password: "yw123456", empId: "YW-007" },
-      
-      // คณะครูและบุคลากรทั่วไป
-      { email: "owner_ai@yuwapat.ac.th", name: "นางสมหญิง มั่นเรียน", role: "Staff", password: "yw123456", empId: "YW-008" },
-      { email: "somchai@yuwapat.ac.th", name: "นายสมชาย ยินดี", role: "Staff", password: "yw123456", empId: "YW-009" },
-      { email: "somsri@yuwapat.ac.th", name: "นางสาวสมศรี สุขเกษม", role: "Staff", password: "yw123456", empId: "YW-010" }
-    ];
-
-    const defaultActivities = [
-      { 
-        id: "ACT-001", 
-        name: "โครงการสัมมนาเชิงปฏิบัติการ: การประยุกต์ใช้ AI ในการพัฒนาบทเรียน", 
-        owner: "owner_ai@yuwapat.ac.th",
-        objectives: "1. เพื่อให้คุณครูและบุคลากรมีความรู้พื้นฐานในการนำเทคโนโลยี AI มาพัฒนาสื่อ\n2. เพื่อยกระดับและพัฒนาแผนจัดการเรียนรู้ให้ตอบรับศตวรรษที่ 21",
-        history: { "2566": 82.00, "2567": 87.00, "2568": 92.00 }
-      },
-      { 
-        id: "ACT-002", 
-        name: "ประชุมคณะกรรมการสถานศึกษา: แนวทางการเลื่อนขั้นเงินเดือนและอัตราจ้างประจำปี", 
-        owner: "head_admin@yuwapat.ac.th",
-        objectives: "1. เพื่อสรุปและทบทวนกระบวนการพิจารณาตัดสินเลื่อนขั้นเงินเดือน\n2. เพื่อส่งเสริมความโปร่งใสและสร้างขวัญกำลังใจที่ดีแก่ครูและบุคลากร",
-        history: { "2566": 78.00, "2567": 83.00, "2568": 86.00 }
-      },
-      { 
-        id: "ACT-003", 
-        name: "โครงการพัฒนาครูมืออาชีพ: เทคนิคควบคุมชั้นเรียนในศตวรรษที่ 21", 
-        owner: "head_academic@yuwapat.ac.th",
-        objectives: "1. เพื่อแบ่งปันวิธีการแก้ไขปัญหาพฤติกรรมผู้เรียนในชั้นเรียน\n2. เพื่อเรียนรู้เทคนิคการกระตุ้นผู้เรียนอย่างมีประสิทธิภาพและราบรื่น",
-        history: { "2566": 89.00, "2567": 86.00, "2568": 90.00 }
-      }
-    ];
-
-    const defaultEvaluations = [
-      { 
-        activityId: "ACT-001", 
-        email: "somchai@yuwapat.ac.th", 
-        name: "นายสมชาย ยินดี", 
-        role: "คุณครู/บุคลากร", 
-        score: 5, 
-        suggestion: "วิทยากรถ่ายทอดเนื้อหาได้กระชับ ชัดเจน และสามารถใช้ทำสื่อส่งเสริมการเรียนรู้ได้ดีจริง" 
-      },
-      { 
-        activityId: "ACT-001", 
-        email: "somsri@yuwapat.ac.th", 
-        name: "นางสาวสมศรี สุขเกษม", 
-        role: "คุณครู/บุคลากร", 
-        score: 4, 
-        suggestion: "เป็นประโยชน์ต่อการสอนอย่างยิ่ง อยากให้ขยายเวลาอบรมเพิ่มเติม" 
-      },
-      { 
-        activityId: "ACT-001", 
-        email: "director@yuwapat.ac.th", 
-        name: "ดร.วิชัย รักเรียน", 
-        role: "ผู้บริหาร", 
-        score: 5, 
-        suggestion: "การนำเสนอเป็นระบบ มีขั้นตอนการวัดผลสำเร็จที่ชัดเจนดีมาก" 
-      },
-      { 
-        activityId: "ACT-002", 
-        email: "somchai@yuwapat.ac.th", 
-        name: "นายสมชาย ยินดี", 
-        role: "คุณครู/บุคลากร", 
-        score: 3, 
-        suggestion: "ตัวชี้วัดควรมีความหลากหลายและสอดคล้องกับภาระงานจริงมากขึ้น" 
-      }
-    ];
-
-    let currentUser = null;
-
-    // ตรวจสอบความถูกต้องและสร้างฐานข้อมูลในเครื่อง
-    if (!localStorage.getItem('eval_users')) {
-      localStorage.setItem('eval_users', JSON.stringify(defaultUsers));
-    }
-    if (!localStorage.getItem('eval_activities')) {
-      localStorage.setItem('eval_activities', JSON.stringify(defaultActivities));
-    }
-    if (!localStorage.getItem('eval_submissions')) {
-      localStorage.setItem('eval_submissions', JSON.stringify(defaultEvaluations));
-    }
-
-    function getUsers() {
-      return JSON.parse(localStorage.getItem('eval_users')) || [];
-    }
-
-    // --- ระบบล็อกอินและความปลอดภัย (Login Systems) ---
-    function checkSession() {
-      const savedUser = localStorage.getItem('current_logged_user');
-      if (savedUser) {
-        currentUser = JSON.parse(savedUser);
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('main-dashboard').classList.remove('hidden');
-        document.getElementById('main-dashboard').classList.add('flex');
-        
-        let roleText = 'คุณครู/บุคลากร';
-        if (currentUser.role === 'Admin') roleText = 'แอดมินระบบกลาง';
-        else if (currentUser.role === 'Executive') roleText = 'ผู้บริหาร';
-        else if (currentUser.role === 'Head_Admin') roleText = 'หัวหน้าฝ่ายบริหารทั่วไป';
-        else if (currentUser.role === 'Head_Academic') roleText = 'หัวหน้าฝ่ายวิชาการ';
-        else if (currentUser.role === 'Head_QA') roleText = 'หัวหน้าฝ่ายประกันคุณภาพภายใน';
-        else if (currentUser.role === 'Head_Student') roleText = 'หัวหน้าฝ่ายกิจการนักเรียน';
-        
-        document.getElementById('userProfileDisplay').innerText = `${currentUser.name} (${roleText})`;
-        
-        switchTab('evaluate-tab');
-      } else {
-        document.getElementById('login-screen').classList.remove('hidden');
-        document.getElementById('main-dashboard').classList.add('hidden');
-        document.getElementById('main-dashboard').classList.remove('flex');
-      }
-    }
-
-    function handleLogin(event) {
-      event.preventDefault();
-      const email = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-password').value.trim();
-
-      const users = getUsers();
-      const found = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
-
-      if (found) {
-        localStorage.setItem('current_logged_user', JSON.stringify(found));
-        showToast('เข้าสู่ระบบสำเร็จ ยินดีต้อนรับกลับสมาคม', 'success');
-        checkSession();
-      } else {
-        showToast('ข้อมูลอีเมลหรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง', 'error');
-      }
-    }
-
-    function autofillLogin(email) {
-      const users = getUsers();
-      const found = users.find(u => u.email === email);
-      if (found) {
-        document.getElementById('login-email').value = found.email;
-        document.getElementById('login-password').value = found.password;
-        showToast('เติมข้อมูลล็อกอินเสร็จสิ้น กรุณากดปุ่มเข้าสู่ระบบ', 'success');
-      }
-    }
-
-    function handleLogout() {
-      customConfirm(
-        "ออกจากระบบสารสนเทศ",
-        "คุณต้องการลงชื่อออกจากระบบการใช้งานในขณะนี้หรือไม่?",
-        "👤",
-        () => {
-          localStorage.removeItem('current_logged_user');
-          currentUser = null;
-          showToast('ออกจากระบบอย่างปลอดภัยเรียบร้อยแล้ว', 'success');
-          checkSession();
-        }
-      );
-    }
-
-    // --- ระบบแสดงผล Notification แบบคลาสสิกของแอป ---
-    function showToast(message, type = 'success') {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = `flex items-center gap-3 px-4 py-3.5 rounded-xl shadow-xl border text-xs font-semibold transition-all duration-300 transform translate-y-2 opacity-0 ${
-        type === 'success' ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-rose-50 border-rose-200 text-rose-850'
-      }`;
-      toast.innerHTML = `
-        <span class="text-base">${type === 'success' ? '✓' : '⚠️'}</span>
-        <span>${message}</span>
-      `;
-      container.appendChild(toast);
-      
-      setTimeout(() => {
-        toast.classList.remove('translate-y-2', 'opacity-0');
-      }, 10);
-
-      setTimeout(() => {
-        toast.classList.add('translate-y-2', 'opacity-0');
-        setTimeout(() => toast.remove(), 300);
-      }, 3500);
-    }
-
-    let currentConfirmAction = null;
-
-    function customConfirm(title, message, icon, onConfirm, isDanger = false) {
-      document.getElementById('confirm-title').innerText = title;
-      document.getElementById('confirm-msg').innerText = message;
-      document.getElementById('confirm-icon').innerText = icon;
-      
-      const okBtn = document.getElementById('confirm-ok-btn');
-      if (isDanger) {
-        okBtn.className = "px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold transition-colors";
-      } else {
-        okBtn.className = "px-4 py-2 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-semibold transition-colors";
-      }
-      
-      const modal = document.getElementById('confirm-modal');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-      
-      currentConfirmAction = onConfirm;
-    }
-
-    // --- ใหม่! ส่วนงานเปิด Modal และ จัดการแก้ไขข้อมูลบุคลากรแบบสมบูรณ์ ---
-    function openUserModal(email) {
-      const users = getUsers();
-      const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
-      if (!user) return;
-
-      document.getElementById('edit-user-original-email').value = user.email;
-      document.getElementById('edit-user-empId').value = user.empId || '';
-      document.getElementById('edit-user-name').value = user.name || '';
-      document.getElementById('edit-user-email').value = user.email || '';
-      document.getElementById('edit-user-role').value = user.role || 'Staff';
-      document.getElementById('edit-user-password').value = user.password || '';
-
-      document.getElementById('user-modal').classList.remove('hidden');
-      document.getElementById('user-modal').classList.add('flex');
-    }
-
-    function closeUserModal() {
-      document.getElementById('user-modal').classList.add('hidden');
-      document.getElementById('user-modal').classList.remove('flex');
-    }
-
-    function saveUserProfile() {
-      const originalEmail = document.getElementById('edit-user-original-email').value;
-      const empId = document.getElementById('edit-user-empId').value.trim();
-      const name = document.getElementById('edit-user-name').value.trim();
-      const email = document.getElementById('edit-user-email').value.trim().toLowerCase();
-      const role = document.getElementById('edit-user-role').value;
-      const password = document.getElementById('edit-user-password').value.trim();
-
-      if (!empId) {
-        showToast('กรุณาระบุรหัสพนักงาน', 'error');
-        return;
-      }
-      if (!name) {
-        showToast('กรุณาระบุชื่อ-นามสกุล', 'error');
-        return;
-      }
-      if (!email.endsWith('@yuwapat.ac.th')) {
-        showToast('อีเมลต้องลงท้ายด้วย @yuwapat.ac.th เท่านั้น', 'error');
-        return;
-      }
-      if (password.length < 6) {
-        showToast('ความปลอดภัยต่ำ! รหัสผ่านต้องยาวอย่างน้อย 6 ตัวอักษร', 'error');
-        return;
-      }
-
-      let users = getUsers();
-
-      // ตรวจสอบอีเมลซ้ำ (ยกเว้นตัวเอง)
-      const isEmailDuplicate = users.some(u => u.email.toLowerCase() === email && u.email.toLowerCase() !== originalEmail.toLowerCase());
-      if (isEmailDuplicate) {
-        showToast('อีเมลนี้ถูกใช้งานโดยบุคลากรท่านอื่นแล้ว', 'error');
-        return;
-      }
-
-      // ตรวจสอบรหัสพนักงานซ้ำ (ยกเว้นตัวเอง)
-      const isEmpIdDuplicate = users.some(u => u.empId.toLowerCase() === empId.toLowerCase() && u.email.toLowerCase() !== originalEmail.toLowerCase());
-      if (isEmpIdDuplicate) {
-        showToast('รหัสพนักงานนี้มีผู้ใช้งานแล้ว', 'error');
-        return;
-      }
-
-      users = users.map(u => {
-        if (u.email.toLowerCase() === originalEmail.toLowerCase()) {
-          return { ...u, empId, name, email, role, password };
-        }
-        return u;
-      });
-
-      localStorage.setItem('eval_users', JSON.stringify(users));
-
-      // หากเป็นการแก้ไขข้อมูลของตนเองที่กำลังล็อกอินอยู่ ให้ปรับปรุงสถานะเซสชันปัจจุบันด้วย
-      if (currentUser && currentUser.email.toLowerCase() === originalEmail.toLowerCase()) {
-        const updatedSelf = users.find(u => u.email.toLowerCase() === email);
-        localStorage.setItem('current_logged_user', JSON.stringify(updatedSelf));
-        currentUser = updatedSelf;
-        checkSession();
-      }
-
-      showToast('ปรับปรุงข้อมูลบุคลากรเรียบร้อยแล้ว', 'success');
-      closeUserModal();
-      loadAdminPanel();
-    }
-
-    // --- เมนูสลับ Tab หลักการทำงาน ---
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(el => {
-        el.classList.add('hidden');
-        el.classList.remove('block');
-      });
-      
-      const targetTab = document.getElementById(tabId);
-      if (targetTab) {
-        targetTab.classList.remove('hidden');
-        targetTab.classList.add('block');
-      }
-
-      document.querySelectorAll('button[id^="btn-"]').forEach(btn => {
-        btn.classList.remove('border-emerald-800', 'text-emerald-800');
-        btn.classList.add('border-transparent', 'text-slate-400');
-      });
-
-      const targetBtn = document.getElementById('btn-' + tabId);
-      if (targetBtn) {
-        targetBtn.classList.add('border-emerald-800', 'text-emerald-800');
-        targetBtn.classList.remove('border-transparent', 'text-slate-400');
-      }
-
-      if (tabId === 'evaluate-tab') loadEvaluationForms();
-      if (tabId === 'report-tab') loadReportList();
-      if (tabId === 'history-tab') loadHistoryReports();
-      if (tabId === 'admin-tab') loadAdminPanel();
-    }
-
-    function getActivities() {
-      return JSON.parse(localStorage.getItem('eval_activities')) || [];
-    }
-
-    function getEvaluations() {
-      return JSON.parse(localStorage.getItem('eval_submissions')) || [];
-    }
-
-    function loadEvaluationForms() {
-      if (!currentUser) return;
-
-      const activities = getActivities();
-      const evaluations = getEvaluations();
-      
-      const userEvaluatedIds = evaluations
-        .filter(eval => eval.email === currentUser.email)
-        .map(eval => eval.activityId);
-      
-      const pendingActivities = activities.filter(act => !userEvaluatedIds.includes(act.id));
-      
-      const badge = document.getElementById('pendingBadge');
-      if (badge) {
-        badge.innerText = pendingActivities.length;
-      }
-
-      const container = document.getElementById('evaluationList');
-      const emptyView = document.getElementById('noEvaluations');
-      
-      if (!container || !emptyView) return;
-      container.innerHTML = '';
-
-      if (pendingActivities.length === 0) {
-        container.classList.add('hidden');
-        emptyView.classList.remove('hidden');
-        return;
-      }
-
-      container.classList.remove('hidden');
-      emptyView.classList.add('hidden');
-
-      pendingActivities.forEach(act => {
-        const card = document.createElement('div');
-        card.className = "bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-emerald-200 transition-all duration-300 relative overflow-hidden";
-        card.id = `act-card-${act.id}`;
-        
-        const borderIndicator = document.createElement('div');
-        borderIndicator.className = "absolute left-0 top-0 bottom-0 w-1 bg-emerald-800";
-        card.appendChild(borderIndicator);
-
-        let objectivesHtml = '';
-        if (act.objectives && act.objectives.trim() !== "") {
-          objectivesHtml = `
-            <div class="mb-4 pl-2">
-              <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">วัตถุประสงค์โครงการ:</span>
-              <div class="text-xs text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-100 whitespace-pre-line leading-relaxed">
-                ${act.objectives}
-              </div>
-            </div>
-          `;
-        }
-
-        const content = document.createElement('div');
-        content.innerHTML = `
-          <h3 class="text-sm font-bold text-slate-800 mb-1 pl-2">${act.name}</h3>
-          <p class="text-[9px] text-slate-400 mb-4 pl-2 font-mono">รหัสโครงการ: ${act.id}</p>
-          
-          ${objectivesHtml}
-
-          <form onsubmit="submitForm(event, '${act.id}')" class="space-y-4 pl-2">
-            <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1.5">1. ข้อมูลสถานะของผู้กรอกประเมิน</label>
-              <div class="flex gap-6">
-                <label class="flex items-center gap-2 text-xs cursor-pointer font-medium text-slate-655 hover:text-slate-800">
-                  <input type="radio" name="role-${act.id}" value="คุณครู/บุคลากร" required class="w-4 h-4 text-emerald-800 focus:ring-emerald-800 border-slate-300"> คุณครู/บุคลากร
-                </label>
-                <label class="flex items-center gap-2 text-xs cursor-pointer font-medium text-slate-655 hover:text-slate-800">
-                  <input type="radio" name="role-${act.id}" value="ผู้บริหาร" class="w-4 h-4 text-emerald-800 focus:ring-emerald-800 border-slate-300"> ผู้บริหาร
-                </label>
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1.5">2. ระดับความพึงพอใจของท่านต่อโครงการ</label>
-              <select name="score-${act.id}" required class="w-full border border-slate-250 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 cursor-pointer">
-                <option value="">-- กรุณาระบุระดับความพึงพอใจ --</option>
-                <option value="5">⭐⭐⭐⭐⭐ 5 (ดีเยี่ยม / พึงพอใจระดับสูงสุด)</option>
-                <option value="4">⭐⭐⭐⭐ 4 (ดี / พึงพอใจระดับมาก)</option>
-                <option value="3">⭐⭐⭐ 3 (ปานกลาง / พอใจระดับทั่วไป)</option>
-                <option value="2">⭐⭐ 2 (พอใช้ / ระดับความพึงพอใจน้อย)</option>
-                <option value="1">⭐ 1 (ควรแก้ไขเพิ่มเติม / พึงพอใจน้อยที่สุด)</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1.5">3. ข้อคิดเห็นและข้อเสนอแนะเพื่อพัฒนาโครงการ</label>
-              <textarea name="suggestion-${act.id}" placeholder="โปรดเสนอข้อแนะนำเพิ่มเติมในการอำนวยความสะดวกหรือการจัดกิจกรรมเพื่อการพัฒนา..." rows="2" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800"></textarea>
-            </div>
-
-            <button type="submit" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-2 rounded-xl text-xs transition-colors shadow-sm mt-2">
-              ส่งผลการประเมินโครงการ
-            </button>
-          </form>
-        `;
-        card.appendChild(content);
-        container.appendChild(card);
-      });
-    }
-
-    // --- 2. ส่วนสรุปรายงานผลคะแนนปัจจุบัน ---
-    function loadReportList() {
-      if (!currentUser) return;
-
-      const activities = getActivities();
-      const evaluations = getEvaluations();
-      
-      const isAdmin = currentUser.role === 'Admin';
-      const isExecutive = currentUser.role === 'Executive';
-      const isHead = ['Head_Admin', 'Head_Academic', 'Head_QA', 'Head_Student'].includes(currentUser.role);
-
-      const container = document.getElementById('reportList');
-      if (!container) return;
-      container.innerHTML = '';
-
-      if (activities.length === 0) {
-        container.innerHTML = '<p class="text-center text-slate-400 py-12 text-xs">ยังไม่มีชุดรายงานประเมินบันทึกเข้ามาในสารสนเทศ</p>';
-        return;
-      }
-
-      activities.forEach(act => {
-        const actEvals = evaluations.filter(e => e.activityId === act.id);
-        const totalEvaluations = actEvals.length;
-
-        let satisfiedCount = 0;
-        actEvals.forEach(e => {
-          if (e.score >= 4) {
-            satisfiedCount++;
-          }
-        });
-
-        const satisfactionPercentage = totalEvaluations > 0 
-          ? ((satisfiedCount / totalEvaluations) * 100).toFixed(2) 
-          : "0.00";
-
-        let avgScore = 0;
-        if (totalEvaluations > 0) {
-          const sum = actEvals.reduce((a, b) => a + b.score, 0);
-          avgScore = (sum / totalEvaluations).toFixed(2);
-        }
-
-        const isOwner = act.owner === currentUser.email;
-        const isAuthorized = isAdmin || isOwner || isExecutive || isHead;
-
-        const card = document.createElement('div');
-        card.className = "bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden";
-        
-        let htmlContent = `
-          <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5 border-b border-slate-100 pb-5">
-            <div>
-              <span class="text-[9px] font-bold bg-slate-50 text-slate-500 border border-slate-200 px-2.5 py-1 rounded font-mono">${act.id}</span>
-              <h3 class="text-sm font-bold text-slate-800 mt-2">${act.name}</h3>
             </div>
             
-            <div class="flex items-center gap-4 bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-200 w-full md:w-auto">
-              <div class="text-center min-w-[80px]">
-                <span class="block text-[9px] text-slate-400 font-bold uppercase tracking-wider">ร้อยละความพึงพอใจ</span>
-                <span class="text-sm font-bold text-emerald-800">${satisfactionPercentage}%</span>
-              </div>
-              <div class="h-6 w-px bg-slate-200"></div>
-              <div class="text-center min-w-[80px]">
-                <span class="block text-[9px] text-slate-400 font-bold uppercase tracking-wider">คะแนนรวมเฉลี่ย</span>
-                <span class="text-sm font-bold text-slate-600">${avgScore} / 5.00</span>
-              </div>
-              <div class="h-6 w-px bg-slate-200"></div>
-              <div class="text-center min-w-[80px]">
-                <span class="block text-[9px] text-slate-400 font-bold uppercase tracking-wider">ยอดผู้ประเมิน</span>
-                <span class="text-sm font-bold text-slate-800">${totalEvaluations} ราย</span>
-              </div>
+            <div class="flex justify-end gap-2 mt-6 border-t pt-4">
+                <button onclick="closeUserModal()" class="px-4 py-2 bg-slate-55 hover:bg-slate-100 rounded-xl text-xs font-semibold text-slate-500 transition-colors">ยกเลิก</button>
+                <button onclick="saveUserProfile()" class="px-4 py-2 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-semibold transition-colors">บันทึกข้อมูลบุคลากร</button>
             </div>
-          </div>
+        </div>
+    </div>
 
-          <div class="mb-5 bg-slate-50 p-4 rounded-xl border border-slate-100">
-            <div class="flex justify-between items-center text-xs mb-1.5">
-              <span class="text-slate-600 font-medium">สถิติดำเนินการสะสม (พึงพอใจระดับดี-ดีเยี่ยม 4 และ 5):</span>
-              <span class="text-slate-800 font-bold">${satisfiedCount}/${totalEvaluations} ราย (${satisfactionPercentage}%)</span>
+    <!-- กล่องสำหรับกรอกประเมินผลโครงการ (Evaluation Modal) -->
+    <div id="evaluation-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-45 hidden items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-100 my-8 overflow-hidden transform scale-95 transition-all">
+            <!-- Header ประดับสีเขียวเข้มและเส้นแบ่งสีทองคำสว่าง -->
+            <div class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-950 text-white px-6 py-5 border-b-2 border-yellow-400 flex justify-between items-center">
+                <div>
+                    <span id="eval-modal-id" class="text-[10px] font-mono font-bold bg-white/10 px-2 py-0.5 rounded tracking-wider">PROJECT ID</span>
+                    <h3 id="eval-modal-name" class="text-base font-bold tracking-tight text-white mt-1">ชื่อโครงการกิจกรรม</h3>
+                </div>
+                <button onclick="closeEvaluationModal()" class="text-white/70 hover:text-white text-xl font-bold">✕</button>
             </div>
-            <div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
-              <div class="bg-gradient-to-r from-emerald-800 to-emerald-600 h-2.5 rounded-full transition-all duration-500" style="width: ${satisfactionPercentage}%"></div>
+
+            <div class="px-6 py-5 max-h-[70vh] overflow-y-auto space-y-6">
+                <!-- วัตถุประสงค์ -->
+                <div id="eval-modal-objectives-container">
+                    <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1.5">เป้าหมายและวัตถุประสงค์โครงการ:</span>
+                    <div id="eval-modal-objectives" class="text-sm text-slate-600 bg-slate-50 p-4 rounded-xl border border-slate-100 leading-relaxed whitespace-pre-line"></div>
+                </div>
+
+                <!-- พื้นที่โปสเตอร์กิจกรรม -->
+                <div id="eval-modal-poster-container">
+                    <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2">โปสเตอร์ประชาสัมพันธ์โครงการ:</span>
+                    <div class="border border-slate-150 rounded-xl overflow-hidden bg-slate-50 max-h-64 flex items-center justify-center">
+                        <img id="eval-modal-poster" src="" alt="[ภาพโปสเตอร์ประชาสัมพันธ์กิจกรรม]" class="object-contain max-h-64 w-full">
+                    </div>
+                </div>
+
+                <!-- แบบฟอร์มการตอบแบบประเมินผลรายหัวข้อ (ไร้รูปดาว - เรียบหรูวิชาการ) -->
+                <form id="evaluationForm" onsubmit="submitEvaluationData(event)" class="space-y-6 pt-3 border-t border-slate-100">
+                    <input type="hidden" id="eval-modal-act-id">
+                    
+                    <!-- ส่วนเลือกสถานะผู้ตอบ -->
+                    <div>
+                        <label class="block text-sm font-bold text-slate-800 mb-2">1. สถานะของผู้ประเมินผลโครงการ</label>
+                        <div class="flex gap-6 pl-1">
+                            <label class="flex items-center gap-2.5 text-sm cursor-pointer font-medium text-slate-650 hover:text-slate-800 transition-colors">
+                                <input type="radio" name="eval-role" value="คุณครู/บุคลากร" required class="w-4 h-4 text-emerald-800 focus:ring-emerald-800 border-slate-300"> 
+                                <span>คุณครู / บุคลากร</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 text-sm cursor-pointer font-medium text-slate-655 hover:text-slate-800 transition-colors">
+                                <input type="radio" name="eval-role" value="ผู้บริหาร" class="w-4 h-4 text-emerald-800 focus:ring-emerald-800 border-slate-300"> 
+                                <span>ผู้บริหาร</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- ส่วนกรอกประเมินแยกหัวข้อแบบเรขาคณิต (1-5) -->
+                    <div>
+                        <label class="block text-sm font-bold text-slate-800 mb-3">2. ระดับความพึงพอใจต่อการดำเนินงานแยกตามหัวข้อ (1 - 5 คะแนน)</label>
+                        <div id="eval-topics-container" class="space-y-4 pl-1">
+                            <!-- โหลดจาก JS -->
+                        </div>
+                    </div>
+
+                    <!-- ข้อเสนอแนะเชิงคุณภาพ -->
+                    <div>
+                        <label class="block text-sm font-bold text-slate-800 mb-1.5">3. ความคิดเห็นหรือข้อคิดเห็นเชิงพัฒนา (นิรนาม)</label>
+                        <textarea id="eval-suggestion" rows="3" placeholder="โปรดระบุข้อเสนอแนะเพิ่มเติมที่เป็นประโยชน์เพื่อนำไปพัฒนาการจัดกิจกรรมในรอบถัดไป..." class="w-full border border-slate-200 rounded-xl px-3.5 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800"></textarea>
+                    </div>
+
+                    <!-- ปุ่มควบคุมของ Modal -->
+                    <div class="flex justify-end gap-2 border-t pt-4 mt-6">
+                        <button type="button" onclick="closeEvaluationModal()" class="px-5 py-2 bg-slate-55 hover:bg-slate-100 rounded-xl text-sm font-semibold text-slate-500 transition-colors">ยกเลิก</button>
+                        <button type="submit" class="px-5 py-2 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-sm font-bold transition-all shadow-sm active:scale-95">ส่งผลการประเมินโครงการ</button>
+                    </div>
+                </form>
             </div>
-          </div>
+        </div>
+    </div>
 
-          <div class="mb-5">
-            <h4 class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-2">📄 สรุปข้อแนะนำและความเห็นเชิงลึก (นิรนาม):</h4>
-            <div class="space-y-1.5 max-h-48 overflow-y-auto">
-        `;
-
-        const suggestions = actEvals.filter(e => e.suggestion && e.suggestion.trim() !== "");
-        if (suggestions.length === 0) {
-          htmlContent += `<p class="text-xs text-slate-400 italic">ไม่พบข้อเสนอแนะเพิ่มเติมสำหรับโครงการนี้</p>`;
-        } else {
-          suggestions.forEach(s => {
-            htmlContent += `
-              <div class="bg-neutral-50 p-3 rounded-xl text-xs text-slate-600 border border-slate-100 leading-relaxed">
-                "${s.suggestion}"
-              </div>
-            `;
-          });
-        }
-
-        htmlContent += `
+    <!-- ==================== 1. หน้าจอเข้าสู่ระบบ (OFFICIAL SECURE LOGIN) ==================== -->
+    <div id="login-screen" class="flex-grow flex items-center justify-center p-6 bg-slate-55">
+        <div class="bg-white rounded-3xl p-8 max-w-lg w-full shadow-2xl border border-slate-200/60 relative overflow-hidden">
+            <!-- แถบประดับสีเขียวเข้มและสีเหลืองสว่างสไตล์ Luxury Minimalist -->
+            <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-800 via-emerald-700 to-yellow-400"></div>
+            
+            <div class="text-center mb-8 mt-4">
+                <!-- โลโก้จริงของโรงเรียนจาก Google Drive พร้อมระบบภาพสำรองอย่างดีผ่าน handleLogoError -->
+                <div class="w-20 h-20 rounded-2xl overflow-hidden bg-slate-50 flex items-center justify-center shadow mx-auto mb-4 border border-slate-100">
+                    <img src="https://lh3.googleusercontent.com/d/1c3cjNBo_XSXdYjn6RAWkodMqChNPrk49" 
+                         alt="ตราสัญลักษณ์โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์" 
+                         class="w-full h-full object-contain"
+                         onerror="handleLogoError(this)">
+                </div>
+                <span class="bg-emerald-50 text-emerald-855 border border-emerald-100 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">ระบบประกันคุณภาพ ยุวพัฒน์</span>
+                <h2 class="text-lg font-bold text-slate-800 mt-3 tracking-tight">ระบบประเมินความพึงพอใจโครงการและกิจกรรม</h2>
+                <p class="text-slate-405 text-[11px] mt-1 font-semibold">โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</p>
             </div>
-          </div>
-        `;
 
-        if (isAuthorized) {
-          let roleLabel = 'สิทธิ์ผู้ดูแลระบบระดับสูง';
-          if (isOwner) roleLabel = 'คุณเป็นผู้รับผิดชอบโครงการนี้';
-          else if (isExecutive) roleLabel = 'สิทธิ์ผู้บริหารสถานศึกษา';
-          else if (isHead) {
-            if (currentUser.role === 'Head_Admin') roleLabel = 'สิทธิ์หัวหน้าฝ่ายบริหารทั่วไป';
-            else if (currentUser.role === 'Head_Academic') roleLabel = 'สิทธิ์หัวหน้าฝ่ายวิชาการ';
-            else if (currentUser.role === 'Head_QA') roleLabel = 'สิทธิ์หัวหน้าฝ่ายประกันคุณภาพภายใน';
-            else if (currentUser.role === 'Head_Student') roleLabel = 'สิทธิ์หัวหน้าฝ่ายกิจการนักเรียน';
-          }
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <!-- ส่วนป้อนอีเมลสถาบันพร้อมไอคอนด้านหน้า -->
+                <div>
+                    <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1">ที่อยู่อีเมลสถาบัน</label>
+                    <div class="relative rounded-xl shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.206" />
+                            </svg>
+                        </div>
+                        <input type="email" id="login-email" required placeholder="ระบุอีเมล @yuwapat.ac.th" class="w-full border border-slate-200 rounded-xl pl-10 pr-4 py-3.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-850">
+                    </div>
+                </div>
+                <!-- ส่วนป้อนรหัสผ่านสถาบันพร้อมไอคอนด้านหน้า -->
+                <div>
+                    <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1">รหัสผ่าน</label>
+                    <div class="relative rounded-xl shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
+                        <input type="password" id="login-password" required placeholder="รหัสผ่านเข้าใช้งาน" class="w-full border border-slate-200 rounded-xl pl-10 pr-4 py-3.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-855">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-emerald-800 hover:bg-emerald-955 text-white font-bold py-3.5 rounded-xl text-sm transition-all shadow-md active:scale-95 mt-4">
+                  เข้าสู่ระบบสารสนเทศสถาบัน
+                </button>
+            </form>
 
-          htmlContent += `
-            <div class="bg-amber-50/40 border border-amber-200/65 rounded-xl p-4 mt-5">
-              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3.5">
-                <div class="flex items-center gap-2">
-                  <h4 class="text-[10px] font-bold text-slate-800 uppercase tracking-wider">
-                    <span>🔒 บัญชีสิทธิ์ในการตรวจสอบและส่งออกคำตอบ</span>
-                  </h4>
-                  <span class="text-[8px] font-bold bg-amber-400 text-slate-900 px-2 py-0.5 rounded-full">
-                    ${roleLabel}
-                  </span>
+            <!-- กล่องข้อมูลล็อกอินจำลองเพื่อการทดสอบระดับสูง -->
+            <div class="mt-6 pt-5 border-t border-slate-100">
+                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-3 text-center">ข้อมูลจำลองสิทธิ์ผู้ใช้สำหรับทดสอบระบบ (รหัสผ่านคือ yw123456):</p>
+                <div class="space-y-3">
+                    <!-- ฝ่ายบริหาร -->
+                    <div>
+                        <span class="text-[9px] text-amber-600 font-bold uppercase tracking-wider block mb-1">💼 ฝ่ายบริหารสถานศึกษา (2 ท่าน)</span>
+                        <div class="grid grid-cols-2 gap-2 text-[9px]">
+                            <button type="button" onclick="autofillLogin('director@yuwapat.ac.th')" class="bg-amber-50 hover:bg-amber-100 p-2 rounded-lg text-left text-amber-955 border border-amber-100 transition-all">
+                                <span class="font-bold block">👤 ดร.วิชัย (ผอ.)</span> director@yuwapat.ac.th
+                            </button>
+                            <button type="button" onclick="autofillLogin('executive2@yuwapat.ac.th')" class="bg-amber-50 hover:bg-amber-100 p-2 rounded-lg text-left text-amber-955 border border-amber-100 transition-all">
+                                <span class="font-bold block">👤 รองฯ ปรีชา</span> executive2@yuwapat.ac.th
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- หัวหน้าฝ่าย 4 ฝ่าย -->
+                    <div>
+                        <span class="text-[9px] text-purple-700 font-bold uppercase tracking-wider block mb-1">📊 ฝ่ายบริหารจัดการหลัก (4 ฝ่าย)</span>
+                        <div class="grid grid-cols-2 gap-2 text-[9px]">
+                            <button type="button" onclick="autofillLogin('head_admin@yuwapat.ac.th')" class="bg-teal-50 hover:bg-teal-100 p-2 rounded-lg text-left text-teal-955 border border-teal-100 transition-all">
+                                <span class="font-bold block">👤 หัวหน้าพชร (ทั่วไป)</span> head_admin@yuwapat.ac.th
+                            </button>
+                            <button type="button" onclick="autofillLogin('head_academic@yuwapat.ac.th')" class="bg-blue-50 hover:bg-blue-100 p-2 rounded-lg text-left text-blue-955 border border-blue-100 transition-all">
+                                <span class="font-bold block">👤 หัวหน้านงลักษณ์ (วิชาการ)</span> head_academic@yuwapat.ac.th
+                            </button>
+                            <button type="button" onclick="autofillLogin('head_qa@yuwapat.ac.th')" class="bg-purple-50 hover:bg-purple-100 p-2 rounded-lg text-left text-purple-955 border border-purple-100 transition-all">
+                                <span class="font-bold block">👤 หัวหน้าพรรณิภา (QA)</span> head_qa@yuwapat.ac.th
+                            </button>
+                            <button type="button" onclick="autofillLogin('head_student@yuwapat.ac.th')" class="bg-indigo-50 hover:bg-indigo-100 p-2 rounded-lg text-left text-indigo-955 border border-indigo-100 transition-all">
+                                <span class="font-bold block">👤 หัวหน้าเกรียงไกร (กิจการฯ)</span> head_student@yuwapat.ac.th
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ครูและแอดมิน -->
+                    <div>
+                        <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider block mb-1">👥 ครูผู้สอน / ผู้ดูแลระบบ</span>
+                        <div class="grid grid-cols-2 gap-2 text-[9px]">
+                            <button type="button" onclick="autofillLogin('somchai@yuwapat.ac.th')" class="bg-slate-50 hover:bg-slate-100 p-2 rounded-lg text-left text-slate-700 transition-all">
+                                <span class="font-bold block">👤 ครูสมชาย</span> somchai@yuwapat.ac.th
+                            </button>
+                            <button type="button" onclick="autofillLogin('owner_ai@yuwapat.ac.th')" class="bg-emerald-50 hover:bg-emerald-100 p-2 rounded-lg text-left text-emerald-955 border border-emerald-100 transition-all">
+                                <span class="font-bold block">👤 ครูสมหญิง (เจ้าของงาน AI)</span> owner_ai@yuwapat.ac.th
+                            </button>
+                            <button type="button" onclick="autofillLogin('admin@yuwapat.ac.th')" class="bg-slate-900 hover:bg-slate-800 p-2 rounded-lg text-left text-white col-span-2 transition-all">
+                                <span class="font-bold block text-yellow-400">🔑 แอดมินสมศักดิ์ (YW-001)</span> admin@yuwapat.ac.th
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 2. หน้าหลักโปรแกรมหลังล็อกอินสำเร็จ ==================== -->
+    <div id="main-dashboard" class="hidden flex-col justify-between min-h-screen">
+        <!-- ส่วนหัวเว็บดีไซน์พรีเมียมหรูหรา บรรจุโลโก้โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์ -->
+        <header class="bg-white border-b border-slate-100 shadow-sm">
+            <!-- เส้นแบรนดิ้งเขียวทองประดับหัวเว็บ -->
+            <div class="h-1.5 bg-gradient-to-r from-emerald-800 via-emerald-750 to-yellow-400"></div>
+            
+            <div class="max-w-6xl mx-auto px-6 py-5 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                <div class="flex items-center gap-4">
+                    <!-- โลโก้จริงสถาบันที่กู้คืนและแสดงผลอย่างเป็นระเบียบผ่าน handleLogoError -->
+                    <div class="w-14 h-14 rounded-xl overflow-hidden bg-slate-50 flex items-center justify-center border border-slate-150 shadow-sm flex-shrink-0">
+                        <img src="https://lh3.googleusercontent.com/d/1c3cjNBo_XSXdYjn6RAWkodMqChNPrk49" 
+                             alt="ตราสัญลักษณ์โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์" 
+                             class="w-full h-full object-contain"
+                             onerror="handleLogoError(this)">
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="bg-emerald-50 text-emerald-855 border border-emerald-100 text-[10px] font-bold px-2.5 py-0.5 rounded uppercase tracking-wider">ระบบประกันคุณภาพภายใน</span>
+                            <span class="text-slate-400 text-sm font-semibold">| โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</span>
+                        </div>
+                        <h1 class="text-lg font-bold tracking-tight text-slate-800 mt-0.5">ระบบประเมินสถิติและสรุปผลความพึงพอใจการจัดโครงการ</h1>
+                    </div>
                 </div>
                 
-                <button onclick="exportToCSV('${act.id}')" class="flex items-center gap-1.5 bg-emerald-800 hover:bg-emerald-900 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all shadow-sm">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                  <span>ส่งออกข้อมูล (CSV)</span>
-                </button>
-              </div>
-              
-              <div class="overflow-x-auto">
-                <table class="min-w-full text-[10px] text-left text-slate-600">
-                  <thead class="bg-amber-100 text-slate-700 uppercase font-bold">
-                    <tr>
-                      <th class="px-3 py-2 rounded-l">ผู้ประเมิน</th>
-                      <th class="px-3 py-2">ตำแหน่ง</th>
-                      <th class="px-3 py-2">คะแนนให้</th>
-                      <th class="px-3 py-2">สถานะคะแนน</th>
-                      <th class="px-3 py-2 rounded-r">ข้อเสนอแนะ</th>
-                    </tr>
-                  </thead>
-                  <tbody class="divide-y divide-amber-200/30">
-          `;
-
-          if (actEvals.length === 0) {
-            htmlContent += `<tr><td colspan="5" class="px-3 py-3 text-center text-slate-400 italic">ยังไม่มีใครทำแบบประเมินสำหรับกิจกรรมนี้</td></tr>`;
-          } else {
-            actEvals.forEach(e => {
-              const statusBadge = e.score >= 4 
-                ? '<span class="text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded font-bold">พึงพอใจ</span>' 
-                : '<span class="text-rose-800 bg-rose-50 px-1.5 py-0.5 rounded font-bold">ไม่พึงพอใจ</span>';
-              htmlContent += `
-                <tr class="hover:bg-amber-100/10 transition-colors">
-                  <td class="px-3 py-2 font-semibold">
-                    <div>${e.name}</div>
-                    <div class="text-[8px] text-slate-400 font-mono">${e.email}</div>
-                  </td>
-                  <td class="px-3 py-2">${e.role}</td>
-                  <td class="px-3 py-2 font-bold text-emerald-800">${e.score}</td>
-                  <td class="px-3 py-2">${statusBadge}</td>
-                  <td class="px-3 py-2 italic text-slate-500">${e.suggestion || '-'}</td>
-                </tr>
-              `;
-            });
-          }
-
-          htmlContent += `
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          `;
-        }
-
-        card.innerHTML = htmlContent;
-        container.appendChild(card);
-      });
-    }
-
-    // --- ฟังก์ชันสำหรับส่งออกรายงานโครงการรายบุคคลเป็นไฟล์ CSV สนับสนุนภาษาไทย ---
-    function exportToCSV(actId) {
-      const activities = getActivities();
-      const evaluations = getEvaluations();
-      const act = activities.find(a => a.id === actId);
-      if (!act) return;
-
-      const actEvals = evaluations.filter(e => e.activityId === actId);
-
-      // เริ่มสร้างเนื้อหาของไฟล์ CSV โดยวางรหัส UTF-8 BOM ที่หัวไฟล์เพื่อป้องกันภาษาไทยเพี้ยนใน MS Excel
-      let csvContent = "\uFEFF";
-      
-      // ส่วนหัวตารางของไฟล์รายงาน
-      csvContent += "รหัสสถิติโครงการ,ชื่อโครงการ/กิจกรรม,อีเมลผู้ตอบแบบสอบถาม,ชื่อ-นามสกุล,ตำแหน่งงานที่ระบุ,ระดับคะแนนที่ให้ (1-5),ผลประเมินตามเกณฑ์ร้อยละ,ความคิดเห็นเชิงคุณภาพและข้อเสนอแนะ\n";
-
-      actEvals.forEach(e => {
-        const ratingStatus = e.score >= 4 ? "พึงพอใจ (100%)" : "ไม่พึงพอใจ (0%)";
-        
-        // กรองเครื่องหมายคอมมา และอัญประกาศ เพื่อไม่ให้คอลัมน์ของไฟล์พัง
-        const safeActName = act.name ? `"${act.name.replace(/"/g, '""')}"` : "";
-        const safeName = e.name ? `"${e.name.replace(/"/g, '""')}"` : "";
-        const safeRole = e.role ? `"${e.role.replace(/"/g, '""')}"` : "";
-        const safeSuggestion = e.suggestion ? `"${e.suggestion.replace(/\r?\n/g, ' ').replace(/"/g, '""')}"` : "";
-
-        csvContent += `${act.id},${safeActName},${e.email},${safeName},${safeRole},${e.score},${ratingStatus},${safeSuggestion}\n`;
-      });
-
-      // จัดการสร้างลิงก์สำหรับดาวน์โหลดไฟล์จำลอง (Blob URL)
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const blobUrl = URL.createObjectURL(blob);
-      const downloadAnchor = document.createElement("a");
-      downloadAnchor.setAttribute("href", blobUrl);
-      
-      // ตั้งชื่อไฟล์รายงานอัตโนมัติ
-      const fileDate = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'numeric', day: 'numeric' }).replace(/\//g, '-');
-      downloadAnchor.setAttribute("download", `รายงานผลการประเมิน_${act.id}_วันที่-${fileDate}.csv`);
-      downloadAnchor.style.visibility = 'hidden';
-      
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      document.body.removeChild(downloadAnchor);
-
-      showToast(`ทำรายการส่งออกข้อมูลรายงานโครงการ ${act.id} เรียบร้อยแล้ว`, 'success');
-    }
-
-    // --- 3. ส่วนรายงานสถิตย้อนหลัง 3 ปี (พัฒนาโครงสร้างกราฟตามดีไซน์รูปภาพ image_5c93a2.png) ---
-    function loadHistoryReports() {
-      const activities = getActivities();
-      const evaluations = getEvaluations();
-      const container = document.getElementById('historyList');
-      if (!container) return;
-      container.innerHTML = '';
-
-      if (activities.length === 0) {
-        container.innerHTML = '<div class="col-span-full text-center text-slate-400 py-12 text-xs">ไม่พบข้อมูลสถิตย้อนหลังในสารสนเทศขณะนี้</div>';
-        return;
-      }
-
-      activities.forEach(act => {
-        const actEvals = evaluations.filter(e => e.activityId === act.id);
-        const totalEvaluations = actEvals.length;
-        let currentPct = 0;
-        
-        if (totalEvaluations > 0) {
-          const satisfiedCount = actEvals.filter(e => e.score >= 4).length;
-          currentPct = (satisfiedCount / totalEvaluations) * 100;
-        }
-
-        const h2566 = act.history ? parseFloat(act.history["2566"] || 0) : 0;
-        const h2567 = act.history ? parseFloat(act.history["2567"] || 0) : 0;
-        const h2568 = act.history ? parseFloat(act.history["2568"] || 0) : 0;
-        const h2569 = currentPct; // ปีปัจจุบัน
-
-        const card = document.createElement('div');
-        card.className = "bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between";
-        
-        const getBarHtml = (yearLabel, score) => {
-          const formattedScore = score > 0 ? score.toFixed(2) + "%" : "ไม่มีข้อมูล";
-          const barHeightPercentage = score > 0 ? score : 0;
-          return `
-            <div class="flex flex-col items-center flex-grow">
-              <span class="text-[9px] font-bold text-slate-500 mb-2">${formattedScore}</span>
-              <div class="w-7 bg-slate-100 rounded-lg h-28 flex items-end overflow-hidden shadow-inner relative">
-                <div class="w-full bg-gradient-to-t from-emerald-800 to-emerald-600 rounded-t transition-all duration-700 hover:from-emerald-700" style="height: ${barHeightPercentage}%"></div>
-              </div>
-              <span class="text-[9px] font-bold text-slate-400 mt-2">${yearLabel}</span>
-            </div>
-          `;
-        };
-
-        card.innerHTML = `
-          <div>
-            <div class="flex items-start justify-between gap-2 mb-4">
-              <div>
-                <span class="text-[8px] font-mono bg-slate-50 border border-slate-200 px-2 py-0.5 rounded text-slate-500">${act.id}</span>
-                <h4 class="text-xs font-bold text-slate-800 mt-2 leading-relaxed h-10 overflow-hidden">${act.name}</h4>
-              </div>
-            </div>
-            
-            <p class="text-[9px] text-slate-400 mb-6 leading-relaxed">ข้อมูลเปรียบเทียบร้อยละความพึงพอใจย้อนหลัง 3 ปีการศึกษา (2566 - 2568) เทียบกับปีปัจจุบัน (2569)</p>
-
-            <div class="flex items-end justify-around gap-2 px-2 pb-2 border-b border-dashed border-slate-150">
-              ${getBarHtml("ปี 2566", h2566)}
-              ${getBarHtml("ปี 2567", h2567)}
-              ${getBarHtml("ปี 2568", h2568)}
-              <div class="flex flex-col items-center flex-grow">
-                <span class="text-[9px] font-bold text-emerald-800 mb-2">${h2569 > 0 ? h2569.toFixed(2) + "%" : "ไม่มีข้อมูล"}</span>
-                <div class="w-7 bg-slate-100 rounded-lg h-28 flex items-end overflow-hidden shadow-inner">
-                  <div class="w-full bg-gradient-to-t from-yellow-500 to-yellow-400 rounded-t transition-all duration-700" style="height: ${h2569 > 0 ? h2569 : 0}%"></div>
+                <!-- ข้อมูลโปรไฟล์ผู้ใช้งานปัจจุบัน และปุ่ม Logout -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 w-full lg:w-auto bg-slate-50 p-3 rounded-xl border border-slate-150">
+                    <div class="flex flex-col">
+                        <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">บัญชีผู้ใช้งานระบบ:</span>
+                        <span id="userProfileDisplay" class="text-sm text-slate-800 font-extrabold">กำลังโหลด...</span>
+                    </div>
+                    <div class="hidden sm:block w-px h-8 bg-slate-200"></div>
+                    <button onclick="handleLogout()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-[10px] font-bold px-3 py-2 rounded-lg transition-all border border-rose-100 active:scale-95">
+                        ออกจากระบบ
+                    </button>
                 </div>
-                <span class="text-[9px] font-bold text-emerald-800 mt-2">ปี 2569 (ปัจจุบัน)</span>
-              </div>
             </div>
-          </div>
+        </header>
 
-          <div class="mt-4 pt-3 flex justify-between items-center text-[10px] text-slate-400">
-            <span>เกณฑ์การพิจารณาความพึงพอใจร้อยละ 100.00%</span>
-            <span class="font-semibold text-emerald-800 flex items-center gap-1">
-              <span class="w-2.5 h-2.5 rounded-full bg-yellow-400 inline-block"></span> 
-              ข้อมูลปีปัจจุบัน
-            </span>
-          </div>
-        `;
-        
-        container.appendChild(card);
-      });
-    }
-
-    // --- 4. ส่วนหลังบ้านระบบสารสนเทศ (Admin Panel) ---
-    function loadAdminPanel() {
-      if (!currentUser) return;
-      
-      const isAdmin = currentUser.role === 'Admin';
-      const deniedBlock = document.getElementById('adminAccessDenied');
-      const panelBlock = document.getElementById('adminPanel');
-
-      if (!isAdmin) {
-        if (deniedBlock) deniedBlock.classList.remove('hidden');
-        if (panelBlock) panelBlock.classList.add('hidden');
-        return;
-      }
-
-      if (deniedBlock) deniedBlock.classList.add('hidden');
-      if (panelBlock) panelBlock.classList.remove('hidden');
-
-      const activities = getActivities();
-      const users = getUsers();
-
-      const ownerSelect = document.getElementById('newActOwner');
-      if (ownerSelect) {
-        ownerSelect.innerHTML = '';
-        users.forEach(u => {
-          const option = document.createElement('option');
-          option.value = u.email;
-          option.innerText = `${u.name} (${u.email})`;
-          ownerSelect.appendChild(option);
-        });
-      }
-
-      const tbodyAct = document.getElementById('adminActivitiesTable');
-      if (tbodyAct) {
-        tbodyAct.innerHTML = '';
-        if (activities.length === 0) {
-          tbodyAct.innerHTML = `<tr><td colspan="4" class="text-center py-5 text-slate-400">ยังไม่พบบันทึกกิจกรรมประเมินในฐานข้อมูล</td></tr>`;
-        } else {
-          activities.forEach(act => {
-            const tr = document.createElement('tr');
-            tr.className = "hover:bg-slate-50 transition-colors";
-            tr.innerHTML = `
-              <td class="px-4 py-3 font-mono text-[10px] text-slate-500 font-bold">${act.id}</td>
-              <td class="px-4 py-3 font-semibold text-slate-700">
-                <div>${act.name}</div>
-              </td>
-              <td class="px-4 py-3 text-slate-500 font-mono text-[10px]">${act.owner}</td>
-              <td class="px-4 py-3 text-center">
-                <button onclick="confirmDeleteActivity('${act.id}')" class="text-[10px] bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold px-3 py-1.5 rounded transition-all">
-                  จำหน่ายออก
+        <!-- ส่วนเนื้อหาของแท็บนำทางหลัก -->
+        <main class="max-w-6xl mx-auto px-6 py-8 flex-grow w-full">
+            <!-- แท็บเมนูมินิมอล -->
+            <div class="flex border-b border-slate-200 mb-8 overflow-x-auto no-scrollbar gap-1">
+                <button onclick="switchTab('evaluate-tab')" id="btn-evaluate-tab" class="py-3.5 px-5 font-bold border-b-2 border-emerald-850 text-emerald-855 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    <span>ทำแบบประเมินโครงการ</span>
+                    <span id="pendingBadge" class="px-2 py-0.5 text-[9px] bg-yellow-400 text-slate-900 font-bold rounded-full">0</span>
                 </button>
-              </td>
-            `;
-            tbodyAct.appendChild(tr);
-          });
+                <button onclick="switchTab('report-tab')" id="btn-report-tab" class="py-3.5 px-5 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2"></path></svg>
+                    <span>สรุปรายงานผลการประเมิน</span>
+                </button>
+                <button onclick="switchTab('history-tab')" id="btn-history-tab" class="py-3.5 px-5 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span>สถิติดำเนินการย้อนหลัง 3 ปี</span>
+                </button>
+                <button onclick="switchTab('admin-tab')" id="btn-admin-tab" class="py-3.5 px-5 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                    <span>บริหารจัดการสารสนเทศ</span>
+                    <span class="text-[9px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-full">แอดมิน</span>
+                </button>
+            </div>
+
+            <!-- 2.1 หน้าประเมินโครงการแบบ Grid (Premium Design) -->
+            <section id="evaluate-tab" class="tab-content block">
+                <div class="bg-emerald-50/40 border-l-4 border-emerald-850 p-4 rounded-r-lg mb-6 text-sm text-emerald-900 leading-relaxed shadow-sm">
+                    <strong>คำแนะนำเบื้องต้น:</strong> แบบประเมินโครงการความพึงพอใจของสถาบันที่ท่านยังค้างประเมินผลจะแสดงดังตารางข้างล่าง 
+                    หากท่านดำเนินการประเมินโครงการเสร็จสิ้น <strong class="text-emerald-950 underline">โครงการนี้จะถูกส่งเข้าระบบสถิติและซ่อนออกจากหน้าจอของท่านทันที</strong> เพื่อลดงานตกค้างและเพิ่มความคลีนสูงสุด
+                </div>
+                
+                <div id="evaluationList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-300">
+                    <!-- โหลดผ่าน JS -->
+                </div>
+                
+                <div id="noEvaluations" class="hidden text-center py-20 bg-white rounded-xl border border-slate-150 shadow-sm">
+                    <div class="w-12 h-12 rounded-full bg-emerald-50 text-emerald-855 flex items-center justify-center mx-auto mb-4 font-bold text-sm">✓</div>
+                    <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider">เสร็จสิ้นภารกิจการประเมิน</h3>
+                    <p class="text-slate-400 mt-1 text-sm">ท่านได้ตอบแบบประเมินโครงการครบถ้วนทุกรายการที่มีในสารสนเทศเรียบร้อยแล้ว ขอขอบพระคุณอย่างยิ่ง</p>
+                </div>
+            </section>
+
+            <!-- 2.2 หน้าสรุปรายงานผลคะแนนปัจจุบัน (คิดร้อยละตามเกณฑ์อย่างเที่ยงตรง) -->
+            <section id="report-tab" class="tab-content hidden">
+                <div class="bg-amber-50/40 border-l-4 border-amber-500 p-4 rounded-r-xl mb-6 text-sm text-slate-700 leading-relaxed shadow-sm">
+                    <strong>เกณฑ์การวัดผลสถิติความพึงพอใจร้อยละ:</strong> 
+                    การคำนวณผลร้อยละความพึงพอใจโครงการ: คะแนนระดับ <strong class="text-slate-900">4 และ 5 คิดเป็นพึงพอใจร้อยละ 100</strong> ต่อผู้โหวต 1 คน 
+                    ส่วนระดับ <strong class="text-slate-900">1, 2, 3 คิดเป็นร้อยละ 0</strong> โดยเฉลี่ยจากจำนวนครูบุคลากรที่ส่งแบบสอบถามทั้งหมด 
+                    <br><strong class="text-amber-850">ตัวอย่างสถิติ:</strong> หากมีบุคลากรทำแบบสอบถามประเมินผลทั้งหมด 50 คน และส่งคะแนนต่ำกว่า 4 ดาว จำนวน 1 คน คะแนนความพึงพอใจสะสมของกิจกรรมจะพล็อตแสดงเป็น **ร้อยละ 98.00**
+                </div>
+                
+                <div id="reportList" class="space-y-6">
+                    <!-- โหลดรายงานปัจจุบันผ่าน JS -->
+                </div>
+            </section>
+
+            <!-- 2.3 หน้าแสดงกราฟสถิตย้อนหลัง 3 ปี -->
+            <section id="history-tab" class="tab-content hidden">
+                <div class="bg-emerald-50/40 border-l-4 border-emerald-850 p-4 rounded-r-xl mb-6 text-sm text-emerald-900 leading-relaxed shadow-sm">
+                    <strong>บัญชีข้อมูลสถิติประกันคุณภาพ:</strong> กราฟสรุปผลเปรียบเทียบร้อยละ (%) ความพึงพอใจโครงการและกิจกรรมย้อนหลัง 3 ปีการศึกษา เพื่อใช้ประเมินวัดความคุ้มค่าและทิศทางผลสำเร็จตามเกณฑ์แผนกลยุทธ์สถาบัน
+                </div>
+
+                <div id="historyList" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- โหลดผ่าน JS -->
+                </div>
+            </section>
+
+            <!-- 2.4 หน้าหลังบ้านควบคุมสารสนเทศระบบ (Admin Only) -->
+            <section id="admin-tab" class="tab-content hidden">
+                <div id="adminAccessDenied" class="hidden bg-slate-50 border border-slate-150 p-10 rounded-xl text-center max-w-lg mx-auto my-8 shadow-sm">
+                    <div class="w-10 h-10 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto text-base mb-4">🔒</div>
+                    <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider">สิทธิ์การเข้าถึงพื้นที่ถูกจำกัด</h3>
+                    <p class="text-slate-400 mt-2 text-sm leading-relaxed">
+                        หน้าต่างควบคุมและระบบแก้ไขรายสิทธิ์ผู้ใช้ สงวนสิทธิ์สำหรับ **ผู้ดูแลระบบกลาง** เท่านั้น
+                    </p>
+                </div>
+
+                <div id="adminPanel" class="space-y-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        
+                        <!-- ฝั่งซ้าย: ฟอร์มสร้างโครงการประเมิน และ แผงลงทะเบียนบุคลากรใหม่ -->
+                        <div class="space-y-6 lg:col-span-1">
+                            
+                            <!-- ฟอร์มสร้างโครงการกิจกรรมใหม่ -->
+                            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                                <h3 class="text-sm font-bold text-slate-900 mb-4 border-b pb-3 flex items-center gap-1.5 uppercase tracking-wider">
+                                    <span class="text-emerald-850">➕</span>
+                                    <span>สร้างทะเบียนประเมินโครงการใหม่</span>
+                                </h3>
+                                <form id="addActivityForm" onsubmit="createNewActivity(event)" class="space-y-4">
+                                    <div>
+                                        <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1">ระบุชื่อโครงการ / กิจกรรม</label>
+                                        <input type="text" id="newActName" required placeholder="เช่น โครงการพัฒนาทักษะวิชาชีพครูสู่ศตวรรษที่ 21" class="w-full border border-slate-200 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-850">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1">เป้าหมาย / วัตถุประสงค์โครงการ</label>
+                                        <textarea id="newActObjectives" rows="3" placeholder="ระบุวัตถุประสงค์โครงการทีละข้อ (แยกบรรทัด)" class="w-full border border-slate-200 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-850"></textarea>
+                                    </div>
+                                    <!-- ปุ่มแทรกภาพโปสเตอร์ของกิจกรรมสำหรับบันทึกเก็บเข้าระบบ -->
+                                    <div>
+                                        <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1">ลิงก์ภาพโปสเตอร์กิจกรรม (Poster URL)</label>
+                                        <input type="url" id="newActPoster" placeholder="เช่น https://domain.com/poster.jpg (ว่างได้)" class="w-full border border-slate-200 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-850">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1">หัวข้อการประเมินความพึงพอใจ (ป้อนบรรทัดละ 1 ข้อ)</label>
+                                        <textarea id="newActTopics" rows="3" required placeholder="เช่น&#10;ด้านความเหมาะสมของหลักสูตร&#10;ด้านคุณภาพและลีลาการสอนของวิทยากร&#10;ด้านความพร้อมของสตรีมมิ่งและระบบเทคโนโลยี" class="w-full border border-slate-200 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-850"></textarea>
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1">ผู้รับผิดชอบโครงการ (ผู้ควบคุมสิทธิ์)</label>
+                                        <select id="newActOwner" class="w-full border border-slate-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-850 cursor-pointer">
+                                            <!-- เติมรายชื่อโดย JS -->
+                                        </select>
+                                    </div>
+
+                                    <!-- ทะเบียนกำหนดร้อยละสะสมย้อนหลัง -->
+                                    <div class="border-t border-slate-150 pt-3">
+                                        <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1.5">กำหนดค่าสถิตย้อนหลัง (%)</label>
+                                        <div class="grid grid-cols-3 gap-2">
+                                            <div>
+                                                <span class="block text-[9px] text-slate-400 mb-0.5">ปี 2566 (%)</span>
+                                                <input type="number" step="0.01" min="0" max="100" id="history2566" required value="85.00" class="w-full border border-slate-200 rounded p-1 text-center text-sm">
+                                            </div>
+                                            <div>
+                                                <span class="block text-[9px] text-slate-400 mb-0.5">ปี 2567 (%)</span>
+                                                <input type="number" step="0.01" min="0" max="100" id="history2567" required value="88.00" class="w-full border border-slate-200 rounded p-1 text-center text-sm">
+                                            </div>
+                                            <div>
+                                                <span class="block text-[9px] text-slate-400 mb-0.5">ปี 2568 (%)</span>
+                                                <input type="number" step="0.01" min="0" max="100" id="history2568" required value="92.00" class="w-full border border-slate-200 rounded p-1 text-center text-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-2 rounded text-sm transition-all shadow-sm active:scale-95">
+                                        บันทึกและเปิดใช้งานแบบประเมิน
+                                    </button>
+                                </form>
+                            </div>
+
+                            <!-- ฟอร์มลงทะเบียนบัญชีบุคลากรใหม่เข้าระบบ -->
+                            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                                <h3 class="text-sm font-bold text-slate-900 mb-4 border-b pb-3 flex items-center gap-1.5 uppercase tracking-wider">
+                                    <span class="text-emerald-855">👤</span>
+                                    <span>ลงทะเบียนเพิ่มบุคลากรใหม่</span>
+                                </h3>
+                                <form id="addUserForm" onsubmit="createNewUser(event)" class="space-y-4">
+                                    <div>
+                                        <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1">รหัสพนักงานประจำตัว</label>
+                                        <input type="text" id="newUserEmpId" required placeholder="ระบุเช่น YW-011" class="w-full border border-slate-200 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-850">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1">ชื่อ - นามสกุล</label>
+                                        <input type="text" id="newUserName" required placeholder="ชื่อ นามสกุลจริง" class="w-full border border-slate-200 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-850">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1">อีเมลเข้าใช้งาน (@yuwapat.ac.th)</label>
+                                        <input type="email" id="newUserEmail" required placeholder="อีเมลโดเมนสถาบัน" class="w-full border border-slate-200 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-850">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1">ตำแหน่งงาน / บทบาทสิทธิ์</label>
+                                        <select id="newUserRole" class="w-full border border-slate-200 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-850 cursor-pointer">
+                                            <option value="Staff">คุณครู/บุคลากรทั่วไป</option>
+                                            <option value="Executive">ผู้บริหาร</option>
+                                            <option value="Head_Admin">หัวหน้าฝ่ายบริหารทั่วไป</option>
+                                            <option value="Head_Academic">หัวหน้าฝ่ายวิชาการ</option>
+                                            <option value="Head_QA">หัวหน้าฝ่ายประกันคุณภาพภายใน</option>
+                                            <option value="Head_Student">หัวหน้าฝ่ายกิจการนักเรียน</option>
+                                            <option value="Admin">ผู้ดูแลระบบกลาง (Admin)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1">กำหนดรหัสผ่าน (ขั้นต่ำ 6 ตัวอักษร)</label>
+                                        <input type="text" id="newUserPassword" required value="yw123456" placeholder="รหัสผ่านขั้นต่ำ 6 ตัวอักษร" class="w-full border border-slate-200 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-850">
+                                    </div>
+                                    <button type="submit" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-2 rounded text-sm transition-all shadow-sm active:scale-95">
+                                        จดบันทึกประวัติบุคลากร
+                                    </button>
+                                </form>
+                            </div>
+
+                        </div>
+
+                        <!-- ฝั่งขวา: แสดงแผนงานโครงการและตารางจัดการแก้ไขสิทธิ์บุคลากรรายบุคคล -->
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm lg:col-span-2 space-y-6">
+                            
+                            <!-- ตารางจดทะเบียนโครงการทั้งหมด -->
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900 mb-3.5 flex items-center gap-1.5 uppercase tracking-wider">
+                                    <span class="text-emerald-850">📋</span>
+                                    <span>ทะเบียนแผนโครงการทั้งหมดในระบบ</span>
+                                </h3>
+                                <div class="overflow-x-auto border border-slate-150 rounded-lg mb-6">
+                                    <table class="min-w-full text-sm text-left">
+                                        <thead class="bg-slate-50 text-slate-655 font-bold border-b border-slate-150 uppercase text-[10px] tracking-wider">
+                                            <tr>
+                                                <th class="px-4 py-3">รหัสสถิติ</th>
+                                                <th class="px-4 py-3">ชื่อโครงการ / กิจกรรม</th>
+                                                <th class="px-4 py-3">ผู้ควบคุมสิทธิ์</th>
+                                                <th class="px-4 py-3 text-center">การจัดการ</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="adminActivitiesTable" class="divide-y divide-slate-100">
+                                            <!-- แถวโหลดผ่าน JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- ตารางแสดงบุคลากรและปุ่มแก้ไขข้อมูลเชิงลึกแบบใหม่ -->
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900 mb-3.5 flex items-center gap-1.5 uppercase tracking-wider">
+                                    <span class="text-emerald-855">🔑</span>
+                                    <span>ข้อมูลสถิติและการแก้ไขข้อมูลบุคลากรรายบุคคล</span>
+                                </h3>
+                                <div class="overflow-x-auto border border-slate-150 rounded-lg">
+                                    <table class="min-w-full text-sm text-left">
+                                        <thead class="bg-slate-50 text-slate-655 font-bold border-b border-slate-150 uppercase text-[10px] tracking-wider">
+                                            <tr>
+                                                <th class="px-4 py-3">รหัสพนักงาน</th>
+                                                <th class="px-4 py-3">ชื่อ-นามสกุล</th>
+                                                <th class="px-4 py-3">อีเมลเข้าใช้งาน</th>
+                                                <th class="px-4 py-3">ตำแหน่ง / บทบาท</th>
+                                                <th class="px-4 py-3">รหัสปัจจุบัน</th>
+                                                <th class="px-4 py-3 text-center">การจัดการ</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="adminUsersTable" class="divide-y divide-slate-100">
+                                            <!-- แถวโหลดผ่าน JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- แถบดึงค่าข้อมูลสารสนเทศจำลองดั้งเดิม -->
+                    <div class="border-t border-slate-200 pt-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h4 class="font-bold text-rose-700 text-sm flex items-center gap-1.5 uppercase tracking-wider">
+                                <span>🔄 คืนค่าข้อมูลสารสนเทศเริ่มต้น</span>
+                            </h4>
+                            <p class="text-[10px] text-slate-400 mt-0.5">กดยืนยันเพื่อล้างข้อมูลและกู้คืนสารสนเทศโครงการดั้งเดิมทั้งหมดของแอปกลับคืนมา</p>
+                        </div>
+                        <button onclick="confirmResetSystem()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-[10px] px-4 py-2 rounded font-bold transition-all shadow-sm active:scale-95">
+                            กู้คืนข้อมูลระบบทั้งหมด
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- ส่วนท้ายเว็บไซต์ระบุช่องทางการติดต่อเป็นทางการ -->
+        <footer class="text-center py-8 text-slate-400 text-xs border-t border-slate-100 bg-white tracking-wider">
+            หากมีข้อสงสัยหรือระบบขัดข้อง โปรดติดต่อฝ่ายไอที โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์
+        </footer>
+    </div>
+
+    <!-- JavaScript & Business Logic -->
+    <script>
+        // --- ฐานข้อมูลทดสอบโครงสร้างองค์กร (รหัสผ่านขั้นต่ำ 6 ตัวอักษร) ---
+        const defaultUsers = [
+            { email: "admin@yuwapat.ac.th", name: "นายสมศักดิ์ ปัญญาดี", role: "Admin", password: "yw123456", empId: "YW-001" },
+            { email: "director@yuwapat.ac.th", name: "ดร.วิชัย รักเรียน", role: "Executive", password: "yw123456", empId: "YW-002" },
+            { email: "executive2@yuwapat.ac.th", name: "นายปรีชา นึกดี", role: "Executive", password: "yw123456", empId: "YW-003" },
+            
+            { email: "head_admin@yuwapat.ac.th", name: "นายพชร แก้วกมล", role: "Head_Admin", password: "yw123456", empId: "YW-004" },
+            { email: "head_academic@yuwapat.ac.th", name: "นางสาวนงลักษณ์ พึ่งสอน", role: "Head_Academic", password: "yw123456", empId: "YW-005" },
+            { email: "head_qa@yuwapat.ac.th", name: "นางพรรณิภา ประกันดี", role: "Head_QA", password: "yw123456", empId: "YW-006" },
+            { email: "head_student@yuwapat.ac.th", name: "นายเกรียงไกร มีเดช", role: "Head_Student", password: "yw123456", empId: "YW-007" },
+            
+            { email: "owner_ai@yuwapat.ac.th", name: "นางสมหญิง มั่นเรียน", role: "Staff", password: "yw123456", empId: "YW-008" },
+            { email: "somchai@yuwapat.ac.th", name: "นายสมชาย ยินดี", role: "Staff", password: "yw123456", empId: "YW-009" },
+            { email: "somsri@yuwapat.ac.th", name: "นางสาวสมศรี สุขเกษม", role: "Staff", password: "yw123456", empId: "YW-010" }
+        ];
+
+        const defaultActivities = [
+            { 
+                id: "ACT-001", 
+                name: "โครงการสัมมนาเชิงปฏิบัติการ: การประยุกต์ใช้ AI ในการพัฒนาบทเรียน", 
+                owner: "owner_ai@yuwapat.ac.th",
+                poster: "", 
+                objectives: "1. เพื่อให้คุณครูและบุคลากรมีความรู้พื้นฐานในการนำเทคโนโลยี AI มาพัฒนาสื่อการเรียนการสอน\n2. เพื่อยกระดับและพัฒนาแผนจัดการเรียนรู้ให้มีความสร้างสรรค์และตอบสนองความสนใจของผู้เรียนเป็นรายบุคคล",
+                topics: [
+                    "ด้านความสอดคล้องของหัวข้ออบรมกับความต้องการของครูผู้สอน",
+                    "ด้านทักษะและความรู้ความชำนาญการถ่ายทอดของวิทยากรหลัก",
+                    "ด้านการนำความรู้ที่ได้รับไปใช้พัฒนาสื่อการสอนจริงในสถาบัน"
+                ],
+                history: { "2566": 82.00, "2567": 87.00, "2568": 92.00 }
+            },
+            { 
+                id: "ACT-002", 
+                name: "ประชุมคณะกรรมการสถานศึกษา: แนวทางการเลื่อนขั้นเงินเดือนและอัตราจ้างประจำปี", 
+                owner: "head_admin@yuwapat.ac.th",
+                poster: "",
+                objectives: "1. เพื่อสรุปและทบทวนแนวทางการพิจารณาเลื่อนขั้นเงินเดือน\n2. เพื่อยกระดับความโปร่งใสในสถาบันและสร้างขวัญกำลังใจให้บุคลากร",
+                topics: [
+                    "ด้านเกณฑ์การวัดผลชี้วัดที่โปร่งใสและตรวจสอบได้",
+                    "ด้านการมีส่วนร่วมของบุคลากรต่อข้อตกลงและกระบวนการพิจารณา",
+                    "ด้านผลลัพธ์และความพึงพอใจต่อสถิติวินัยการจัดสรรตามรอบปี"
+                ],
+                history: { "2566": 78.00, "2567": 83.00, "2568": 86.00 }
+            }
+        ];
+
+        const defaultEvaluations = [
+            { 
+                activityId: "ACT-001", 
+                email: "somchai@yuwapat.ac.th", 
+                name: "นายสมชาย ยินดี", 
+                role: "คุณครู/บุคลากร", 
+                ratings: {
+                    "ด้านความสอดคล้องของหัวข้ออบรมกับความต้องการของครูผู้สอน": 5,
+                    "ด้านทักษะและความรู้ความชำนาญการถ่ายทอดของวิทยากรหลัก": 5,
+                    "ด้านการนำความรู้ที่ได้รับไปใช้พัฒนาสื่อการสอนจริงในสถาบัน": 4
+                }, 
+                suggestion: "เนื้อหากระชับ นำไปทำสื่อและสไลด์สอนได้สวยงามจริงครับ" 
+            },
+            { 
+                activityId: "ACT-001", 
+                email: "somsri@yuwapat.ac.th", 
+                name: "นางสาวสมศรี สุขเกษม", 
+                role: "คุณครู/บุคลากร", 
+                ratings: {
+                    "ด้านความสอดคล้องของหัวข้ออบรมกับความต้องการของครูผู้สอน": 4,
+                    "ด้านทักษะและความรู้ความชำนาญการถ่ายทอดของวิทยากรหลัก": 4,
+                    "ด้านการนำความรู้ที่ได้รับไปใช้พัฒนาสื่อการสอนจริงในสถาบัน": 3
+                }, 
+                suggestion: "อยากให้มีจัดสัมมนาขั้นแอดวานซ์แยกย่อยตามสายวิชาเพิ่มเติม" 
+            },
+            { 
+                activityId: "ACT-001", 
+                email: "director@yuwapat.ac.th", 
+                name: "ดร.วิชัย รักเรียน", 
+                role: "ผู้บริหาร", 
+                ratings: {
+                    "ด้านความสอดคล้องของหัวข้ออบรมกับความต้องการของครูผู้สอน": 5,
+                    "ด้านทักษะและความรู้ความชำนาญการถ่ายทอดของวิทยากรหลัก": 5,
+                    "ด้านการนำความรู้ที่ได้รับไปใช้พัฒนาสื่อการสอนจริงในสถาบัน": 5
+                }, 
+                suggestion: "ระบบจัดการสิทธิ์และขั้นตอนสัมมนาทำได้ดีมาก น่าสนับสนุนอย่างสม่ำเสมอ" 
+            }
+        ];
+
+        // --- ระบบสืบค้นข้อมูลท้องถิ่น (LocalStorage Service) ---
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('eval_users')) || defaultUsers;
         }
-      }
 
-      const tbodyUsers = document.getElementById('adminUsersTable');
-      if (tbodyUsers) {
-        tbodyUsers.innerHTML = '';
-        users.forEach(u => {
-          let displayRole = 'คุณครู/บุคลากร';
-          let badgeColor = 'bg-slate-100 text-slate-600';
-          
-          if (u.role === 'Admin') {
-            displayRole = 'ผู้ดูแลระบบกลาง';
-            badgeColor = 'bg-red-100 text-red-800';
-          } else if (u.role === 'Executive') {
-            displayRole = 'ผู้บริหาร';
-            badgeColor = 'bg-amber-100 text-amber-800';
-          } else if (u.role === 'Head_Admin') {
-            displayRole = 'หัวหน้าฝ่ายบริหารทั่วไป';
-            badgeColor = 'bg-teal-100 text-teal-800';
-          } else if (u.role === 'Head_Academic') {
-            displayRole = 'หัวหน้าฝ่ายวิชาการ';
-            badgeColor = 'bg-blue-100 text-blue-800';
-          } else if (u.role === 'Head_QA') {
-            displayRole = 'หัวหน้าฝ่ายประกันคุณภาพภายใน';
-            badgeColor = 'bg-purple-100 text-purple-800';
-          } else if (u.role === 'Head_Student') {
-            displayRole = 'หัวหน้าฝ่ายกิจการนักเรียน';
-            badgeColor = 'bg-indigo-100 text-indigo-800';
-          }
+        function getActivities() {
+            return JSON.parse(localStorage.getItem('eval_activities')) || defaultActivities;
+        }
 
-          const tr = document.createElement('tr');
-          tr.className = "hover:bg-slate-50 transition-colors";
-          tr.innerHTML = `
-            <td class="px-4 py-3 font-mono text-[10px] text-slate-500 font-bold">${u.empId || '-'}</td>
-            <td class="px-4 py-3 font-semibold text-slate-700">${u.name}</td>
-            <td class="px-4 py-3 font-mono text-slate-500 text-[10px]">${u.email}</td>
-            <td class="px-4 py-3 text-slate-600">
-              <span class="${badgeColor} text-[9px] px-2 py-0.5 rounded-full font-bold">
-                ${displayRole}
-              </span>
-            </td>
-            <td class="px-4 py-3 font-mono font-bold text-slate-800">${u.password}</td>
-            <td class="px-4 py-3 text-center">
-              <button onclick="openUserModal('${u.email}')" class="text-[10px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold px-3 py-1.5 rounded transition-all">
-                แก้ไขข้อมูล
-              </button>
-            </td>
-          `;
-          tbodyUsers.appendChild(tr);
+        function getEvaluations() {
+            return JSON.parse(localStorage.getItem('eval_submissions')) || defaultEvaluations;
+        }
+
+        let currentUser = null;
+
+        // --- ฟังก์ชันแจ้งเตือนสากล (Toast) ---
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if(!container) return;
+            const toast = document.createElement('div');
+            toast.className = `flex items-center gap-3 px-4 py-3 rounded-lg shadow-xl border text-xs font-semibold transition-all duration-300 transform translate-y-2 opacity-0 ${
+                type === 'success' ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-rose-50 border-rose-200 text-rose-850'
+            }`;
+            toast.innerHTML = `
+                <span class="text-sm">${type === 'success' ? '✓' : '⚠️'}</span>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        let currentConfirmAction = null;
+
+        function customConfirm(title, message, icon, onConfirm, isDanger = false) {
+            const modal = document.getElementById('confirm-modal');
+            if(!modal) return;
+            document.getElementById('confirm-title').innerText = title;
+            document.getElementById('confirm-msg').innerText = message;
+            document.getElementById('confirm-icon').innerText = icon;
+            
+            const okBtn = document.getElementById('confirm-ok-btn');
+            if (isDanger) {
+                okBtn.className = "px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded text-xs font-semibold transition-colors";
+            } else {
+                okBtn.className = "px-4 py-2 bg-emerald-800 hover:bg-emerald-900 text-white rounded text-xs font-semibold transition-colors";
+            }
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            currentConfirmAction = onConfirm;
+        }
+
+        // ฟังก์ชันรับมือการแสดงตราสัญลักษณ์โรงเรียนในแบบปลอดภัย ป้องกัน SyntaxError จาก Quote ซ้อนใน HTML inline event
+        function handleLogoError(img) {
+            img.onerror = null;
+            img.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%23064e3b'/><text x='50' y='55' font-family='Sarabun' font-weight='bold' font-size='30' fill='%23facc15' text-anchor='middle'>YW</text></svg>";
+        }
+
+        // --- ระบบเซสชันเข้าใช้ (Auth Session Manager) ---
+        function checkSession() {
+            const savedUser = localStorage.getItem('current_logged_user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                const loginScreen = document.getElementById('login-screen');
+                const dashboard = document.getElementById('main-dashboard');
+                
+                if(loginScreen) loginScreen.classList.add('hidden');
+                if(dashboard) {
+                    dashboard.classList.remove('hidden');
+                    dashboard.classList.add('flex');
+                }
+                
+                let roleText = 'คุณครู/บุคลากร';
+                if (currentUser.role === 'Admin') roleText = 'แอดมินระบบกลาง';
+                else if (currentUser.role === 'Executive') roleText = 'ผู้บริหาร';
+                else if (currentUser.role === 'Head_Admin') roleText = 'หัวหน้าฝ่ายบริหารทั่วไป';
+                else if (currentUser.role === 'Head_Academic') roleText = 'หัวหน้าฝ่ายวิชาการ';
+                else if (currentUser.role === 'Head_QA') roleText = 'หัวหน้าฝ่ายประกันคุณภาพภายใน';
+                else if (currentUser.role === 'Head_Student') roleText = 'หัวหน้าฝ่ายกิจการนักเรียน';
+                
+                const profileDisplay = document.getElementById('userProfileDisplay');
+                if(profileDisplay) profileDisplay.innerText = `${currentUser.name} (${roleText})`;
+                
+                switchTab('evaluate-tab');
+            } else {
+                const loginScreen = document.getElementById('login-screen');
+                const dashboard = document.getElementById('main-dashboard');
+                
+                if(loginScreen) loginScreen.classList.remove('hidden');
+                if(dashboard) {
+                    dashboard.classList.add('hidden');
+                    dashboard.classList.remove('flex');
+                }
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+
+            const users = getUsers();
+            const found = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+
+            if (found) {
+                localStorage.setItem('current_logged_user', JSON.stringify(found));
+                showToast('เข้าสู่ระบบสำเร็จเรียบร้อย', 'success');
+                checkSession();
+            } else {
+                showToast('ข้อมูลอีเมลหรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง', 'error');
+            }
+        }
+
+        function autofillLogin(email) {
+            const users = getUsers();
+            const found = users.find(u => u.email === email);
+            if (found) {
+                const emailInput = document.getElementById('login-email');
+                const pwInput = document.getElementById('login-password');
+                if(emailInput) emailInput.value = found.email;
+                if(pwInput) pwInput.value = found.password;
+                showToast('เติมข้อมูลล็อกอินตัวอย่างเรียบร้อย', 'success');
+            }
+        }
+
+        function handleLogout() {
+            customConfirm(
+                "ออกจากระบบสารสนเทศ",
+                "คุณต้องการลงชื่อออกจากระบบการใช้งานในขณะนี้หรือไม่?",
+                "👤",
+                () => {
+                    localStorage.removeItem('current_logged_user');
+                    currentUser = null;
+                    showToast('ออกจากระบบอย่างปลอดภัยเรียบร้อยแล้ว', 'success');
+                    checkSession();
+                }
+            );
+        }
+
+        // --- ระบบสลับแท็บเมนูหลัก (Navigation Tabs) ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            
+            const targetTab = document.getElementById(tabId);
+            if (targetTab) {
+                targetTab.classList.remove('hidden');
+                targetTab.classList.add('block');
+            }
+
+            document.querySelectorAll('button[id^="btn-"]').forEach(btn => {
+                btn.classList.remove('border-emerald-850', 'text-emerald-855');
+                btn.classList.add('border-transparent', 'text-slate-400');
+            });
+
+            const targetBtn = document.getElementById('btn-' + tabId);
+            if (targetBtn) {
+                targetBtn.classList.add('border-emerald-855', 'text-emerald-855');
+                targetBtn.classList.remove('border-transparent', 'text-slate-400');
+            }
+
+            if (tabId === 'evaluate-tab') loadEvaluationForms();
+            if (tabId === 'report-tab') loadReportList();
+            if (tabId === 'history-tab') loadHistoryReports();
+            if (tabId === 'admin-tab') loadAdminPanel();
+        }
+
+        // --- 1. หน้าจอประเมินโครงการแบบ Grid (Premium Design) ---
+        function loadEvaluationForms() {
+            if (!currentUser) return;
+
+            const activities = getActivities();
+            const evaluations = getEvaluations();
+            
+            const userEvaluatedIds = evaluations
+                .filter(ev => ev.email.toLowerCase() === currentUser.email.toLowerCase())
+                .map(ev => ev.activityId);
+            
+            const pendingActivities = activities.filter(act => !userEvaluatedIds.includes(act.id));
+            
+            const badge = document.getElementById('pendingBadge');
+            if (badge) {
+                badge.innerText = pendingActivities.length;
+            }
+
+            const container = document.getElementById('evaluationList');
+            const emptyView = document.getElementById('noEvaluations');
+            
+            if (!container || !emptyView) return;
+            container.innerHTML = '';
+
+            if (pendingActivities.length === 0) {
+                container.classList.add('hidden');
+                emptyView.classList.remove('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            emptyView.classList.add('hidden');
+
+            pendingActivities.forEach(act => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col justify-between transition-all duration-300 hover:shadow-md hover:border-emerald-300 relative";
+                card.id = `act-card-${act.id}`;
+                
+                const posterSrc = act.poster && act.poster.trim() !== "" ? act.poster : "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'><rect width='100%' height='100%' fill='%23064e3b'/><text x='50%' y='50%' font-family='Sarabun, sans-serif' font-weight='bold' font-size='15' fill='%23facc15' dominant-baseline='middle' text-anchor='middle'>โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</text></svg>";
+
+                card.innerHTML = `
+                    <div class="relative h-44 bg-slate-100 overflow-hidden">
+                        <img src="${posterSrc}" alt="[ภาพโปสเตอร์ประชาสัมพันธ์กิจกรรม]" class="w-full h-full object-cover">
+                        <div class="absolute top-2.5 left-2.5">
+                            <span class="bg-emerald-900/90 text-white text-[9px] font-mono font-bold px-2 py-0.5 rounded tracking-wider border border-white/10 shadow-sm">${act.id}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-5 flex-grow flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-800 leading-snug mb-2 min-h-8 limit-2-lines">${act.name}</h4>
+                            <p class="text-xs text-slate-400 limit-2-lines leading-relaxed mb-4">${act.objectives || 'ตรวจสอบข้อมูลประเมินผลหลังงานโครงการสำเร็จ'}</p>
+                        </div>
+                        
+                        <button onclick="openEvaluationModal('${act.id}')" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white text-sm font-bold py-2 rounded transition-all active:scale-[0.98] shadow-sm">
+                            เริ่มทำแบบประเมินผล
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // เปิด Modal แบบสอบถามหลายหัวข้อแบบรูปทรงเรขาคณิต (1-5) สัมผัสง่าย (w-12 h-12)
+        function openEvaluationModal(actId) {
+            const activities = getActivities();
+            const act = activities.find(a => a.id === actId);
+            if (!act) return;
+
+            document.getElementById('eval-modal-act-id').value = act.id;
+            document.getElementById('eval-modal-id').innerText = act.id;
+            document.getElementById('eval-modal-name').innerText = act.name;
+
+            // ตรวจสอบเป้าหมายวัตถุประสงค์
+            const objContainer = document.getElementById('eval-modal-objectives-container');
+            const objText = document.getElementById('eval-modal-objectives');
+            if (act.objectives && act.objectives.trim() !== "") {
+                objContainer.classList.remove('hidden');
+                objText.innerText = act.objectives;
+            } else {
+                objContainer.classList.add('hidden');
+            }
+
+            // จัดหาภาพโปสเตอร์
+            const posterImg = document.getElementById('eval-modal-poster');
+            const posterSrc = act.poster && act.poster.trim() !== "" ? act.poster : "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='250' viewBox='0 0 500 250'><rect width='100%' height='100%' fill='%23064e3b'/><text x='50%' y='50%' font-family='Sarabun, sans-serif' font-weight='bold' font-size='16' fill='%23facc15' dominant-baseline='middle' text-anchor='middle'>โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</text></svg>";
+            if (posterImg) posterImg.src = posterSrc;
+
+            // สร้างปุ่มเรขาคณิต (Geometric Buttons) สำหรับหัวข้อโหวตรายข้อ
+            const topicsContainer = document.getElementById('eval-topics-container');
+            topicsContainer.innerHTML = '';
+            
+            const topics = act.topics || ["ความพึงพอใจต่อผลงานการจัดกิจกรรมในภาพรวม"];
+            
+            topics.forEach((topic, idx) => {
+                const topicWrapper = document.createElement('div');
+                topicWrapper.className = "bg-slate-50 p-4 rounded-xl border border-slate-100";
+                
+                let radioOptionsHtml = '';
+                for(let i=1; i<=5; i++) {
+                    radioOptionsHtml += `
+                        <label class="flex flex-col items-center gap-1 cursor-pointer">
+                            <input type="radio" name="topic-rating-${idx}" value="${i}" required class="sr-only peer">
+                            <span class="w-12 h-12 border border-slate-200 rounded flex items-center justify-center text-sm font-bold text-slate-500 bg-white hover:border-emerald-800 transition-all peer-checked:bg-emerald-800 peer-checked:text-white peer-checked:border-emerald-800 shadow-inner">
+                                ${i}
+                            </span>
+                        </label>
+                    `;
+                }
+
+                topicWrapper.innerHTML = `
+                    <p class="text-sm text-slate-700 font-semibold mb-3">${idx+1}. ${topic}</p>
+                    <div class="flex justify-between max-w-sm mt-1">
+                        ${radioOptionsHtml}
+                    </div>
+                `;
+                topicsContainer.appendChild(topicWrapper);
+            });
+
+            // ล้างฟอร์ม
+            document.getElementById('evaluationForm').reset();
+            document.getElementById('eval-suggestion').value = '';
+
+            const modal = document.getElementById('evaluation-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeEvaluationModal() {
+            const modal = document.getElementById('evaluation-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        // จัดการส่งแบบประเมินผลโครงการ
+        function submitEvaluationData(e) {
+            e.preventDefault();
+            const actId = document.getElementById('eval-modal-act-id').value;
+            const activities = getActivities();
+            const act = activities.find(a => a.id === actId);
+            if (!act) return;
+
+            const selectedRole = document.querySelector('input[name="eval-role"]:checked').value;
+            const suggestion = document.getElementById('eval-suggestion').value.trim();
+
+            const ratingsObj = {};
+            const topics = act.topics || ["ความพึงพอใจต่อผลงานการจัดกิจกรรมในภาพรวม"];
+            topics.forEach((topic, idx) => {
+                const selectedVal = document.querySelector(`input[name="topic-rating-${idx}"]:checked`).value;
+                ratingsObj[topic] = parseInt(selectedVal);
+            });
+
+            const newSubmission = {
+                activityId: actId,
+                email: currentUser.email,
+                name: currentUser.name,
+                role: selectedRole,
+                ratings: ratingsObj,
+                suggestion: suggestion
+            };
+
+            const evaluations = getEvaluations();
+            evaluations.push(newSubmission);
+            localStorage.setItem('eval_submissions', JSON.stringify(evaluations));
+
+            closeEvaluationModal();
+            
+            // เอฟเฟกต์ประเมินแล้วหายไป
+            const card = document.getElementById(`act-card-${actId}`);
+            if (card) {
+                card.classList.add('opacity-0', 'scale-90', 'duration-500');
+                setTimeout(() => {
+                    showToast('บันทึกผลการทำแบบประเมินโครงการสำเร็จเรียบร้อย', 'success');
+                    loadEvaluationForms();
+                }, 500);
+            } else {
+                showToast('บันทึกผลการทำประเมินสำเร็จ', 'success');
+                loadEvaluationForms();
+            }
+        }
+
+        // --- 2. หน้าสรุปรายงานผลคะแนนปัจจุบัน (คิดร้อยละตามเกณฑ์อย่างเที่ยงตรง) ---
+        function loadReportList() {
+            if (!currentUser) return;
+
+            const activities = getActivities();
+            const evaluations = getEvaluations();
+            
+            const isAdmin = currentUser.role === 'Admin';
+            const isExecutive = currentUser.role === 'Executive';
+            const isHead = ['Head_Admin', 'Head_Academic', 'Head_QA', 'Head_Student'].includes(currentUser.role);
+
+            const container = document.getElementById('reportList');
+            if(!container) return;
+            container.innerHTML = '';
+
+            if (activities.length === 0) {
+                container.innerHTML = '<p class="text-center text-slate-400 py-12 text-xs">ยังไม่มีรายการแผนงานจัดประเมินผลโครงการในฐานข้อมูล</p>';
+                return;
+            }
+
+            activities.forEach(act => {
+                const actEvals = evaluations.filter(e => e.activityId === act.id);
+                const totalEvaluations = actEvals.length;
+                const topics = act.topics || ["ความพึงพอใจต่อผลงานการจัดกิจกรรมในภาพรวม"];
+
+                // คำนวณความพึงพอใจรายหัวข้อ (คะแนน 4-5 = 100%, 1-3 = 0% รายคน)
+                const topicStats = [];
+                let sumTopicPercentage = 0;
+
+                topics.forEach(topic => {
+                    let satisfiedCount = 0;
+                    actEvals.forEach(ev => {
+                        const score = ev.ratings && ev.ratings[topic] ? ev.ratings[topic] : 0;
+                        if (score >= 4) {
+                            satisfiedCount++;
+                        }
+                    });
+
+                    const pct = totalEvaluations > 0 ? (satisfiedCount / totalEvaluations) * 100 : 0;
+                    topicStats.push({
+                        name: topic,
+                        satisfied: satisfiedCount,
+                        percentage: pct
+                    });
+                    sumTopicPercentage += pct;
+                });
+
+                // ร้อยละความพึงพอใจโดยรวมสะสมของกิจกรรมนั้นๆ
+                const overallSatisfaction = topics.length > 0 ? (sumTopicPercentage / topics.length).toFixed(2) : "0.00";
+
+                let avgScore = 0;
+                if (totalEvaluations > 0) {
+                    const sum = actEvals.reduce((sumVal, ev) => {
+                        let innerSum = 0;
+                        topics.forEach(topic => {
+                            innerSum += (ev.ratings && ev.ratings[topic] ? ev.ratings[topic] : 0);
+                        });
+                        return sumVal + (innerSum / topics.length);
+                    }, 0);
+                    avgScore = (sum / totalEvaluations).toFixed(2);
+                }
+
+                const isOwner = act.owner.toLowerCase() === currentUser.email.toLowerCase();
+                const isAuthorized = isAdmin || isOwner || isExecutive || isHead;
+
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden";
+                
+                let htmlContent = `
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5 border-b border-slate-100 pb-5">
+                        <div>
+                            <span class="text-[9px] font-bold bg-slate-50 text-slate-500 border border-slate-200 px-2.5 py-1 rounded font-mono">${act.id}</span>
+                            <h3 class="text-base font-bold text-slate-800 mt-2">${act.name}</h3>
+                        </div>
+                        
+                        <div class="flex items-center gap-4 bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-200 w-full md:w-auto">
+                            <div class="text-center min-w-[90px]">
+                                <span class="block text-[9px] text-slate-400 font-bold uppercase tracking-wider">ร้อยละความพึงพอใจสะสม</span>
+                                <span class="text-sm font-extrabold text-emerald-800">${overallSatisfaction}%</span>
+                            </div>
+                            <div class="h-6 w-px bg-slate-200"></div>
+                            <div class="text-center min-w-[70px]">
+                                <span class="block text-[9px] text-slate-400 font-bold uppercase tracking-wider">คะแนนเฉลี่ย</span>
+                                <span class="text-sm font-extrabold text-slate-600">${avgScore} / 5.00</span>
+                            </div>
+                            <div class="h-6 w-px bg-slate-200"></div>
+                            <div class="text-center min-w-[70px]">
+                                <span class="block text-[9px] text-slate-400 font-bold uppercase tracking-wider">ยอดผู้ประเมิน</span>
+                                <span class="text-sm font-extrabold text-slate-850">${totalEvaluations} ราย</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- แถบความพึงพอใจแยกตามหัวข้อประกันคุณภาพ -->
+                    <div class="mb-5 space-y-4 bg-slate-50/50 p-4 rounded-xl border border-slate-150">
+                        <h4 class="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-2">📊 สถิติความพึงพอใจจำแนกตามหัวข้อประเมินคุณภาพ (ครูประเมินระดับ 4-5):</h4>
+                `;
+
+                topicStats.forEach(stat => {
+                    htmlContent += `
+                        <div>
+                            <div class="flex justify-between items-center text-xs mb-1.5 font-medium text-slate-700">
+                                <span>${stat.name}</span>
+                                <span class="font-bold text-emerald-800">${stat.percentage.toFixed(2)}% (${stat.satisfied}/${totalEvaluations} ราย)</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-lg h-2 overflow-hidden">
+                                <div class="bg-gradient-to-r from-emerald-800 to-emerald-600 h-2 rounded-lg transition-all duration-500" style="width: ${stat.percentage}%"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                htmlContent += `
+                    </div>
+
+                    <!-- ข้อคิดเห็นเพิ่มเติมแบบนิรนาม -->
+                    <div class="mb-5">
+                        <h4 class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-2">📄 บันทึกข้อเสนอแนะเพื่อการพัฒนางานวิชาการ (นิรนาม):</h4>
+                        <div class="space-y-1.5 max-h-48 overflow-y-auto">
+                `;
+
+                const suggestions = actEvals.filter(e => e.suggestion && e.suggestion.trim() !== "");
+                if (suggestions.length === 0) {
+                    htmlContent += `<p class="text-xs text-slate-400 italic">ไม่ปรากฏบันทึกข้อแนะนำสำหรับการดำเนินงานโครงการนี้</p>`;
+                } else {
+                    suggestions.forEach(s => {
+                        htmlContent += `
+                            <div class="bg-neutral-50 p-3 rounded-lg text-xs text-slate-600 border border-slate-100 leading-relaxed">
+                                "${s.suggestion}"
+                            </div>
+                        `;
+                    });
+                }
+
+                htmlContent += `
+                        </div>
+                    </div>
+                `;
+
+                // บล็อกระบุตัวตนเฉพาะผู้มีสิทธิ์ (และปุ่มส่งออกรายงาน CSV)
+                if (isAuthorized) {
+                    let roleLabel = 'สิทธิ์ผู้ดูแลระบบระดับสูง';
+                    if (isOwner) roleLabel = 'คุณเป็นผู้รับผิดชอบโครงการนี้';
+                    else if (isExecutive) roleLabel = 'สิทธิ์ผู้บริหารสถานศึกษา';
+                    else if (isHead) {
+                        if (currentUser.role === 'Head_Admin') roleLabel = 'สิทธิ์หัวหน้าฝ่ายบริหารทั่วไป';
+                        else if (currentUser.role === 'Head_Academic') roleLabel = 'สิทธิ์หัวหน้าฝ่ายวิชาการ';
+                        else if (currentUser.role === 'Head_QA') roleLabel = 'สิทธิ์หัวหน้าฝ่ายประกันคุณภาพภายใน';
+                        else if (currentUser.role === 'Head_Student') roleLabel = 'สิทธิ์หัวหน้าฝ่ายกิจการนักเรียน';
+                    }
+
+                    htmlContent += `
+                        <div class="bg-amber-50/30 border border-amber-200 rounded-xl p-4 mt-5">
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4 border-b border-amber-150 pb-3">
+                                <div class="flex items-center gap-2">
+                                    <h4 class="text-[10px] font-bold text-slate-800 uppercase tracking-wider">
+                                        <span>🔒 บัญชีสิทธิ์ผู้ตรวจสอบผลการประเมินรายบุคคล</span>
+                                    </h4>
+                                    <span class="text-[8px] font-bold bg-amber-400 text-slate-900 px-2 py-0.5 rounded-full">
+                                        ${roleLabel}
+                                    </span>
+                                </div>
+                                
+                                <button onclick="exportToCSV('${act.id}')" class="flex items-center gap-1.5 bg-emerald-800 hover:bg-emerald-955 text-white text-[10px] font-bold px-3 py-1.5 rounded transition-all shadow-sm active:scale-95">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                    <span>ส่งออกข้อมูล (CSV)</span>
+                                </button>
+                            </div>
+                            
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full text-[10px] text-left text-slate-655">
+                                    <thead class="bg-amber-100 text-slate-700 uppercase font-bold border border-amber-200/60">
+                                        <tr>
+                                            <th class="px-3 py-2 rounded-l">ผู้ประเมิน</th>
+                                            <th class="px-3 py-2">ตำแหน่ง</th>
+                                            <th class="px-3 py-2">คะแนนรายหัวข้อ (1-5)</th>
+                                            <th class="px-3 py-2 rounded-r">เนื้อหาระบุเพิ่มเติม</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-amber-200/20">
+                    `;
+
+                    if (actEvals.length === 0) {
+                        htmlContent += `<tr><td colspan="4" class="px-3 py-3 text-center text-slate-400 italic">ยังไม่มีใครทำแบบประเมินสำหรับกิจกรรมนี้</td></tr>`;
+                    } else {
+                        actEvals.forEach(e => {
+                            let ratingsSummary = '';
+                            topics.forEach((topic, tidx) => {
+                                const score = e.ratings && e.ratings[topic] ? e.ratings[topic] : 0;
+                                ratingsSummary += `<div class="mb-0.5">${tidx+1}. <span class="font-bold ${score >= 4 ? 'text-emerald-850' : 'text-slate-455'}">${score}</span></div>`;
+                            });
+
+                            const userObj = getUsers().find(u => u.email.toLowerCase() === e.email.toLowerCase());
+                            const empIdText = userObj ? userObj.empId : '-';
+
+                            htmlContent += `
+                                <tr class="hover:bg-amber-100/10 transition-colors">
+                                    <td class="px-3 py-2">
+                                        <div class="font-bold text-slate-800">${e.name}</div>
+                                        <div class="text-[8px] text-slate-400 font-mono">ID: ${empIdText} • ${e.email}</div>
+                                    </td>
+                                    <td class="px-3 py-2">${e.role}</td>
+                                    <td class="px-3 py-2 leading-snug">${ratingsSummary}</td>
+                                    <td class="px-3 py-2 italic text-slate-500">${e.suggestion || '-'}</td>
+                                </tr>
+                            `;
+                        });
+                    }
+
+                    htmlContent += `
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = htmlContent;
+                container.appendChild(card);
+            });
+        }
+
+        // ดาวน์โหลดรายงานการวิเคราะห์และตรวจสอบความพึงพอใจรายบุคคล (Excel Friendly CSV)
+        function exportToCSV(actId) {
+            const activities = getActivities();
+            const evaluations = getEvaluations();
+            const act = activities.find(a => a.id === actId);
+            if (!act) return;
+
+            const actEvals = evaluations.filter(e => e.activityId === actId);
+            const topics = act.topics || ["ความพึงพอใจต่อผลงานการจัดกิจกรรมในภาพรวม"];
+
+            let csvContent = "\uFEFF";
+            
+            // สร้าง Header หลัก
+            let headerRow = "รหัสพนักงาน,ชื่อ-นามสกุล,ตำแหน่งประเมิน,อีเมล";
+            topics.forEach((topic, idx) => {
+                headerRow += `,คะแนนหัวข้อที่ ${idx+1} (${topic.replace(/,/g, ' ')})`;
+            });
+            headerRow += ",ข้อคิดเห็น/ข้อเสนอแนะเพิ่มเติม\n";
+            csvContent += headerRow;
+
+            // เติมข้อมูลผู้สอบประเมิน
+            actEvals.forEach(e => {
+                const userObj = getUsers().find(u => u.email.toLowerCase() === e.email.toLowerCase());
+                const empId = userObj ? userObj.empId : '-';
+                
+                let row = `${empId},"${e.name.replace(/"/g, '""')}","${e.role.replace(/"/g, '""')}","${e.email}"`;
+                
+                topics.forEach(topic => {
+                    const score = e.ratings && e.ratings[topic] ? e.ratings[topic] : 0;
+                    row += `,${score}`;
+                });
+
+                const safeSuggestion = e.suggestion ? `"${e.suggestion.replace(/\r?\n/g, ' ').replace(/"/g, '""')}"` : "";
+                row += `,${safeSuggestion}\n`;
+                csvContent += row;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const blobUrl = URL.createObjectURL(blob);
+            const downloadAnchor = document.createElement("a");
+            downloadAnchor.setAttribute("href", blobUrl);
+            
+            const fileDate = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'numeric', day: 'numeric' }).replace(/\//g, '-');
+            downloadAnchor.setAttribute("download", `รายงานสถิติประเมิน_${act.id}_วันที่-${fileDate}.csv`);
+            downloadAnchor.style.visibility = 'hidden';
+            
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            document.body.removeChild(downloadAnchor);
+
+            showToast(`ทำรายการส่งออกข้อมูลของโครงการ ${act.id} เรียบร้อยแล้ว`, 'success');
+        }
+
+        // --- 3. หน้าแสดงกราฟสถิตย้อนหลัง 3 ปี ---
+        function loadHistoryReports() {
+            const activities = getActivities();
+            const evaluations = getEvaluations();
+            const container = document.getElementById('historyList');
+            if(!container) return;
+            container.innerHTML = '';
+
+            if (activities.length === 0) {
+                container.innerHTML = '<div class="col-span-full text-center text-slate-400 py-12 text-xs">ไม่พบสถิติดำเนินงานย้อนหลังเพื่อวิเคราะห์แผนงาน</div>';
+                return;
+            }
+
+            activities.forEach(act => {
+                const actEvals = evaluations.filter(e => e.activityId === act.id);
+                const totalEvaluations = actEvals.length;
+                const topics = act.topics || ["ความพึงพอใจต่อผลงานการจัดกิจกรรมในภาพรวม"];
+
+                // คำนวณความพึงพอใจเฉลี่ยรวมทุกหัวข้อสำหรับปีปัจจุบัน (2569)
+                let sumTopicPercentage = 0;
+                topics.forEach(topic => {
+                    let satisfiedCount = 0;
+                    actEvals.forEach(ev => {
+                        const score = ev.ratings && ev.ratings[topic] ? ev.ratings[topic] : 0;
+                        if (score >= 4) {
+                            satisfiedCount++;
+                        }
+                    });
+                    const pct = totalEvaluations > 0 ? (satisfiedCount / totalEvaluations) * 100 : 0;
+                    sumTopicPercentage += pct;
+                });
+
+                const currentYearPercentage = topics.length > 0 ? (sumTopicPercentage / topics.length) : 0;
+
+                const h2566 = act.history ? parseFloat(act.history["2566"] || 0) : 0;
+                const h2567 = act.history ? parseFloat(act.history["2567"] || 0) : 0;
+                const h2568 = act.history ? parseFloat(act.history["2568"] || 0) : 0;
+                const h2569 = currentYearPercentage;
+
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between";
+                
+                const getBarHtml = (yearLabel, score, isCurrent = false) => {
+                    const formattedScore = score > 0 ? score.toFixed(2) + "%" : "ไม่มีข้อมูล";
+                    const barHeightPercentage = score > 0 ? score : 0;
+                    
+                    const barGradient = isCurrent 
+                        ? 'from-yellow-500 to-yellow-400' 
+                        : 'from-emerald-800 to-emerald-600 hover:from-emerald-700';
+
+                    return `
+                        <div class="flex flex-col items-center flex-grow">
+                          <span class="text-[9px] font-bold ${isCurrent ? 'text-emerald-900' : 'text-slate-500'} mb-2">${formattedScore}</span>
+                          <div class="w-7 bg-slate-100 rounded h-28 flex items-end overflow-hidden shadow-inner relative">
+                            <div class="w-full bg-gradient-to-t ${barGradient} rounded-t transition-all duration-700" style="height: ${barHeightPercentage}%"></div>
+                          </div>
+                          <span class="text-[9px] font-bold ${isCurrent ? 'text-emerald-900 font-extrabold' : 'text-slate-400'} mt-2">${yearLabel}</span>
+                        </div>
+                    `;
+                };
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-start justify-between gap-2 mb-4">
+                            <div>
+                                <span class="text-[8px] font-mono bg-slate-50 border border-slate-200 px-2 py-0.5 rounded text-slate-500">${act.id}</span>
+                                <h4 class="text-sm font-bold text-slate-800 mt-2 h-10 limit-2-lines leading-snug">${act.name}</h4>
+                            </div>
+                        </div>
+                        
+                        <p class="text-[9px] text-slate-400 mb-6 leading-relaxed">ข้อมูลเปรียบเทียบร้อยละความพึงพอใจย้อนหลัง 3 ปีการศึกษา (2566 - 2568) เทียบกับปีปัจจุบัน (2569)</p>
+
+                        <div class="flex items-end justify-around gap-2 px-2 pb-2 border-b border-dashed border-slate-150">
+                          ${getBarHtml("ปี 2566", h2566)}
+                          ${getBarHtml("ปี 2567", h2567)}
+                          ${getBarHtml("ปี 2568", h2568)}
+                          ${getBarHtml("ปี 2569", h2569, true)}
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 flex justify-between items-center text-[9px] text-slate-400">
+                        <span>เกณฑ์การพิจารณาความพึงพอใจร้อยละ (%) ประจำโครงการ</span>
+                        <span class="font-semibold text-emerald-800 flex items-center gap-1">
+                          <span class="w-2.5 h-2.5 rounded-full bg-yellow-400 inline-block"></span> 
+                          ข้อมูลปีปัจจุบัน
+                        </span>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // --- 4. ส่วนหลังบ้านระบบสารสนเทศ (Admin Panel) ---
+        function loadAdminPanel() {
+            if (!currentUser) return;
+            
+            const isAdmin = currentUser.role === 'Admin';
+            const deniedBlock = document.getElementById('adminAccessDenied');
+            const panelBlock = document.getElementById('adminPanel');
+
+            if (!isAdmin) {
+                if (deniedBlock) deniedBlock.classList.remove('hidden');
+                if (panelBlock) panelBlock.classList.add('hidden');
+                return;
+            }
+
+            if (deniedBlock) deniedBlock.classList.add('hidden');
+            if (panelBlock) panelBlock.classList.remove('hidden');
+
+            const activities = getActivities();
+            const users = getUsers();
+
+            // เติมรายชื่อผู้รับผิดชอบโครงการ
+            const ownerSelect = document.getElementById('newActOwner');
+            if (ownerSelect) {
+                ownerSelect.innerHTML = '';
+                users.forEach(u => {
+                    const option = document.createElement('option');
+                    option.value = u.email;
+                    option.innerText = `${u.name} (${u.email})`;
+                    ownerSelect.appendChild(option);
+                });
+            }
+
+            // โหลดตารางโครงการ
+            const tbodyAct = document.getElementById('adminActivitiesTable');
+            if (tbodyAct) {
+                tbodyAct.innerHTML = '';
+                if (activities.length === 0) {
+                    tbodyAct.innerHTML = `<tr><td colspan="4" class="text-center py-5 text-slate-400">ยังไม่พบบันทึกกิจกรรมประเมินในฐานข้อมูล</td></tr>`;
+                } else {
+                    activities.forEach(act => {
+                        const tr = document.createElement('tr');
+                        tr.className = "hover:bg-slate-50 transition-colors";
+                        tr.innerHTML = `
+                            <td class="px-4 py-3 font-mono text-[10px] text-slate-500 font-bold">${act.id}</td>
+                            <td class="px-4 py-3 font-semibold text-slate-700">
+                              <div>${act.name}</div>
+                            </td>
+                            <td class="px-4 py-3 text-slate-500 font-mono text-[10px]">${act.owner}</td>
+                            <td class="px-4 py-3 text-center">
+                              <button onclick="confirmDeleteActivity('${act.id}')" class="text-[9px] bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold px-2.5 py-1.5 rounded transition-all">
+                                ถอนทะเบียน
+                              </button>
+                            </td>
+                        `;
+                        tbodyAct.appendChild(tr);
+                    });
+                }
+            }
+
+            // โหลดตารางบุคลากรและการปรับสิทธิ์
+            const tbodyUsers = document.getElementById('adminUsersTable');
+            if (tbodyUsers) {
+                tbodyUsers.innerHTML = '';
+                users.forEach(u => {
+                    let displayRole = 'คุณครู/บุคลากร';
+                    let badgeColor = 'bg-slate-100 text-slate-655';
+                    
+                    if (u.role === 'Admin') {
+                        displayRole = 'ผู้ดูแลระบบกลาง';
+                        badgeColor = 'bg-red-100 text-red-800';
+                    } else if (u.role === 'Executive') {
+                        displayRole = 'ผู้บริหาร';
+                        badgeColor = 'bg-amber-100 text-amber-800';
+                    } else if (u.role === 'Head_Admin') {
+                        displayRole = 'หัวหน้าฝ่ายบริหารทั่วไป';
+                        badgeColor = 'bg-teal-100 text-teal-800';
+                    } else if (u.role === 'Head_Academic') {
+                        displayRole = 'หัวหน้าฝ่ายวิชาการ';
+                        badgeColor = 'bg-blue-100 text-blue-800';
+                    } else if (u.role === 'Head_QA') {
+                        displayRole = 'หัวหน้าฝ่ายประกันคุณภาพภายใน';
+                        badgeColor = 'bg-purple-100 text-purple-800';
+                    } else if (u.role === 'Head_Student') {
+                        displayRole = 'หัวหน้าฝ่ายกิจการนักเรียน';
+                        badgeColor = 'bg-indigo-100 text-indigo-800';
+                    }
+
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-50 transition-colors";
+                    tr.innerHTML = `
+                        <td class="px-4 py-3 font-mono text-[10px] text-slate-500 font-bold">${u.empId || '-'}</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">${u.name}</td>
+                        <td class="px-4 py-3 font-mono text-slate-500 text-[10px]">${u.email}</td>
+                        <td class="px-4 py-3 text-slate-600">
+                          <span class="${badgeColor} text-[9px] px-2 py-0.5 rounded-full font-bold">
+                            ${displayRole}
+                          </span>
+                        </td>
+                        <td class="px-4 py-3 font-mono font-bold text-slate-850">${u.password}</td>
+                        <td class="px-4 py-3 text-center">
+                          <button onclick="openUserModal('${u.email}')" class="text-[9px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1.5 rounded transition-all">
+                            แก้ไขข้อมูล
+                          </button>
+                        </td>
+                    `;
+                    tbodyUsers.appendChild(tr);
+                });
+            }
+        }
+
+        // สร้างแบบประเมินและตั้งค่ากิจกรรม
+        function createNewActivity(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('newActName').value.trim();
+            const objectives = document.getElementById('newActObjectives').value.trim();
+            const poster = document.getElementById('newActPoster').value.trim();
+            const topicsText = document.getElementById('newActTopics').value.trim();
+            const owner = document.getElementById('newActOwner').value;
+
+            const score2566 = parseFloat(document.getElementById('history2566').value) || 0.0;
+            const score2567 = parseFloat(document.getElementById('history2567').value) || 0.0;
+            const score2568 = parseFloat(document.getElementById('history2568').value) || 0.0;
+
+            const topics = topicsText.split('\n').map(t => t.trim()).filter(t => t !== "");
+            if (topics.length === 0) {
+                showToast('กรุณาระบุหัวข้อคำถามประเมินผลอย่างน้อย 1 หัวข้อ', 'error');
+                return;
+            }
+
+            const id = "ACT-" + Math.floor(100 + Math.random() * 900);
+
+            const activities = getActivities();
+            activities.push({ 
+                id, 
+                name, 
+                owner, 
+                poster, 
+                objectives, 
+                topics,
+                history: { "2566": score2566, "2567": score2567, "2568": score2568 } 
+            });
+            localStorage.setItem('eval_activities', JSON.stringify(activities));
+
+            document.getElementById('addActivityForm').reset();
+            showToast(`จดทะเบียนโครงการและสร้างสถิติมูลฐานสำหรับ "${name}" สำเร็จ`, 'success');
+            
+            loadAdminPanel();
+            loadEvaluationForms();
+        }
+
+        // จดทะเบียนบุคลากรใหม่เข้าระบบ
+        function createNewUser(e) {
+            e.preventDefault();
+            
+            const empId = document.getElementById('newUserEmpId').value.trim();
+            const name = document.getElementById('newUserName').value.trim();
+            const email = document.getElementById('newUserEmail').value.trim().toLowerCase();
+            const role = document.getElementById('newUserRole').value;
+            const password = document.getElementById('newUserPassword').value.trim();
+
+            if (!empId) {
+                showToast('กรุณาระบุรหัสพนักงานประจำตัว', 'error');
+                return;
+            }
+
+            if (!email.endsWith('@yuwapat.ac.th')) {
+                showToast('กรุณาระบุที่อยู่อีเมลโดเมนสถาบัน @yuwapat.ac.th เท่านั้น', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showToast('รหัสผ่านมีความสั้นเกินไป! รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร', 'error');
+                return;
+            }
+
+            let users = getUsers();
+            
+            const isEmailDuplicate = users.some(u => u.email.toLowerCase() === email);
+            if (isEmailDuplicate) {
+                showToast('ที่อยู่อีเมลนี้ได้รับการจดทะเบียนในระบบเรียบร้อยแล้ว', 'error');
+                return;
+            }
+
+            const isEmpDuplicate = users.some(u => u.empId.toLowerCase() === empId.toLowerCase());
+            if (isEmpDuplicate) {
+                showToast('รหัสพนักงานนี้มีผู้ใช้งานลงทะเบียนอยู่แล้ว', 'error');
+                return;
+            }
+
+            users.push({ empId, email, name, role, password });
+            localStorage.setItem('eval_users', JSON.stringify(users));
+
+            document.getElementById('addUserForm').reset();
+            document.getElementById('newUserPassword').value = "yw123456";
+            
+            showToast(`ลงทะเบียนและสร้างสิทธิ์เข้าใช้งานให้คุณครู/บุคลากร "${name}" สำเร็จ`, 'success');
+            
+            loadAdminPanel();
+        }
+
+        function confirmDeleteActivity(actId) {
+            customConfirm(
+                "ยืนยันการลบแบบประเมินและสถิติโครงการ?",
+                `หากลบรายการดังกล่าว ข้อมูลสถิติ รายงานคะแนน และความเห็นเชิงคุณภาพทั้งหมดสำหรับโครงการรหัส ${actId} จะถูกลบถาวรจากฐานข้อมูลกลาง`,
+                "🗑️",
+                () => {
+                    deleteActivity(actId);
+                },
+                true
+            );
+        }
+
+        function deleteActivity(actId) {
+            let activities = getActivities();
+            activities = activities.filter(act => act.id !== actId);
+            localStorage.setItem('eval_activities', JSON.stringify(activities));
+
+            let evaluations = getEvaluations();
+            evaluations = evaluations.filter(e => e.activityId !== actId);
+            localStorage.setItem('eval_submissions', JSON.stringify(evaluations));
+
+            showToast(`ลบรายการข้อมูลโครงการรหัส ${actId} สำเร็จเรียบร้อย`, 'success');
+            loadAdminPanel();
+            loadEvaluationForms();
+            loadReportList();
+            loadHistoryReports();
+        }
+
+        function confirmResetSystem() {
+            customConfirm(
+                "คุณต้องการคืนค่าข้อมูลระบบกลับสู่ค่าดั้งเดิม?",
+                "การกระทำนี้จะลบกิจกรรมและรายชื่อบุคลากรที่เพิ่มใหม่ทั้งหมด และดึงสถิติตัวอย่างเริ่มต้นกลับมาใช้",
+                "🔄",
+                () => {
+                    resetSystemData();
+                },
+                true
+            );
+        }
+
+        function resetSystemData() {
+            localStorage.removeItem('eval_users');
+            localStorage.removeItem('eval_activities');
+            localStorage.removeItem('eval_submissions');
+            localStorage.removeItem('current_logged_user');
+            
+            localStorage.setItem('eval_users', JSON.stringify(defaultUsers));
+            localStorage.setItem('eval_activities', JSON.stringify(defaultActivities));
+            localStorage.setItem('eval_submissions', JSON.stringify(defaultEvaluations));
+            
+            showToast("ดำเนินการกู้คืนฐานข้อมูลเริ่มต้นสำเร็จลุล่วง", "success");
+            checkSession();
+        }
+
+        // เปิด-ปิด Modal ปรับปรุงสิทธิ์บุคลากร
+        function openUserModal(email) {
+            const users = getUsers();
+            const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+            if (!user) return;
+
+            document.getElementById('edit-user-original-email').value = user.email;
+            document.getElementById('edit-user-empId').value = user.empId || '';
+            document.getElementById('edit-user-name').value = user.name || '';
+            document.getElementById('edit-user-email').value = user.email || '';
+            document.getElementById('edit-user-role').value = user.role || 'Staff';
+            document.getElementById('edit-user-password').value = user.password || '';
+
+            const modal = document.getElementById('user-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeUserModal() {
+            const modal = document.getElementById('user-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function saveUserProfile() {
+            const originalEmail = document.getElementById('edit-user-original-email').value;
+            const empId = document.getElementById('edit-user-empId').value.trim();
+            const name = document.getElementById('edit-user-name').value.trim();
+            const email = document.getElementById('edit-user-email').value.trim().toLowerCase();
+            const role = document.getElementById('edit-user-role').value;
+            const password = document.getElementById('edit-user-password').value.trim();
+
+            if (!empId) {
+                showToast('กรุณาระบุรหัสพนักงานประจำตัว', 'error');
+                return;
+            }
+            if (!name) {
+                showToast('กรุณาระบุชื่อ-นามสกุลจริง', 'error');
+                return;
+            }
+            if (!email.endsWith('@yuwapat.ac.th')) {
+                showToast('อีเมลเข้าใช้ต้องลงท้ายด้วย @yuwapat.ac.th เท่านั้น', 'error');
+                return;
+            }
+            if (password.length < 6) {
+                showToast('รหัสผ่านสั้นเกินไป! รหัสผ่านต้องมีความยาวไม่ต่ำกว่า 6 ตัวอักษร', 'error');
+                return;
+            }
+
+            let users = getUsers();
+
+            const isEmailDuplicate = users.some(u => u.email.toLowerCase() === email && u.email.toLowerCase() !== originalEmail.toLowerCase());
+            if (isEmailDuplicate) {
+                showToast('อีเมลลงทะเบียนนี้มีผู้ใช้งานเรียบร้อยแล้วในระบบ', 'error');
+                return;
+            }
+
+            const isEmpIdDuplicate = users.some(u => u.empId.toLowerCase() === empId.toLowerCase() && u.email.toLowerCase() !== originalEmail.toLowerCase());
+            if (isEmpIdDuplicate) {
+                showToast('รหัสพนักงานนี้มีผู้ใช้งานแล้วในระบบ', 'error');
+                return;
+            }
+
+            users = users.map(u => {
+                if (u.email.toLowerCase() === originalEmail.toLowerCase()) {
+                    return { ...u, empId, name, email, role, password };
+                }
+                return u;
+            });
+
+            localStorage.setItem('eval_users', JSON.stringify(users));
+
+            if (currentUser && currentUser.email.toLowerCase() === originalEmail.toLowerCase()) {
+                const updatedSelf = users.find(u => u.email.toLowerCase() === email);
+                localStorage.setItem('current_logged_user', JSON.stringify(updatedSelf));
+                currentUser = updatedSelf;
+                checkSession();
+            }
+
+            showToast('ปรับปรุงสิทธิ์ประวัติและรหัสผ่านบุคลากรสำเร็จ', 'success');
+            closeUserModal();
+            loadAdminPanel();
+        }
+
+        // เชื่อมโยง Event ของกล่องข้อความยืนยันกลาง
+        document.addEventListener('DOMContentLoaded', function() {
+            const cancelBtn = document.getElementById('confirm-cancel-btn');
+            const okBtn = document.getElementById('confirm-ok-btn');
+            
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', () => {
+                    const modal = document.getElementById('confirm-modal');
+                    if(modal) {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                    }
+                    currentConfirmAction = null;
+                });
+            }
+            
+            if (okBtn) {
+                okBtn.addEventListener('click', () => {
+                    const modal = document.getElementById('confirm-modal');
+                    if(modal) {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                    }
+                    if (currentConfirmAction) {
+                        currentConfirmAction();
+                    }
+                    currentConfirmAction = null;
+                });
+            }
+            
+            // ดำเนินการตรวจสอบเซสชันเข้าใช้งานเริ่มต้น
+            checkSession();
         });
-      }
-    }
-
-    // สร้างแบบประเมินและตั้งค่ากิจกรรม
-    function createNewActivity(e) {
-      e.preventDefault();
-      
-      const name = document.getElementById('newActName').value;
-      const objectives = document.getElementById('newActObjectives').value;
-      const owner = document.getElementById('newActOwner').value;
-
-      const score2566 = parseFloat(document.getElementById('history2566').value) || 0.0;
-      const score2567 = parseFloat(document.getElementById('history2567').value) || 0.0;
-      const score2568 = parseFloat(document.getElementById('history2568').value) || 0.0;
-
-      const id = "ACT-" + Math.floor(100 + Math.random() * 900);
-
-      const activities = getActivities();
-      activities.push({ 
-        id, 
-        name, 
-        owner, 
-        objectives, 
-        history: { "2566": score2566, "2567": score2567, "2568": score2568 } 
-      });
-      localStorage.setItem('eval_activities', JSON.stringify(activities));
-
-      document.getElementById('addActivityForm').reset();
-      showToast(`จดทะเบียนโครงการและบันทึกสถิติมูลฐานสำหรับ "${name}" สำเร็จ`, 'success');
-      
-      loadAdminPanel();
-      loadEvaluationForms();
-    }
-
-    // ฟังก์ชันสำหรับจดทะเบียนบุคลากรใหม่เข้าระบบ
-    function createNewUser(e) {
-      e.preventDefault();
-      
-      const empId = document.getElementById('newUserEmpId').value.trim();
-      const name = document.getElementById('newUserName').value.trim();
-      const email = document.getElementById('newUserEmail').value.trim().toLowerCase();
-      const role = document.getElementById('newUserRole').value;
-      const password = document.getElementById('newUserPassword').value.trim();
-
-      if (!empId) {
-        showToast('กรุณาระบุรหัสพนักงาน', 'error');
-        return;
-      }
-
-      if (!email.endsWith('@yuwapat.ac.th')) {
-        showToast('กรุณาระบุที่อยู่อีเมลโดเมนสถาบัน @yuwapat.ac.th เท่านั้น', 'error');
-        return;
-      }
-
-      if (password.length < 6) {
-        showToast('ความปลอดภัยต่ำ! รหัสผ่านต้องยาวอย่างน้อย 6 ตัวอักษร', 'error');
-        return;
-      }
-
-      let users = getUsers();
-      
-      const isEmailDuplicate = users.some(u => u.email.toLowerCase() === email);
-      if (isEmailDuplicate) {
-        showToast('ที่อยู่อีเมลนี้ได้รับการจดทะเบียนในระบบเรียบร้อยแล้ว', 'error');
-        return;
-      }
-
-      const isEmpDuplicate = users.some(u => u.empId.toLowerCase() === empId.toLowerCase());
-      if (isEmpDuplicate) {
-        showToast('รหัสพนักงานนี้มีผู้ใช้งานแล้วในสารสนเทศ', 'error');
-        return;
-      }
-
-      users.push({ empId, email, name, role, password });
-      localStorage.setItem('eval_users', JSON.stringify(users));
-
-      document.getElementById('addUserForm').reset();
-      document.getElementById('newUserPassword').value = "yw123456";
-      
-      showToast(`ลงทะเบียนและสร้างสิทธิ์เข้าใช้ให้คุณครู/บุคลากร "${name}" สำเร็จ`, 'success');
-      
-      loadAdminPanel();
-    }
-
-    function confirmDeleteActivity(actId) {
-      customConfirm(
-        "ยืนยันการลบแบบประเมินและสารสนเทศกิจกรรม?",
-        `หากลบรายการดังกล่าว ข้อมูลสถิติ รายงานคะแนน และความเห็นเชิงคุณภาพทั้งหมดสำหรับกิจกรรมรหัส ${actId} จะถูกนำออกจากระบบข้อมูลอย่างถาวร`,
-        "🗑️",
-        () => {
-          deleteActivity(actId);
-        },
-        true
-      );
-    }
-
-    function deleteActivity(actId) {
-      let activities = getActivities();
-      activities = activities.filter(act => act.id !== actId);
-      localStorage.setItem('eval_activities', JSON.stringify(activities));
-
-      let evaluations = getEvaluations();
-      evaluations = evaluations.filter(e => e.activityId !== actId);
-      localStorage.setItem('eval_submissions', JSON.stringify(evaluations));
-
-      showToast(`ทำรายการถอนทะเบียนกิจกรรมประเมินรหัส ${actId} เรียบร้อย`, 'success');
-      loadAdminPanel();
-      loadEvaluationForms();
-      loadReportList();
-      loadHistoryReports();
-    }
-
-    function confirmResetSystem() {
-      customConfirm(
-        "ท่านยืนยันจะดำเนินงานล้างข้อมูลทั้งหมดหรือไม่?",
-        "การดำเนินงานนี้จะเป็นการรีเซ็ตค่ากลับสู่สภาวะทดลองระบบเริ่มต้นแบบเดิม บัญชีรหัสผ่านและข้อมูลที่เพิ่มใหม่ทั้งหมดจะสูญหายทันที",
-        "🔄",
-        () => {
-          resetSystemData();
-        },
-        true
-      );
-    }
-
-    function resetSystemData() {
-      localStorage.removeItem('eval_users');
-      localStorage.removeItem('eval_activities');
-      localStorage.removeItem('eval_submissions');
-      localStorage.removeItem('current_logged_user');
-      
-      localStorage.setItem('eval_users', JSON.stringify(defaultUsers));
-      localStorage.setItem('eval_activities', JSON.stringify(defaultActivities));
-      localStorage.setItem('eval_submissions', JSON.stringify(defaultEvaluations));
-      
-      showToast("ดำเนินการกู้คืนระบบและฐานข้อมูลเริ่มต้นเสร็จสิ้น", "success");
-      checkSession();
-    }
-
-    // --- เริ่มต้นโหลดฐานระบบหลังติดตั้งหน้าเบราว์เซอร์สำเร็จ ---
-    window.onload = function() {
-      checkSession();
-    }
-  </script>
+    </script>
 </body>
 </html>
