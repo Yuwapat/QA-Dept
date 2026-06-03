@@ -13,7 +13,8 @@
     <style>
         body {
             font-family: 'Sarabun', sans-serif;
-            background-color: #fbfbfb;
+            background-color: #fafafa;
+            font-size: 15px; /* ปรับขนาดฟอนต์เริ่มต้นของร่างกายให้ใหญ่ขึ้น */
         }
         .no-scrollbar::-webkit-scrollbar {
             display: none;
@@ -33,51 +34,51 @@
 <body class="min-h-screen text-slate-850 flex flex-col justify-between selection:bg-emerald-100 selection:text-emerald-950">
 
     <!-- Container สำหรับแจ้งเตือนแบบกำหนดเอง (Custom Toast Notification) -->
-    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full px-4 md:px-0"></div>
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2.5 max-w-sm w-full px-4 md:px-0"></div>
 
     <!-- กล่องยืนยันการทำรายการแบบเป็นทางการ (Custom Confirmation Modal) -->
     <div id="confirm-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-all duration-300">
-        <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-slate-100 transform scale-95 transition-all">
+        <div class="bg-white rounded-2xl p-7 max-w-md w-full shadow-2xl border border-slate-100 transform scale-95 transition-all">
             <div class="flex items-center gap-3.5 mb-4 border-b border-slate-100 pb-3">
-                <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 text-sm font-bold" id="confirm-icon">!</div>
-                <h3 id="confirm-title" class="text-sm font-bold text-slate-900">ยืนยันการดำเนินการ</h3>
+                <div class="w-9 h-9 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 text-base font-bold" id="confirm-icon">!</div>
+                <h3 id="confirm-title" class="text-base font-bold text-slate-950">ยืนยันการดำเนินการ</h3>
             </div>
-            <p id="confirm-msg" class="text-slate-500 text-xs leading-relaxed">กรุณาตรวจสอบความถูกต้องของข้อมูลก่อนยืนยันการบันทึกเข้าสู่ระบบสารสนเทศ</p>
-            <div class="flex justify-end gap-2 mt-6">
-                <button id="confirm-cancel-btn" class="px-4 py-2 bg-slate-55 hover:bg-slate-100 rounded-lg text-xs font-semibold text-slate-500 transition-colors">ยกเลิก</button>
-                <button id="confirm-ok-btn" class="px-4 py-2 bg-emerald-800 hover:bg-emerald-900 text-white rounded-lg text-xs font-semibold transition-colors">ยืนยันทำรายการ</button>
+            <p id="confirm-msg" class="text-slate-600 text-sm leading-relaxed">กรุณาตรวจสอบความถูกต้องของข้อมูลก่อนยืนยันการบันทึกเข้าสู่ระบบสารสนเทศ</p>
+            <div class="flex justify-end gap-2.5 mt-6">
+                <button id="confirm-cancel-btn" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-bold text-slate-500 transition-colors">ยกเลิก</button>
+                <button id="confirm-ok-btn" class="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold transition-colors">ยืนยันทำรายการ</button>
             </div>
         </div>
     </div>
 
     <!-- กล่องสำหรับแก้ไขข้อมูลบุคลากรแบบครบวงจรสำหรับแอดมิน (Admin Edit Personnel Modal) -->
     <div id="user-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-slate-100">
-            <div class="flex justify-between items-center mb-4 border-b pb-3">
-                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-                    <span class="text-emerald-800">👤</span>
+        <div class="bg-white rounded-2xl p-7 max-w-md w-full shadow-2xl border border-slate-100">
+            <div class="flex justify-between items-center mb-5 border-b pb-3.5">
+                <h3 class="text-sm font-bold text-slate-950 uppercase tracking-wider flex items-center gap-2">
+                    <span class="text-emerald-800 text-lg">👤</span>
                     <span>แก้ไขข้อมูลและสิทธิ์บุคลากร</span>
                 </h3>
-                <button onclick="closeUserModal()" class="text-slate-400 hover:text-slate-600 text-xs font-bold">✕</button>
+                <button onclick="closeUserModal()" class="text-slate-400 hover:text-slate-600 text-sm font-bold">✕</button>
             </div>
             <input type="hidden" id="edit-user-original-email">
             
             <div class="space-y-4">
                 <div>
-                    <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">รหัสพนักงาน</label>
-                    <input type="text" id="edit-user-empId" placeholder="เช่น YW-001" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
+                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">รหัสพนักงานประจำตัว</label>
+                    <input type="text" id="edit-user-empId" placeholder="เช่น YW-001" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
                 </div>
                 <div>
-                    <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">ชื่อ-นามสกุล</label>
-                    <input type="text" id="edit-user-name" placeholder="ชื่อ และ นามสกุล" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
+                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">ชื่อ-นามสกุล</label>
+                    <input type="text" id="edit-user-name" placeholder="ชื่อ และ นามสกุลจริง" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
                 </div>
                 <div>
-                    <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">อีเมลเข้าใช้งาน (@yuwapat.ac.th)</label>
-                    <input type="email" id="edit-user-email" placeholder="sombat@yuwapat.ac.th" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
+                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">อีเมลเข้าใช้งาน (@yuwapat.ac.th)</label>
+                    <input type="email" id="edit-user-email" placeholder="username@yuwapat.ac.th" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
                 </div>
                 <div>
-                    <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">ตำแหน่งงาน / บทบาทสิทธิ์</label>
-                    <select id="edit-user-role" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800 cursor-pointer">
+                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">ตำแหน่งงาน / บทบาทสิทธิ์</label>
+                    <select id="edit-user-role" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800 cursor-pointer bg-white">
                         <option value="Staff">คุณครู/บุคลากรทั่วไป</option>
                         <option value="Executive">ผู้บริหาร</option>
                         <option value="Head_Admin">หัวหน้าฝ่ายบริหารทั่วไป</option>
@@ -88,14 +89,14 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">รหัสผ่านสำหรับเข้าใช้งาน (อย่างน้อย 6 ตัวอักษร)</label>
-                    <input type="text" id="edit-user-password" placeholder="กำหนดรหัสผ่านอย่างน้อย 6 ตัวอักษร" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
+                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">รหัสผ่านสำหรับเข้าใช้งาน (อย่างน้อย 6 ตัวอักษร)</label>
+                    <input type="text" id="edit-user-password" placeholder="กำหนดรหัสผ่านใหม่" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
                 </div>
             </div>
             
-            <div class="flex justify-end gap-2 mt-6 border-t pt-4">
-                <button onclick="closeUserModal()" class="px-4 py-2 bg-slate-55 hover:bg-slate-100 rounded-xl text-xs font-semibold text-slate-500 transition-colors">ยกเลิก</button>
-                <button onclick="saveUserProfile()" class="px-4 py-2 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-semibold transition-colors">บันทึกข้อมูลบุคลากร</button>
+            <div class="flex justify-end gap-2.5 mt-6 border-t pt-4">
+                <button onclick="closeUserModal()" class="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl text-xs font-semibold text-slate-500 transition-colors">ยกเลิก</button>
+                <button onclick="saveUserProfile()" class="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold transition-colors">บันทึกข้อมูลบุคลากร</button>
             </div>
         </div>
     </div>
@@ -105,49 +106,49 @@
         <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-100 my-8 overflow-hidden transform scale-95 transition-all">
             <div class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-950 text-white px-6 py-5 border-b-2 border-yellow-400 flex justify-between items-center">
                 <div>
-                    <span id="eval-modal-id" class="text-[10px] font-mono font-bold bg-white/10 px-2 py-0.5 rounded tracking-wider">PROJECT ID</span>
-                    <h3 id="eval-modal-name" class="text-base font-bold tracking-tight text-white mt-1">ชื่อโครงการกิจกรรม</h3>
+                    <span id="eval-modal-id" class="text-xs font-mono font-bold bg-white/10 px-2.5 py-1 rounded tracking-wider">PROJECT ID</span>
+                    <h3 id="eval-modal-name" class="text-base font-bold tracking-tight text-white mt-1.5">ชื่อโครงการกิจกรรม</h3>
                 </div>
                 <button onclick="closeEvaluationModal()" class="text-white/70 hover:text-white text-xl font-bold">✕</button>
             </div>
 
-            <div class="px-6 py-5 max-h-[70vh] overflow-y-auto space-y-6">
+            <div class="px-6 py-6 max-h-[70vh] overflow-y-auto space-y-6">
                 <!-- วัตถุประสงค์ -->
                 <div id="eval-modal-objectives-container">
-                    <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1.5">เป้าหมายและวัตถุประสงค์โครงการ:</span>
-                    <div id="eval-modal-objectives" class="text-sm text-slate-600 bg-slate-50 p-4 rounded-xl border border-slate-100 leading-relaxed whitespace-pre-line"></div>
+                    <span class="block text-xs text-slate-400 font-bold uppercase tracking-wider mb-2">เป้าหมายและวัตถุประสงค์โครงการ:</span>
+                    <div id="eval-modal-objectives" class="text-sm text-slate-700 bg-slate-50 p-4.5 rounded-xl border border-slate-100 leading-relaxed whitespace-pre-line"></div>
                 </div>
 
                 <!-- พื้นที่โปสเตอร์กิจกรรม -->
                 <div id="eval-modal-poster-container">
-                    <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2">โปสเตอร์ประชาสัมพันธ์โครงการ:</span>
-                    <div class="border border-slate-150 rounded-xl overflow-hidden bg-slate-50 max-h-64 flex items-center justify-center">
-                        <img id="eval-modal-poster" src="" alt="[ภาพโปสเตอร์ประชาสัมพันธ์กิจกรรม]" class="object-contain max-h-64 w-full">
+                    <span class="block text-xs text-slate-400 font-bold uppercase tracking-wider mb-2.5">โปสเตอร์ประชาสัมพันธ์โครงการ:</span>
+                    <div class="border border-slate-150 rounded-xl overflow-hidden bg-slate-50 max-h-80 flex items-center justify-center">
+                        <img id="eval-modal-poster" src="" alt="[ภาพโปสเตอร์ประชาสัมพันธ์กิจกรรม]" class="object-contain max-h-80 w-full">
                     </div>
                 </div>
 
-                <!-- แบบฟอร์มการตอบแบบประเมินผลรายหัวข้อ (ไร้รูปดาว - เรียบหรูวิชาการ) -->
-                <form id="evaluationForm" onsubmit="submitEvaluationData(event)" class="space-y-6 pt-3 border-t border-slate-100">
+                <!-- แบบฟอร์มการตอบแบบประเมินผลรายหัวข้อ -->
+                <form id="evaluationForm" onsubmit="submitEvaluationData(event)" class="space-y-6 pt-4 border-t border-slate-100">
                     <input type="hidden" id="eval-modal-act-id">
                     
                     <!-- ส่วนเลือกสถานะผู้ตอบ -->
                     <div>
-                        <label class="block text-sm font-bold text-slate-800 mb-2">1. สถานะของผู้ประเมินผลโครงการ</label>
-                        <div class="flex gap-6 pl-1">
-                            <label class="flex items-center gap-2.5 text-sm cursor-pointer font-medium text-slate-650 hover:text-slate-800 transition-colors">
-                                <input type="radio" name="eval-role" value="คุณครู/บุคลากร" required class="w-4 h-4 text-emerald-800 focus:ring-emerald-800 border-slate-300"> 
-                                <span>คุณครู / บุคลากร</span>
+                        <label class="block text-sm font-bold text-slate-800 mb-2.5">1. สถานะของผู้ประเมินผลโครงการ</label>
+                        <div class="flex gap-8 pl-1">
+                            <label class="flex items-center gap-3 text-sm cursor-pointer font-medium text-slate-650 hover:text-slate-800 transition-colors">
+                                <input type="radio" name="eval-role" value="คุณครู/บุคลากร" required class="w-4.5 h-4.5 text-emerald-800 focus:ring-emerald-800 border-slate-300"> 
+                                <span class="text-sm">คุณครู / บุคลากร</span>
                             </label>
-                            <label class="flex items-center gap-2.5 text-sm cursor-pointer font-medium text-slate-655 hover:text-slate-800 transition-colors">
-                                <input type="radio" name="eval-role" value="ผู้บริหาร" class="w-4 h-4 text-emerald-800 focus:ring-emerald-800 border-slate-300"> 
-                                <span>ผู้บริหาร</span>
+                            <label class="flex items-center gap-3 text-sm cursor-pointer font-medium text-slate-655 hover:text-slate-800 transition-colors">
+                                <input type="radio" name="eval-role" value="ผู้บริหาร" class="w-4.5 h-4.5 text-emerald-800 focus:ring-emerald-800 border-slate-300"> 
+                                <span class="text-sm">ผู้บริหาร</span>
                             </label>
                         </div>
                     </div>
 
                     <!-- ส่วนกรอกประเมินแยกหัวข้อแบบเรขาคณิต (1-5) -->
                     <div>
-                        <label class="block text-sm font-bold text-slate-800 mb-3">2. ระดับความพึงพอใจต่อการดำเนินงานแยกตามหัวข้อ (1 - 5 คะแนน)</label>
+                        <label class="block text-sm font-bold text-slate-800 mb-3.5">2. ระดับความพึงพอใจต่อการดำเนินงานแยกตามหัวข้อ (1 - 5 คะแนน)</label>
                         <div id="eval-topics-container" class="space-y-4 pl-1">
                             <!-- โหลดจาก JS -->
                         </div>
@@ -155,14 +156,14 @@
 
                     <!-- ข้อเสนอแนะเชิงคุณภาพ -->
                     <div>
-                        <label class="block text-sm font-bold text-slate-800 mb-1.5">3. ความคิดเห็นหรือข้อคิดเห็นเชิงพัฒนา (นิรนาม)</label>
-                        <textarea id="eval-suggestion" rows="3" placeholder="โปรดระบุข้อเสนอแนะเพิ่มเติมที่เป็นประโยชน์เพื่อนำไปพัฒนาการจัดกิจกรรมในรอบถัดไป..." class="w-full border border-slate-200 rounded-xl px-3.5 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800"></textarea>
+                        <label class="block text-sm font-bold text-slate-800 mb-2">3. ความคิดเห็นหรือข้อคิดเห็นเชิงพัฒนา (นิรนาม)</label>
+                        <textarea id="eval-suggestion" rows="3" placeholder="โปรดระบุข้อเสนอแนะเพิ่มเติมที่เป็นประโยชน์เพื่อนำไปพัฒนาการจัดกิจกรรมในรอบถัดไป..." class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800"></textarea>
                     </div>
 
                     <!-- ปุ่มควบคุมของ Modal -->
-                    <div class="flex justify-end gap-2 border-t pt-4 mt-6">
-                        <button type="button" onclick="closeEvaluationModal()" class="px-5 py-2 bg-slate-55 hover:bg-slate-100 rounded-xl text-sm font-semibold text-slate-500 transition-colors">ยกเลิก</button>
-                        <button type="submit" class="px-5 py-2 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-sm font-bold transition-all shadow-sm active:scale-95">ส่งผลการประเมินโครงการ</button>
+                    <div class="flex justify-end gap-2.5 border-t pt-4 mt-6">
+                        <button type="button" onclick="closeEvaluationModal()" class="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl text-xs font-semibold text-slate-500 transition-colors">ยกเลิก</button>
+                        <button type="submit" class="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95">ส่งผลการประเมินโครงการ</button>
                     </div>
                 </form>
             </div>
@@ -177,21 +178,21 @@
             
             <div class="text-center mb-8 mt-4">
                 <!-- โลโก้จริงของโรงเรียนจาก Google Drive พร้อมระบบภาพสำรองอย่างดีผ่าน handleLogoError -->
-                <div class="w-20 h-20 rounded-2xl overflow-hidden bg-slate-50 flex items-center justify-center shadow mx-auto mb-4 border border-slate-100">
+                <div class="w-24 h-24 rounded-2xl overflow-hidden bg-slate-50 flex items-center justify-center shadow mx-auto mb-5 border border-slate-100">
                     <img src="https://lh3.googleusercontent.com/d/1c3cjNBo_XSXdYjn6RAWkodMqChNPrk49" 
                          alt="ตราสัญลักษณ์โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์" 
                          class="w-full h-full object-contain"
                          onerror="handleLogoError(this)">
                 </div>
-                <span class="bg-emerald-50 text-emerald-855 border border-emerald-100 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">ระบบประกันคุณภาพ ยุวพัฒน์</span>
-                <h2 class="text-lg font-bold text-slate-800 mt-3 tracking-tight">ระบบประเมินความพึงพอใจโครงการและกิจกรรม</h2>
-                <p class="text-slate-405 text-[11px] mt-1 font-semibold">โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</p>
+                <span class="bg-emerald-50 text-emerald-855 border border-emerald-100 text-xs font-bold px-3.5 py-1 rounded-full uppercase tracking-wider">ระบบประกันคุณภาพ ยุวพัฒน์</span>
+                <h2 class="text-xl font-bold text-slate-800 mt-4 tracking-tight">ระบบประเมินความพึงพอใจโครงการและกิจกรรม</h2>
+                <p class="text-slate-450 text-xs mt-1.5 font-semibold">โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</p>
             </div>
 
             <form onsubmit="handleLogin(event)" class="space-y-4">
                 <!-- ส่วนป้อนอีเมลสถาบันพร้อมไอคอนด้านหน้า -->
                 <div>
-                    <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1">ที่อยู่อีเมลสถาบัน</label>
+                    <label class="block text-xs font-bold uppercase text-slate-455 tracking-wider mb-1.5">ที่อยู่อีเมลสถาบัน</label>
                     <div class="relative rounded-xl shadow-sm">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -203,7 +204,7 @@
                 </div>
                 <!-- ส่วนป้อนรหัสผ่านสถาบันพร้อมไอคอนด้านหน้า -->
                 <div>
-                    <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1">รหัสผ่าน</label>
+                    <label class="block text-xs font-bold uppercase text-slate-455 tracking-wider mb-1.5">รหัสผ่าน</label>
                     <div class="relative rounded-xl shadow-sm">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -214,60 +215,19 @@
                     </div>
                 </div>
                 <button type="submit" class="w-full bg-emerald-800 hover:bg-emerald-955 text-white font-bold py-3.5 rounded-xl text-sm transition-all shadow-md active:scale-95 mt-4">
-                  เข้าสู่ระบบ
+                  เข้าสู่ระบบสารสนเทศ
                 </button>
             </form>
 
             <!-- กล่องข้อมูลล็อกอินจำลองเพื่อการทดสอบระดับสูง -->
             <div class="mt-6 pt-5 border-t border-slate-100">
-                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-3 text-center">ข้อมูลจำลองสิทธิ์ผู้ใช้สำหรับทดสอบระบบ (รหัสผ่านคือ yw123456):</p>
+                <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-3 text-center">ข้อมูลจำลองสิทธิ์ผู้ใช้สำหรับทดสอบระบบ (รหัสผ่านคือ yw123456):</p>
                 <div class="space-y-3">
-                    <!-- ฝ่ายบริหาร -->
                     <div>
-                        <span class="text-[9px] text-amber-600 font-bold uppercase tracking-wider block mb-1">💼 ฝ่ายบริหารสถานศึกษา (2 ท่าน)</span>
-                        <div class="grid grid-cols-2 gap-2 text-[9px]">
-                            <button type="button" onclick="autofillLogin('director@yuwapat.ac.th')" class="bg-amber-50 hover:bg-amber-100 p-2 rounded-lg text-left text-amber-955 border border-amber-100 transition-all">
-                                <span class="font-bold block">👤 ดร.วิชัย (ผอ.)</span> director@yuwapat.ac.th
-                            </button>
-                            <button type="button" onclick="autofillLogin('executive2@yuwapat.ac.th')" class="bg-amber-50 hover:bg-amber-100 p-2 rounded-lg text-left text-amber-955 border border-amber-100 transition-all">
-                                <span class="font-bold block">👤 รองฯ ปรีชา</span> executive2@yuwapat.ac.th
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- หัวหน้าฝ่าย 4 ฝ่าย -->
-                    <div>
-                        <span class="text-[9px] text-purple-700 font-bold uppercase tracking-wider block mb-1">📊 ฝ่ายบริหารจัดการหลัก (4 ฝ่าย)</span>
-                        <div class="grid grid-cols-2 gap-2 text-[9px]">
-                            <button type="button" onclick="autofillLogin('head_admin@yuwapat.ac.th')" class="bg-teal-50 hover:bg-teal-100 p-2 rounded-lg text-left text-teal-955 border border-teal-100 transition-all">
-                                <span class="font-bold block">👤 หัวหน้าพชร (ทั่วไป)</span> head_admin@yuwapat.ac.th
-                            </button>
-                            <button type="button" onclick="autofillLogin('head_academic@yuwapat.ac.th')" class="bg-blue-50 hover:bg-blue-100 p-2 rounded-lg text-left text-blue-955 border border-blue-100 transition-all">
-                                <span class="font-bold block">👤 หัวหน้านงลักษณ์ (วิชาการ)</span> head_academic@yuwapat.ac.th
-                            </button>
-                            <button type="button" onclick="autofillLogin('head_qa@yuwapat.ac.th')" class="bg-purple-50 hover:bg-purple-100 p-2 rounded-lg text-left text-purple-955 border border-purple-100 transition-all">
-                                <span class="font-bold block">👤 หัวหน้าพรรณิภา (QA)</span> head_qa@yuwapat.ac.th
-                            </button>
-                            <button type="button" onclick="autofillLogin('head_student@yuwapat.ac.th')" class="bg-indigo-50 hover:bg-indigo-100 p-2 rounded-lg text-left text-indigo-955 border border-indigo-100 transition-all">
-                                <span class="font-bold block">👤 หัวหน้าเกรียงไกร (กิจการฯ)</span> head_student@yuwapat.ac.th
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- ครูและแอดมิน -->
-                    <div>
-                        <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider block mb-1">👥 ครูผู้สอน / ผู้ดูแลระบบ</span>
-                        <div class="grid grid-cols-2 gap-2 text-[9px]">
-                            <button type="button" onclick="autofillLogin('somchai@yuwapat.ac.th')" class="bg-slate-50 hover:bg-slate-100 p-2 rounded-lg text-left text-slate-700 transition-all">
-                                <span class="font-bold block">👤 ครูสมชาย</span> somchai@yuwapat.ac.th
-                            </button>
-                            <button type="button" onclick="autofillLogin('owner_ai@yuwapat.ac.th')" class="bg-emerald-50 hover:bg-emerald-100 p-2 rounded-lg text-left text-emerald-955 border border-emerald-100 transition-all">
-                                <span class="font-bold block">👤 ครูสมหญิง (เจ้าของงาน AI)</span> owner_ai@yuwapat.ac.th
-                            </button>
-                            <button type="button" onclick="autofillLogin('admin@yuwapat.ac.th')" class="bg-slate-900 hover:bg-slate-800 p-2 rounded-lg text-left text-white col-span-2 transition-all">
-                                <span class="font-bold block text-yellow-400">🔑 แอดมินสมศักดิ์ (YW-001)</span> admin@yuwapat.ac.th
-                            </button>
-                        </div>
+                        <button type="button" onclick="autofillLogin('admin@yuwapat.ac.th')" class="bg-slate-900 hover:bg-slate-800 p-3 rounded-lg text-left text-white w-full transition-all text-xs flex justify-between items-center shadow-md border border-slate-850">
+                            <span class="font-bold text-yellow-400">🔑 แอดมินสมศักดิ์ (YW-001)</span>
+                            <span class="font-mono text-slate-300">admin@yuwapat.ac.th</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -276,70 +236,70 @@
 
     <!-- ==================== 2. หน้าหลักโปรแกรมหลังล็อกอินสำเร็จ ==================== -->
     <div id="main-dashboard" class="hidden flex-col justify-between min-h-screen">
-        <!-- ส่วนหัวเว็บดีไซน์พรีเมียมหรูหรา บรรจุโลโก้โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์ (ปรับแต่งความคลีนบาลานซ์) -->
+        <!-- ส่วนหัวเว็บดีไซน์พรีเมียมหรูหรา บรรจุโลโก้โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์ -->
         <header class="bg-white border-b border-slate-100 shadow-sm">
             <!-- เส้นแบรนดิ้งเขียวทองประดับหัวเว็บ -->
-            <div class="h-1 bg-gradient-to-r from-emerald-800 via-emerald-700 to-yellow-400"></div>
+            <div class="h-1.5 bg-gradient-to-r from-emerald-800 via-emerald-700 to-yellow-400"></div>
             
             <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <div class="flex items-center gap-3.5">
                     <!-- โลโก้จริงสถาบันที่กู้คืนและแสดงผลอย่างเป็นระเบียบผ่าน handleLogoError -->
-                    <div class="w-12 h-12 rounded-xl overflow-hidden bg-slate-50 flex items-center justify-center border border-slate-150 shadow-sm flex-shrink-0">
+                    <div class="w-14 h-14 rounded-xl overflow-hidden bg-slate-50 flex items-center justify-center border border-slate-150 shadow-sm flex-shrink-0">
                         <img src="https://lh3.googleusercontent.com/d/1c3cjNBo_XSXdYjn6RAWkodMqChNPrk49" 
                              alt="ตราสัญลักษณ์โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์" 
-                             class="w-10 h-10 object-contain"
+                             class="w-12 h-12 object-contain"
                              onerror="handleLogoError(this)">
                     </div>
                     <div>
                         <div class="flex items-center gap-2 flex-wrap">
-                            <span class="bg-emerald-55 text-emerald-800 border border-emerald-100 text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">ระบบประกันคุณภาพภายใน</span>
-                            <span class="text-slate-400 text-[11px] font-semibold">| โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</span>
+                            <span class="bg-emerald-55 text-emerald-800 border border-emerald-100 text-xs font-bold px-2.5 py-0.5 rounded uppercase tracking-wider">ระบบประกันคุณภาพภายใน</span>
+                            <span class="text-slate-400 text-xs font-semibold">| โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</span>
                         </div>
-                        <h1 class="text-base font-bold tracking-tight text-slate-800 mt-0.5">ระบบประเมินสถิติและสรุปผลความพึงพอใจการจัดโครงการ</h1>
+                        <h1 class="text-lg md:text-xl font-bold tracking-tight text-slate-800 mt-0.5">ระบบประเมินสถิติและสรุปผลความพึงพอใจการจัดโครงการ</h1>
                     </div>
                 </div>
                 
                 <!-- ข้อมูลโปรไฟล์ผู้ใช้งานปัจจุบัน และปุ่ม Logout แบบคลีนไร้รอยต่อ -->
-                <div class="flex flex-row items-center gap-3.5 bg-slate-50 px-4 py-2 rounded-xl border border-slate-200/80">
-                    <div class="flex flex-col text-right">
-                        <span class="text-[8px] text-slate-400 font-bold uppercase tracking-wider">บัญชีผู้ใช้งานระบบ</span>
+                <div class="flex flex-row items-center gap-3.5 bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-200/80 w-full lg:w-auto justify-between lg:justify-start">
+                    <div class="flex flex-col text-left lg:text-right">
+                        <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">บัญชีผู้ใช้งานระบบ</span>
                         <span id="userProfileDisplay" class="text-xs text-slate-800 font-bold">กำลังโหลด...</span>
                     </div>
-                    <div class="w-px h-6 bg-slate-200"></div>
-                    <button onclick="handleLogout()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition-all border border-rose-100 active:scale-95">
+                    <div class="w-px h-6 bg-slate-200 hidden lg:block"></div>
+                    <button onclick="handleLogout()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold px-3 py-2 rounded-lg transition-all border border-rose-100 active:scale-95">
                         ออกจากระบบ
                     </button>
                 </div>
             </div>
         </header>
 
-        <!-- ส่วนเนื้อหาของแท็บนำทางหลัก (ปรับโครงสร้างขนาดหัวข้อและระยะห่างเพื่อให้ได้บาลานซ์ที่ดูดีที่สุด) -->
+        <!-- ส่วนเนื้อหาของแท็บนำทางหลัก -->
         <main class="max-w-6xl mx-auto px-6 py-6 flex-grow w-full">
-            <!-- แท็บเมนูมินิมอล -->
+            <!-- แท็บเมนูมินิมอลที่มีขนาดสมดุล ชัดเจน และใหญ่ขึ้น -->
             <div class="flex border-b border-slate-200 mb-6 overflow-x-auto no-scrollbar gap-1">
-                <button onclick="switchTab('evaluate-tab')" id="btn-evaluate-tab" class="py-3 px-4 font-bold border-b-2 border-emerald-850 text-emerald-855 text-xs focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                <button onclick="switchTab('evaluate-tab')" id="btn-evaluate-tab" class="py-3 px-4 font-bold border-b-2 border-emerald-850 text-emerald-855 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                     <span>ทำแบบประเมินโครงการ</span>
-                    <span id="pendingBadge" class="px-1.5 py-0.5 text-[9px] bg-yellow-400 text-slate-900 font-bold rounded-full">0</span>
+                    <span id="pendingBadge" class="px-2 py-0.5 text-xs bg-yellow-400 text-slate-900 font-bold rounded-full">0</span>
                 </button>
-                <button onclick="switchTab('report-tab')" id="btn-report-tab" class="py-3 px-4 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-xs focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2"></path></svg>
+                <button onclick="switchTab('report-tab')" id="btn-report-tab" class="py-3 px-4 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2"></path></svg>
                     <span>สรุปรายงานผลการประเมิน</span>
                 </button>
-                <button onclick="switchTab('history-tab')" id="btn-history-tab" class="py-3 px-4 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-xs focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <button onclick="switchTab('history-tab')" id="btn-history-tab" class="py-3 px-4 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <span>สถิติดำเนินการย้อนหลัง 3 ปี</span>
                 </button>
-                <button onclick="switchTab('admin-tab')" id="btn-admin-tab" class="py-3 px-4 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-xs focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                <button onclick="switchTab('admin-tab')" id="btn-admin-tab" class="py-3 px-4 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
                     <span>บริหารจัดการสารสนเทศ</span>
-                    <span class="text-[8px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-full">แอดมิน</span>
+                    <span class="text-xs bg-slate-100 text-slate-500 font-bold px-2 py-0.5 rounded-full">แอดมิน</span>
                 </button>
             </div>
 
             <!-- 2.1 หน้าประเมินโครงการแบบ Grid -->
-            <section id="evaluate-tab" class="tab-content block">
-                <div class="bg-emerald-50 border-l-4 border-emerald-700 p-3.5 rounded-r-lg mb-6 text-xs text-emerald-900 leading-relaxed shadow-sm">
+            <section id="evaluate-tab" class="tab-content block animate-fade-in">
+                <div class="bg-emerald-50 border-l-4 border-emerald-700 p-4 rounded-r-lg mb-6 text-sm text-emerald-900 leading-relaxed shadow-sm">
                     <strong>คำแนะนำเบื้องต้น:</strong> แบบประเมินโครงการความพึงพอใจของสถาบันที่ท่านยังค้างประเมินผลจะแสดงดังตารางข้างล่าง 
                     หากท่านดำเนินการประเมินโครงการเสร็จสิ้น <strong class="text-emerald-950 underline">โครงการนี้จะถูกส่งเข้าระบบสถิติและซ่อนออกจากหน้าจอของท่านทันที</strong> เพื่อลดงานตกค้างและเพิ่มความคลีนสูงสุด
                 </div>
@@ -349,15 +309,15 @@
                 </div>
                 
                 <div id="noEvaluations" class="hidden text-center py-16 bg-white rounded-2xl border border-slate-150 shadow-sm">
-                    <div class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-800 flex items-center justify-center mx-auto mb-3 font-bold text-sm">✓</div>
-                    <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider">เสร็จสิ้นภารกิจการประเมิน</h3>
-                    <p class="text-slate-400 mt-1 text-xs">ท่านได้ตอบแบบประเมินโครงการครบถ้วนทุกรายการที่มีในสารสนเทศเรียบร้อยแล้ว ขอขอบพระคุณอย่างยิ่ง</p>
+                    <div class="w-12 h-12 rounded-full bg-emerald-50 text-emerald-800 flex items-center justify-center mx-auto mb-3 font-bold text-sm">✓</div>
+                    <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider">เสร็จสิ้นภารกิจการประเมิน</h3>
+                    <p class="text-slate-400 mt-1 text-sm">ท่านได้ตอบแบบประเมินโครงการครบถ้วนทุกรายการที่มีในสารสนเทศเรียบร้อยแล้ว ขอขอบพระคุณอย่างยิ่ง</p>
                 </div>
             </section>
 
-            <!-- 2.2 หน้าสรุปรายงานผลคะแนนปัจจุบัน (ปรับระยะห่างและตารางรายบุคคลให้บาลานซ์สุดๆ เหมือนในสกรีนช็อต 1) -->
+            <!-- 2.2 หน้าสรุปรายงานผลคะแนนปัจจุบัน -->
             <section id="report-tab" class="tab-content hidden">
-                <div class="bg-amber-50/40 border-l-4 border-amber-500 p-3.5 rounded-r-lg mb-6 text-xs text-slate-750 leading-relaxed shadow-sm">
+                <div class="bg-amber-50/40 border-l-4 border-amber-500 p-4 rounded-r-lg mb-6 text-sm text-slate-755 leading-relaxed shadow-sm">
                     <strong>เกณฑ์การวัดผลสถิติความพึงพอใจร้อยละ:</strong> 
                     การคำนวณผลร้อยละความพึงพอใจโครงการ: คะแนนระดับ <strong class="text-slate-900">4 และ 5 คิดเป็นพึงพอใจร้อยละ 100</strong> ต่อผู้โหวต 1 คน 
                     ส่วนระดับ <strong class="text-slate-900">1, 2, 3 คิดเป็นร้อยละ 0</strong> โดยเฉลี่ยจากจำนวนครูบุคลากรที่ส่งแบบสอบถามทั้งหมด 
@@ -369,9 +329,9 @@
                 </div>
             </section>
 
-            <!-- 2.3 หน้าแสดงกราฟสถิตย้อนหลัง 3 ปี (ลีนคลีน เรียบหรู ตามแบบสกรีนช็อต 2) -->
+            <!-- 2.3 หน้าแสดงกราฟสถิตย้อนหลัง 3 ปี -->
             <section id="history-tab" class="tab-content hidden">
-                <div class="bg-emerald-50/40 border-l-4 border-emerald-800 p-3.5 rounded-r-lg mb-6 text-xs text-emerald-900 leading-relaxed shadow-sm">
+                <div class="bg-emerald-50/40 border-l-4 border-emerald-800 p-4 rounded-r-lg mb-6 text-sm text-emerald-900 leading-relaxed shadow-sm">
                     <strong>บัญชีข้อมูลสถิติประกันคุณภาพ:</strong> กราฟสรุปผลเปรียบเทียบร้อยละ (%) ความพึงพอใจโครงการและกิจกรรมย้อนหลัง 3 ปีการศึกษา เพื่อใช้ประเมินวัดความคุ้มค่าและทิศทางผลสำเร็จตามเกณฑ์แผนกลยุทธ์สถาบัน
                 </div>
 
@@ -380,7 +340,7 @@
                 </div>
             </section>
 
-            <!-- 2.4 หน้าหลังบ้านควบคุมสารสนเทศระบบ (Admin Only - จัดระเบียบระยะห่าง บาลานซ์ตามสกรีนช็อต 3) -->
+            <!-- 2.4 หน้าหลังบ้านควบคุมสารสนเทศระบบ (Admin Only) -->
             <section id="admin-tab" class="tab-content hidden">
                 <div id="adminAccessDenied" class="hidden bg-slate-50 border border-slate-150 p-10 rounded-xl text-center max-w-lg mx-auto my-8 shadow-sm">
                     <div class="w-10 h-10 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto text-base mb-4">🔒</div>
@@ -398,49 +358,49 @@
                             
                             <!-- ฟอร์มสร้างโครงการกิจกรรมใหม่ -->
                             <div class="bg-white p-5 rounded-xl border border-slate-200/80 shadow-sm">
-                                <h3 class="text-xs font-bold text-slate-900 mb-4 border-b pb-3 flex items-center gap-1.5 uppercase tracking-wider">
+                                <h3 class="text-sm font-bold text-slate-900 mb-4 border-b pb-3 flex items-center gap-2 uppercase tracking-wider">
                                     <span class="text-emerald-850">➕</span>
                                     <span>สร้างทะเบียนประเมินโครงการใหม่</span>
                                 </h3>
                                 <form id="addActivityForm" onsubmit="createNewActivity(event)" class="space-y-4">
                                     <div>
-                                        <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">ระบุชื่อโครงการ / กิจกรรม</label>
-                                        <input type="text" id="newActName" required placeholder="เช่น โครงการพัฒนาทักษะวิชาชีพครูสู่ศตวรรษที่ 21" class="w-full border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-850">
+                                        <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">ระบุชื่อโครงการ / กิจกรรม</label>
+                                        <input type="text" id="newActName" required placeholder="เช่น โครงการพัฒนาทักษะวิชาชีพครูสู่ศตวรรษที่ 21" class="w-full border border-slate-200 rounded px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-850">
                                     </div>
                                     <div>
-                                        <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">เป้าหมาย / วัตถุประสงค์โครงการ</label>
-                                        <textarea id="newActObjectives" rows="3" placeholder="ระบุวัตถุประสงค์โครงการทีละข้อ (แยกบรรทัด)" class="w-full border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-850"></textarea>
+                                        <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">เป้าหมาย / วัตถุประสงค์โครงการ</label>
+                                        <textarea id="newActObjectives" rows="3" placeholder="ระบุวัตถุประสงค์โครงการทีละข้อ (แยกบรรทัด)" class="w-full border border-slate-200 rounded px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-850"></textarea>
                                     </div>
                                     <!-- ปุ่มแทรกภาพโปสเตอร์ของกิจกรรมสำหรับบันทึกเก็บเข้าระบบ -->
                                     <div>
-                                        <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">ลิงก์ภาพโปสเตอร์กิจกรรม (Poster URL)</label>
-                                        <input type="url" id="newActPoster" placeholder="เช่น https://domain.com/poster.jpg (ว่างได้)" class="w-full border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-850">
+                                        <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">ลิงก์ภาพโปสเตอร์กิจกรรม (Poster URL)</label>
+                                        <input type="url" id="newActPoster" placeholder="เช่น https://domain.com/poster.jpg (ว่างได้)" class="w-full border border-slate-200 rounded px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-850">
                                     </div>
                                     <div>
-                                        <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">หัวข้อการประเมินความพึงพอใจ (ป้อนบรรทัดละ 1 ข้อ)</label>
-                                        <textarea id="newActTopics" rows="3" required placeholder="ด้านความเหมาะสมของหลักสูตร&#10;ด้านคุณภาพและลีลาการสอนของวิทยากร&#10;ด้านความพร้อมของสตรีมมิ่งและระบบเทคโนโลยี" class="w-full border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-850"></textarea>
+                                        <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">หัวข้อการประเมินความพึงพอใจ (ป้อนบรรทัดละ 1 ข้อ)</label>
+                                        <textarea id="newActTopics" rows="3" required placeholder="ด้านความเหมาะสมของหลักสูตร&#10;ด้านคุณภาพและลีลาการสอนของวิทยากร&#10;ด้านความพร้อมของสตรีมมิ่งและระบบเทคโนโลยี" class="w-full border border-slate-200 rounded px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-850"></textarea>
                                     </div>
                                     <div>
-                                        <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">ผู้รับผิดชอบโครงการ (ผู้ควบคุมสิทธิ์)</label>
-                                        <select id="newActOwner" class="w-full border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-850 cursor-pointer">
+                                        <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">ผู้รับผิดชอบโครงการ (ผู้ควบคุมสิทธิ์)</label>
+                                        <select id="newActOwner" class="w-full border border-slate-200 rounded px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-850 cursor-pointer bg-white">
                                             <!-- เติมรายชื่อโดย JS -->
                                         </select>
                                     </div>
 
                                     <!-- ทะเบียนกำหนดร้อยละสะสมย้อนหลัง -->
                                     <div class="border-t border-slate-150 pt-3">
-                                        <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1.5">กำหนดค่าสถิตย้อนหลัง (%)</label>
+                                        <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">กำหนดค่าสถิตย้อนหลัง (%)</label>
                                         <div class="grid grid-cols-3 gap-2">
                                             <div>
-                                                <span class="block text-[8px] text-slate-400 mb-0.5">ปี 2566 (%)</span>
+                                                <span class="block text-[10px] text-slate-400 mb-1">ปี 2566 (%)</span>
                                                 <input type="number" step="0.01" min="0" max="100" id="history2566" required value="85.00" class="w-full border border-slate-200 rounded p-1.5 text-center text-xs">
                                             </div>
                                             <div>
-                                                <span class="block text-[8px] text-slate-400 mb-0.5">ปี 2567 (%)</span>
+                                                <span class="block text-[10px] text-slate-400 mb-1">ปี 2567 (%)</span>
                                                 <input type="number" step="0.01" min="0" max="100" id="history2567" required value="88.00" class="w-full border border-slate-200 rounded p-1.5 text-center text-xs">
                                             </div>
                                             <div>
-                                                <span class="block text-[8px] text-slate-400 mb-0.5">ปี 2568 (%)</span>
+                                                <span class="block text-[10px] text-slate-400 mb-1">ปี 2568 (%)</span>
                                                 <input type="number" step="0.01" min="0" max="100" id="history2568" required value="92.00" class="w-full border border-slate-200 rounded p-1.5 text-center text-xs">
                                             </div>
                                         </div>
@@ -454,25 +414,25 @@
 
                             <!-- ฟอร์มลงทะเบียนบัญชีบุคลากรใหม่เข้าระบบ -->
                             <div class="bg-white p-5 rounded-xl border border-slate-200/80 shadow-sm">
-                                <h3 class="text-xs font-bold text-slate-900 mb-4 border-b pb-3 flex items-center gap-1.5 uppercase tracking-wider">
+                                <h3 class="text-sm font-bold text-slate-900 mb-4 border-b pb-3 flex items-center gap-2 uppercase tracking-wider">
                                     <span class="text-emerald-855">👤</span>
                                     <span>ลงทะเบียนเพิ่มบุคลากรใหม่</span>
                                 </h3>
                                 <form id="addUserForm" onsubmit="createNewUser(event)" class="space-y-4">
                                     <div>
-                                        <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">รหัสพนักงานประจำตัว</label>
+                                        <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">รหัสพนักงานประจำตัว</label>
                                         <input type="text" id="newUserEmpId" required placeholder="ระบุเช่น YW-011" class="w-full border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-850">
                                     </div>
                                     <div>
-                                        <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">ชื่อ - นามสกุล</label>
+                                        <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">ชื่อ - นามสกุล</label>
                                         <input type="text" id="newUserName" required placeholder="ชื่อ นามสกุลจริง" class="w-full border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-850">
                                     </div>
                                     <div>
-                                        <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">อีเมลเข้าใช้งาน (@yuwapat.ac.th)</label>
+                                        <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">อีเมลเข้าใช้งาน (@yuwapat.ac.th)</label>
                                         <input type="email" id="newUserEmail" required placeholder="อีเมลโดเมนสถาบัน" class="w-full border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-850">
                                     </div>
                                     <div>
-                                        <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">ตำแหน่งงาน / บทบาทสิทธิ์</label>
+                                        <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">ตำแหน่งงาน / บทบาทสิทธิ์</label>
                                         <select id="newUserRole" class="w-full border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-850 cursor-pointer">
                                             <option value="Staff">คุณครู/บุคลากรทั่วไป</option>
                                             <option value="Executive">ผู้บริหาร</option>
@@ -484,7 +444,7 @@
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="block text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">กำหนดรหัสผ่าน (ขั้นต่ำ 6 ตัวอักษร)</label>
+                                        <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">กำหนดรหัสผ่าน (ขั้นต่ำ 6 ตัวอักษร)</label>
                                         <input type="text" id="newUserPassword" required value="yw123456" placeholder="รหัสผ่านขั้นต่ำ 6 ตัวอักษร" class="w-full border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-850">
                                     </div>
                                     <button type="submit" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-sm active:scale-95">
@@ -495,18 +455,18 @@
 
                         </div>
 
-                        <!-- ฝั่งขวา: แสดงแผนงานโครงการและตารางจัดการแก้ไขสิทธิ์บุคลากรรายบุคคล (จัดพาร์ติชันและขนาดฟอนต์ตาราง บาลานซ์สุดๆ ตามสกรีนช็อต 3) -->
+                        <!-- ฝั่งขวา: แสดงแผนงานโครงการและตารางจัดการแก้ไขสิทธิ์บุคลากรรายบุคคล -->
                         <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm lg:col-span-2 space-y-6">
                             
                             <!-- ตารางจดทะเบียนโครงการทั้งหมด -->
                             <div>
-                                <h3 class="text-xs font-bold text-slate-900 mb-3.5 flex items-center gap-1.5 uppercase tracking-wider">
-                                    <span class="text-emerald-850">📋</span>
+                                <h3 class="text-sm font-bold text-slate-900 mb-3.5 flex items-center gap-2 uppercase tracking-wider">
+                                    <span class="text-emerald-855">📋</span>
                                     <span>ทะเบียนแผนโครงการทั้งหมดในระบบ</span>
                                 </h3>
                                 <div class="overflow-x-auto border border-slate-150 rounded-lg">
-                                    <table class="min-w-full text-xs text-left">
-                                        <thead class="bg-slate-50 text-slate-655 font-bold border-b border-slate-150 uppercase text-[9px] tracking-wider">
+                                    <table class="min-w-full text-sm text-left">
+                                        <thead class="bg-slate-50 text-slate-655 font-bold border-b border-slate-150 uppercase text-xs tracking-wider">
                                             <tr>
                                                 <th class="px-4 py-3">รหัสสถิติ</th>
                                                 <th class="px-4 py-3">ชื่อโครงการ / กิจกรรม</th>
@@ -514,7 +474,7 @@
                                                 <th class="px-4 py-3 text-center">การจัดการ</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="adminActivitiesTable" class="divide-y divide-slate-100">
+                                        <tbody id="adminActivitiesTable" class="divide-y divide-slate-100 text-xs md:text-sm">
                                             <!-- แถวโหลดผ่าน JS -->
                                         </tbody>
                                     </table>
@@ -523,13 +483,13 @@
 
                             <!-- ตารางแสดงบุคลากรและปุ่มแก้ไขข้อมูลเชิงลึกแบบใหม่ -->
                             <div>
-                                <h3 class="text-xs font-bold text-slate-900 mb-3.5 flex items-center gap-1.5 uppercase tracking-wider">
+                                <h3 class="text-sm font-bold text-slate-900 mb-3.5 flex items-center gap-2 uppercase tracking-wider">
                                     <span class="text-emerald-855">🔑</span>
                                     <span>ข้อมูลสถิติและการแก้ไขข้อมูลบุคลากรรายบุคคล</span>
                                 </h3>
                                 <div class="overflow-x-auto border border-slate-150 rounded-lg">
-                                    <table class="min-w-full text-xs text-left">
-                                        <thead class="bg-slate-50 text-slate-655 font-bold border-b border-slate-150 uppercase text-[9px] tracking-wider">
+                                    <table class="min-w-full text-sm text-left">
+                                        <thead class="bg-slate-50 text-slate-655 font-bold border-b border-slate-150 uppercase text-xs tracking-wider">
                                             <tr>
                                                 <th class="px-4 py-3">รหัสพนักงาน</th>
                                                 <th class="px-4 py-3">ชื่อ-นามสกุล</th>
@@ -539,7 +499,7 @@
                                                 <th class="px-4 py-3 text-center">การจัดการ</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="adminUsersTable" class="divide-y divide-slate-100">
+                                        <tbody id="adminUsersTable" class="divide-y divide-slate-100 text-xs md:text-sm">
                                             <!-- แถวโหลดผ่าน JS -->
                                         </tbody>
                                     </table>
@@ -552,12 +512,12 @@
                     <!-- แถบดึงค่าข้อมูลสารสนเทศจำลองดั้งเดิม -->
                     <div class="border-t border-slate-200 pt-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
-                            <h4 class="font-bold text-rose-700 text-xs flex items-center gap-1.5 uppercase tracking-wider">
+                            <h4 class="font-bold text-rose-700 text-sm flex items-center gap-1.5 uppercase tracking-wider">
                                 <span>🔄 คืนค่าข้อมูลสารสนเทศเริ่มต้น</span>
                             </h4>
-                            <p class="text-[9px] text-slate-400 mt-0.5">กดยืนยันเพื่อล้างข้อมูลและกู้คืนสารสนเทศโครงการดั้งเดิมทั้งหมดของแอปกลับคืนมา</p>
+                            <p class="text-xs text-slate-400 mt-1">กดยืนยันเพื่อล้างข้อมูลและกู้คืนสารสนเทศโครงการดั้งเดิมทั้งหมดของแอปกลับคืนมา</p>
                         </div>
-                        <button onclick="confirmResetSystem()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-[10px] px-4 py-2 rounded font-bold transition-all shadow-sm active:scale-95">
+                        <button onclick="confirmResetSystem()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs px-4 py-2.5 rounded font-bold transition-all shadow-sm active:scale-95">
                             กู้คืนข้อมูลระบบทั้งหมด
                         </button>
                     </div>
@@ -567,7 +527,7 @@
         </main>
 
         <!-- ส่วนท้ายเว็บไซต์ระบุช่องทางการติดต่อเป็นทางการ -->
-        <footer class="text-center py-6 text-slate-400 text-[10px] border-t border-slate-100 bg-white tracking-wider">
+        <footer class="text-center py-6 text-slate-400 text-xs border-t border-slate-100 bg-white tracking-wider">
             หากมีข้อสงสัยหรือระบบขัดข้อง โปรดติดต่อฝ่ายไอที โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์
         </footer>
     </div>
@@ -658,7 +618,8 @@
             }
         ];
 
-        // --- ระบบสืบค้นข้อมูลท้องถิ่น (LocalStorage Service) ---
+        // --- STREAMING_CHUNK: Declaring global notification and data handling systems... ---
+        // ฟังก์ชันระบบสืบค้นและดึงข้อมูลสารสนเทศ LocalStorage
         function getUsers() {
             return JSON.parse(localStorage.getItem('eval_users')) || defaultUsers;
         }
@@ -671,54 +632,7 @@
             return JSON.parse(localStorage.getItem('eval_submissions')) || defaultEvaluations;
         }
 
-        let currentUser = null;
-
-        // --- ฟังก์ชันแจ้งเตือนสากล (Toast) ---
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            if(!container) return;
-            const toast = document.createElement('div');
-            toast.className = `flex items-center gap-3 px-4 py-3 rounded-lg shadow-xl border text-xs font-semibold transition-all duration-300 transform translate-y-2 opacity-0 ${
-                type === 'success' ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-rose-50 border-rose-200 text-rose-850'
-            }`;
-            toast.innerHTML = `
-                <span class="text-sm">${type === 'success' ? '✓' : '⚠️'}</span>
-                <span>${message}</span>
-            `;
-            container.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.classList.remove('translate-y-2', 'opacity-0');
-            }, 10);
-
-            setTimeout(() => {
-                toast.classList.add('translate-y-2', 'opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
-        }
-
-        let currentConfirmAction = null;
-
-        function customConfirm(title, message, icon, onConfirm, isDanger = false) {
-            const modal = document.getElementById('confirm-modal');
-            if(!modal) return;
-            document.getElementById('confirm-title').innerText = title;
-            document.getElementById('confirm-msg').innerText = message;
-            document.getElementById('confirm-icon').innerText = icon;
-            
-            const okBtn = document.getElementById('confirm-ok-btn');
-            if (isDanger) {
-                okBtn.className = "px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold transition-colors";
-            } else {
-                okBtn.className = "px-4 py-2 bg-emerald-800 hover:bg-emerald-900 text-white rounded-lg text-xs font-semibold transition-colors";
-            }
-            
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            currentConfirmAction = onConfirm;
-        }
-
-        // ฟังก์ชันรับมือการแสดงตราสัญลักษณ์โรงเรียนในแบบปลอดภัย ป้องกัน SyntaxError จาก Quote ซ้อนใน HTML inline event
+        // ฟังก์ชันรับมือการแสดงตราสัญลักษณ์โรงเรียนในแบบปลอดภัย
         function handleLogoError(img) {
             img.onerror = null;
             img.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%23064e3b'/><text x='50' y='55' font-family='Sarabun' font-weight='bold' font-size='30' fill='%23facc15' text-anchor='middle'>YW</text></svg>";
@@ -805,6 +719,7 @@
             );
         }
 
+        // --- STREAMING_CHUNK: Implementing navigation, evaluate grid and submission ---
         // --- ระบบสลับแท็บเมนูหลัก (Navigation Tabs) ---
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => {
@@ -876,20 +791,20 @@
                 const posterSrc = act.poster && act.poster.trim() !== "" ? act.poster : "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'><rect width='100%' height='100%' fill='%23064e3b'/><text x='50%' y='50%' font-family='Sarabun, sans-serif' font-weight='bold' font-size='15' fill='%23facc15' dominant-baseline='middle' text-anchor='middle'>โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</text></svg>";
 
                 card.innerHTML = `
-                    <div class="relative h-36 bg-slate-100 overflow-hidden">
+                    <div class="relative h-44 bg-slate-100 overflow-hidden">
                         <img src="${posterSrc}" alt="[ภาพโปสเตอร์ประชาสัมพันธ์กิจกรรม]" class="w-full h-full object-cover">
-                        <div class="absolute top-2 left-2">
-                            <span class="bg-emerald-900/90 text-white text-[9px] font-mono font-bold px-2 py-0.5 rounded tracking-wider border border-white/10 shadow-sm">${act.id}</span>
+                        <div class="absolute top-2.5 left-2.5">
+                            <span class="bg-emerald-900/90 text-white text-xs font-mono font-bold px-2.5 py-1 rounded tracking-wider border border-white/10 shadow-sm">${act.id}</span>
                         </div>
                     </div>
                     
-                    <div class="p-4 flex-grow flex flex-col justify-between">
-                        <div>
-                            <h4 class="text-xs font-bold text-slate-800 leading-snug mb-1.5 min-h-8 limit-2-lines">${act.name}</h4>
-                            <p class="text-[10px] text-slate-400 limit-2-lines leading-relaxed mb-3">${act.objectives || 'ตรวจสอบข้อมูลประเมินผลหลังงานโครงการสำเร็จ'}</p>
+                    <div class="p-5 flex-grow flex flex-col justify-between">
+                        <div class="mb-4">
+                            <h4 class="text-base font-bold text-slate-800 leading-snug mb-2 min-h-8 limit-2-lines">${act.name}</h4>
+                            <p class="text-xs text-slate-500 limit-2-lines leading-relaxed mb-3">${act.objectives || 'ตรวจสอบข้อมูลประเมินผลหลังงานโครงการสำเร็จ'}</p>
                         </div>
                         
-                        <button onclick="openEvaluationModal('${act.id}')" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white text-[11px] font-bold py-1.5 rounded transition-all active:scale-[0.98] shadow-sm">
+                        <button onclick="openEvaluationModal('${act.id}')" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold py-3 rounded-xl transition-all active:scale-[0.98] shadow-sm">
                             เริ่มทำแบบประเมินผล
                         </button>
                     </div>
@@ -898,7 +813,7 @@
             });
         }
 
-        // เปิด Modal แบบสอบถามหลายหัวข้อแบบรูปทรงเรขาคณิต (1-5) สัมผัสง่าย
+        // เปิด Modal แบบสอบถามหลายหัวข้อแบบรูปทรงเรขาคณิต (1-5) สัมผัสง่าย (w-12 h-12)
         function openEvaluationModal(actId) {
             const activities = getActivities();
             const act = activities.find(a => a.id === actId);
@@ -938,7 +853,7 @@
                     radioOptionsHtml += `
                         <label class="flex flex-col items-center gap-1 cursor-pointer">
                             <input type="radio" name="topic-rating-${idx}" value="${i}" required class="sr-only peer">
-                            <span class="w-10 h-10 border border-slate-200 rounded flex items-center justify-center text-xs font-bold text-slate-500 bg-white hover:border-emerald-800 transition-all peer-checked:bg-emerald-800 peer-checked:text-white peer-checked:border-emerald-800 shadow-inner">
+                            <span class="w-12 h-12 border border-slate-200 rounded-xl flex items-center justify-center text-sm font-bold text-slate-500 bg-white hover:border-emerald-800 transition-all peer-checked:bg-emerald-800 peer-checked:text-white peer-checked:border-emerald-800 shadow-inner">
                                 ${i}
                             </span>
                         </label>
@@ -946,8 +861,8 @@
                 }
 
                 topicWrapper.innerHTML = `
-                    <p class="text-xs text-slate-700 font-semibold mb-2.5">${idx+1}. ${topic}</p>
-                    <div class="flex justify-between max-w-xs mt-1">
+                    <p class="text-sm text-slate-700 font-bold mb-3">${idx+1}. ${topic}</p>
+                    <div class="flex justify-between max-w-sm mt-1">
                         ${radioOptionsHtml}
                     </div>
                 `;
@@ -1020,7 +935,8 @@
             }
         }
 
-        // --- 2. หน้าสรุปรายงานผลคะแนนปัจจุบัน (คิดร้อยละตามเกณฑ์อย่างเที่ยงตรง - บาลานซ์ขนาดองค์ประกอบ) ---
+        // --- STREAMING_CHUNK: Designing satisfaction summaries and reports ---
+        // --- 2. หน้าสรุปรายงานผลคะแนนปัจจุบัน (คิดร้อยละตามเกณฑ์อย่างเที่ยงตรง) ---
         function loadReportList() {
             if (!currentUser) return;
 
@@ -1086,47 +1002,47 @@
                 const isAuthorized = isAdmin || isOwner || isExecutive || isHead;
 
                 const card = document.createElement('div');
-                card.className = "bg-white p-5 rounded-xl shadow-sm border border-slate-200 relative overflow-hidden";
+                card.className = "bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden";
                 
                 let htmlContent = `
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4 border-b border-slate-100 pb-4">
                         <div>
-                            <span class="text-[8px] font-bold bg-slate-50 text-slate-500 border border-slate-200 px-2 py-0.5 rounded font-mono">${act.id}</span>
-                            <h3 class="text-sm font-bold text-slate-800 mt-1">${act.name}</h3>
+                            <span class="text-xs font-bold bg-slate-50 text-slate-500 border border-slate-200 px-2.5 py-1 rounded font-mono">${act.id}</span>
+                            <h3 class="text-base font-bold text-slate-800 mt-2">${act.name}</h3>
                         </div>
                         
-                        <div class="flex items-center gap-3.5 bg-slate-50 px-3.5 py-1.5 rounded-xl border border-slate-200 w-full md:w-auto text-xs">
-                            <div class="text-center min-w-[80px]">
-                                <span class="block text-[8px] text-slate-400 font-bold uppercase tracking-wider">พึงพอใจร้อยละ</span>
-                                <span class="text-xs font-bold text-emerald-800">${overallSatisfaction}%</span>
+                        <div class="flex items-center gap-4 bg-slate-50 px-4 py-2 rounded-xl border border-slate-200 w-full md:w-auto text-sm">
+                            <div class="text-center min-w-[90px]">
+                                <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">พึงพอใจร้อยละ</span>
+                                <span class="text-base font-bold text-emerald-800">${overallSatisfaction}%</span>
                             </div>
-                            <div class="h-5 w-px bg-slate-250"></div>
-                            <div class="text-center min-w-[60px]">
-                                <span class="block text-[8px] text-slate-400 font-bold uppercase tracking-wider">คะแนนเฉลี่ย</span>
-                                <span class="text-xs font-bold text-slate-650">${avgScore}</span>
+                            <div class="h-6 w-px bg-slate-250"></div>
+                            <div class="text-center min-w-[70px]">
+                                <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">คะแนนเฉลี่ย</span>
+                                <span class="text-base font-bold text-slate-600">${avgScore}</span>
                             </div>
-                            <div class="h-5 w-px bg-slate-250"></div>
-                            <div class="text-center min-w-[60px]">
-                                <span class="block text-[8px] text-slate-400 font-bold uppercase tracking-wider">ยอดผู้ประเมิน</span>
-                                <span class="text-xs font-bold text-slate-800">${totalEvaluations} ราย</span>
+                            <div class="h-6 w-px bg-slate-250"></div>
+                            <div class="text-center min-w-[70px]">
+                                <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">ยอดผู้ประเมิน</span>
+                                <span class="text-base font-bold text-slate-800">${totalEvaluations} ราย</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- แถบความพึงพอใจแยกตามหัวข้อประกันคุณภาพ (ปรับขนาดให้บาลานซ์คลีนตา) -->
-                    <div class="mb-4 space-y-3 bg-slate-50/50 p-3.5 rounded-xl border border-slate-150">
-                        <h4 class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">📊 สถิติความพึงพอใจจำแนกตามหัวข้อประเมินคุณภาพ (ครูประเมินระดับ 4-5):</h4>
+                    <!-- แถบความพึงพอใจแยกตามหัวข้อประกันคุณภาพ -->
+                    <div class="mb-4 space-y-3.5 bg-slate-50/50 p-4 rounded-xl border border-slate-150">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">📊 สถิติความพึงพอใจจำแนกตามหัวข้อประเมินคุณภาพ (ครูประเมินระดับ 4-5):</h4>
                 `;
 
                 topicStats.forEach(stat => {
                     htmlContent += `
                         <div>
-                            <div class="flex justify-between items-center text-xs mb-1 font-medium text-slate-650">
+                            <div class="flex justify-between items-center text-xs md:text-sm mb-1.5 font-medium text-slate-650">
                                 <span>${stat.name}</span>
                                 <span class="font-bold text-emerald-800">${stat.percentage.toFixed(2)}% (${stat.satisfied}/${totalEvaluations} ราย)</span>
                             </div>
-                            <div class="w-full bg-slate-200 rounded h-1.5 overflow-hidden">
-                                <div class="bg-gradient-to-r from-emerald-800 to-emerald-600 h-1.5 rounded transition-all duration-500" style="width: ${stat.percentage}%"></div>
+                            <div class="w-full bg-slate-200 rounded-lg h-2 overflow-hidden">
+                                <div class="bg-gradient-to-r from-emerald-800 to-emerald-600 h-2 rounded-lg transition-all duration-500" style="width: ${stat.percentage}%"></div>
                             </div>
                         </div>
                     `;
@@ -1137,17 +1053,17 @@
 
                     <!-- ข้อคิดเห็นเพิ่มเติมแบบนิรนาม -->
                     <div class="mb-4">
-                        <h4 class="text-[9px] font-bold text-slate-450 uppercase tracking-wider mb-2">📄 บันทึกข้อเสนอแนะเพื่อการพัฒนางานวิชาการ (นิรนาม):</h4>
-                        <div class="space-y-1.5 max-h-40 overflow-y-auto">
+                        <h4 class="text-xs font-bold text-slate-450 uppercase tracking-wider mb-2">📄 บันทึกข้อเสนอแนะเพื่อการพัฒนางานวิชาการ (นิรนาม):</h4>
+                        <div class="space-y-2 max-h-48 overflow-y-auto">
                 `;
 
                 const suggestions = actEvals.filter(e => e.suggestion && e.suggestion.trim() !== "");
                 if (suggestions.length === 0) {
-                    htmlContent += `<p class="text-[11px] text-slate-400 italic">ไม่ปรากฏบันทึกข้อแนะนำสำหรับการดำเนินงานโครงการนี้</p>`;
+                    htmlContent += `<p class="text-xs text-slate-400 italic">ไม่ปรากฏบันทึกข้อแนะนำสำหรับการดำเนินงานโครงการนี้</p>`;
                 } else {
                     suggestions.forEach(s => {
                         htmlContent += `
-                            <div class="bg-neutral-50 px-3 py-2 rounded-lg text-[11px] text-slate-650 border border-slate-100 leading-relaxed">
+                            <div class="bg-neutral-50 px-4 py-2.5 rounded-lg text-xs md:text-sm text-slate-655 border border-slate-100 leading-relaxed">
                                 "${s.suggestion}"
                             </div>
                         `;
@@ -1159,7 +1075,7 @@
                     </div>
                 `;
 
-                // บล็อกระบุตัวตนเฉพาะผู้มีสิทธิ์ (และปุ่มส่งออกรายงาน CSV - ปรับแต่งตารางตามดีไซน์สกรีนช็อต 1) -->
+                // บล็อกระบุตัวตนเฉพาะผู้มีสิทธิ์ (และปุ่มส่งออกรายงาน CSV)
                 if (isAuthorized) {
                     let roleLabel = 'สิทธิ์ผู้ดูแลระบบระดับสูง';
                     if (isOwner) roleLabel = 'คุณเป็นผู้รับผิดชอบโครงการนี้';
@@ -1172,44 +1088,44 @@
                     }
 
                     htmlContent += `
-                        <div class="bg-amber-50/20 border border-amber-200/60 rounded-xl p-4 mt-4 text-xs">
+                        <div class="bg-amber-50/20 border border-amber-200 rounded-xl p-4.5 mt-5 text-sm">
                             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3.5 border-b border-amber-100 pb-2.5">
-                                <div class="flex items-center gap-2">
-                                    <h4 class="text-[10px] font-bold text-slate-800 uppercase tracking-wider">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">
                                         <span>🔒 บัญชีสิทธิ์ผู้ตรวจสอบผลการประเมินรายบุคคล</span>
                                     </h4>
-                                    <span class="text-[8px] font-bold bg-amber-400 text-slate-900 px-2 py-0.5 rounded-full">
+                                    <span class="text-[10px] font-bold bg-amber-400 text-slate-900 px-2.5 py-0.5 rounded-full">
                                         ${roleLabel}
                                     </span>
                                 </div>
                                 
-                                <button onclick="exportToCSV('${act.id}')" class="flex items-center gap-1 bg-emerald-800 hover:bg-emerald-900 text-white text-[9px] font-bold px-3 py-1.5 rounded transition-all shadow-sm active:scale-95">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                <button onclick="exportToCSV('${act.id}')" class="flex items-center gap-1 bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-3 py-2 rounded-lg transition-all shadow-sm active:scale-95">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                     <span>ส่งออกข้อมูล (CSV)</span>
                                 </button>
                             </div>
                             
                             <div class="overflow-x-auto">
-                                <table class="min-w-full text-[10px] text-left text-slate-655 border border-slate-100">
-                                    <thead class="bg-amber-100/50 text-slate-700 uppercase font-bold border-b border-amber-100">
+                                <table class="min-w-full text-xs md:text-sm text-left text-slate-655 border border-slate-100 bg-white rounded-lg">
+                                    <thead class="bg-amber-100/50 text-slate-700 uppercase font-bold border-b border-amber-100 text-xs">
                                         <tr>
-                                            <th class="px-3 py-2 rounded-l">ผู้ประเมิน</th>
-                                            <th class="px-3 py-2">ตำแหน่ง</th>
-                                            <th class="px-3 py-2">คะแนนรายหัวข้อ (1-5)</th>
-                                            <th class="px-3 py-2 rounded-r">เนื้อหาระบุเพิ่มเติม</th>
+                                            <th class="px-4 py-3 rounded-l">ผู้ประเมิน</th>
+                                            <th class="px-4 py-3">ตำแหน่ง</th>
+                                            <th class="px-4 py-3">คะแนนรายหัวข้อ (1-5)</th>
+                                            <th class="px-4 py-3 rounded-r">เนื้อหาระบุเพิ่มเติม</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="divide-y divide-slate-100 bg-white">
+                                    <tbody class="divide-y divide-slate-100">
                     `;
 
                     if (actEvals.length === 0) {
-                        htmlContent += `<tr><td colspan="4" class="px-3 py-3 text-center text-slate-400 italic">ยังไม่มีใครทำแบบประเมินสำหรับกิจกรรมนี้</td></tr>`;
+                        htmlContent += `<tr><td colspan="4" class="px-4 py-4 text-center text-slate-400 italic">ยังไม่มีใครทำแบบประเมินสำหรับกิจกรรมนี้</td></tr>`;
                     } else {
                         actEvals.forEach(e => {
                             let ratingsSummary = '';
                             topics.forEach((topic, tidx) => {
                                 const score = e.ratings && e.ratings[topic] ? e.ratings[topic] : 0;
-                                ratingsSummary += `<div class="mb-0.5">${tidx+1}. <span class="font-bold ${score >= 4 ? 'text-emerald-800' : 'text-slate-500'}">${score}.0</span></div>`;
+                                ratingsSummary += `<div class="mb-0.5">${tidx+1}. <span class="font-bold ${score >= 4 ? 'text-emerald-850' : 'text-slate-500'}">${score}.0</span></div>`;
                             });
 
                             const userObj = getUsers().find(u => u.email.toLowerCase() === e.email.toLowerCase());
@@ -1217,13 +1133,13 @@
 
                             htmlContent += `
                                 <tr class="hover:bg-slate-50 transition-colors">
-                                    <td class="px-3 py-2.5">
-                                        <div class="font-bold text-slate-800 text-xs">${e.name}</div>
-                                        <div class="text-[8px] text-slate-400 font-mono mt-0.5">ID: ${empIdText} • ${e.email}</div>
+                                    <td class="px-4 py-3.5">
+                                        <div class="font-bold text-slate-800">${e.name}</div>
+                                        <div class="text-[10px] text-slate-400 font-mono mt-0.5">ID: ${empIdText} • ${e.email}</div>
                                     </td>
-                                    <td class="px-3 py-2.5 text-slate-600">${e.role}</td>
-                                    <td class="px-3 py-2.5 leading-snug font-medium text-slate-850">${ratingsSummary}</td>
-                                    <td class="px-3 py-2.5 italic text-slate-500 leading-relaxed">${e.suggestion || '-'}</td>
+                                    <td class="px-4 py-3.5 text-slate-655">${e.role}</td>
+                                    <td class="px-4 py-3.5 leading-snug font-medium text-slate-850">${ratingsSummary}</td>
+                                    <td class="px-4 py-3.5 italic text-slate-500 leading-relaxed">${e.suggestion || '-'}</td>
                                 </tr>
                             `;
                         });
@@ -1242,6 +1158,7 @@
             });
         }
 
+        // --- STREAMING_CHUNK: Historical chart calculation and rendering ---
         // ดาวน์โหลดรายงานการวิเคราะห์และตรวจสอบความพึงพอใจรายบุคคล (Excel Friendly CSV)
         function exportToCSV(actId) {
             const activities = getActivities();
@@ -1304,7 +1221,7 @@
             container.innerHTML = '';
 
             if (activities.length === 0) {
-                container.innerHTML = '<div class="col-span-full text-center text-slate-400 py-12 text-xs">ไม่พบสถิติดำเนินงานย้อนหลังเพื่อวิเคราะห์แผนงาน</div>';
+                container.innerHTML = '<div class="col-span-full text-center text-slate-400 py-12 text-sm">ไม่พบสถิติดำเนินงานย้อนหลังเพื่อวิเคราะห์แผนงาน</div>';
                 return;
             }
 
@@ -1335,7 +1252,7 @@
                 const h2569 = currentYearPercentage;
 
                 const card = document.createElement('div');
-                card.className = "bg-white p-5 rounded-xl border border-slate-200 flex flex-col justify-between shadow-sm";
+                card.className = "bg-white p-6 rounded-2xl border border-slate-200 flex flex-col justify-between shadow-sm";
                 
                 const getBarHtml = (yearLabel, score, isCurrent = false) => {
                     const formattedScore = score > 0 ? score.toFixed(2) + "%" : "ไม่มีข้อมูล";
@@ -1347,25 +1264,25 @@
 
                     return `
                         <div class="flex flex-col items-center flex-grow">
-                          <span class="text-[9px] font-bold ${isCurrent ? 'text-emerald-900 font-extrabold' : 'text-slate-500'} mb-1.5">${formattedScore}</span>
-                          <div class="w-6.5 bg-slate-100 rounded h-24 flex items-end overflow-hidden shadow-inner relative">
+                          <span class="text-[10px] font-bold ${isCurrent ? 'text-emerald-900 font-extrabold' : 'text-slate-500'} mb-2">${formattedScore}</span>
+                          <div class="w-8 bg-slate-100 rounded h-28 flex items-end overflow-hidden shadow-inner relative">
                             <div class="w-full bg-gradient-to-t ${barGradient} rounded-t transition-all duration-700" style="height: ${barHeightPercentage}%"></div>
                           </div>
-                          <span class="text-[9px] font-bold ${isCurrent ? 'text-emerald-900 font-extrabold' : 'text-slate-400'} mt-1.5">${yearLabel}</span>
+                          <span class="text-xs font-bold ${isCurrent ? 'text-emerald-900 font-extrabold' : 'text-slate-400'} mt-2">${yearLabel}</span>
                         </div>
                     `;
                 };
 
                 card.innerHTML = `
                     <div>
-                        <div class="flex items-start justify-between gap-2 mb-2">
+                        <div class="flex items-start justify-between gap-2 mb-3">
                             <div>
-                                <span class="text-[8px] font-mono bg-slate-50 border border-slate-200 px-2 py-0.5 rounded text-slate-500">${act.id}</span>
-                                <h4 class="text-xs font-bold text-slate-800 mt-1.5 h-10 limit-2-lines leading-snug">${act.name}</h4>
+                                <span class="text-[10px] font-mono bg-slate-50 border border-slate-200 px-2 py-0.5 rounded text-slate-500">${act.id}</span>
+                                <h4 class="text-base font-bold text-slate-800 mt-2 h-10 limit-2-lines leading-snug">${act.name}</h4>
                             </div>
                         </div>
                         
-                        <p class="text-[9px] text-slate-400 mb-4 leading-relaxed">ข้อมูลเปรียบเทียบร้อยละความพึงพอใจย้อนหลัง 3 ปีการศึกษา (2566 - 2568) เทียบกับปีปัจจุบัน (2569)</p>
+                        <p class="text-xs text-slate-400 mb-5 leading-relaxed">ข้อมูลเปรียบเทียบร้อยละความพึงพอใจย้อนหลัง 3 ปีการศึกษา (2566 - 2568) เทียบกับปีปัจจุบัน (2569)</p>
 
                         <div class="flex items-end justify-around gap-2 px-2 pb-2 border-b border-dashed border-slate-150">
                           ${getBarHtml("ปี 2566", h2566)}
@@ -1375,10 +1292,10 @@
                         </div>
                     </div>
 
-                    <div class="mt-3 pt-2.5 flex justify-between items-center text-[9px] text-slate-400">
+                    <div class="mt-4 pt-3 flex justify-between items-center text-[10px] text-slate-400">
                         <span>เกณฑ์การพิจารณาความพึงพอใจร้อยละ (%) ประจำโครงการ</span>
                         <span class="font-semibold text-emerald-800 flex items-center gap-1">
-                          <span class="w-2 h-2 rounded-full bg-yellow-400 inline-block"></span> 
+                          <span class="w-2.5 h-2.5 rounded-full bg-yellow-400 inline-block"></span> 
                           ข้อมูลปีปัจจุบัน
                         </span>
                     </div>
@@ -1388,6 +1305,7 @@
             });
         }
 
+        // --- STREAMING_CHUNK: Rendering admin directory and utilities ---
         // --- 4. ส่วนหลังบ้านระบบสารสนเทศ (Admin Panel) ---
         function loadAdminPanel() {
             if (!currentUser) return;
@@ -1431,13 +1349,13 @@
                         const tr = document.createElement('tr');
                         tr.className = "hover:bg-slate-50 transition-colors";
                         tr.innerHTML = `
-                            <td class="px-4 py-3.5 font-mono text-[10px] text-slate-500 font-bold">${act.id}</td>
+                            <td class="px-4 py-3.5 font-mono text-[11px] text-slate-500 font-bold">${act.id}</td>
                             <td class="px-4 py-3.5 font-semibold text-slate-700 leading-snug">
-                              <div>${act.name}</div>
+                              <div class="text-sm">${act.name}</div>
                             </td>
-                            <td class="px-4 py-3.5 text-slate-500 font-mono text-[10px]">${act.owner}</td>
+                            <td class="px-4 py-3.5 text-slate-500 font-mono text-xs">${act.owner}</td>
                             <td class="px-4 py-3.5 text-center">
-                              <button onclick="confirmDeleteActivity('${act.id}')" class="text-[9px] bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold px-2.5 py-1.5 rounded transition-all">
+                              <button onclick="confirmDeleteActivity('${act.id}')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold px-3 py-2 rounded transition-all">
                                 ถอนทะเบียน
                               </button>
                             </td>
@@ -1447,7 +1365,7 @@
                 }
             }
 
-            // โหลดตารางบุคลากรและการปรับสิทธิ์ (ปรับแต่งบาลานซ์ความคลีนตามสกรีนช็อต 3)
+            // โหลดตารางบุคลากรและการปรับสิทธิ์
             const tbodyUsers = document.getElementById('adminUsersTable');
             if (tbodyUsers) {
                 tbodyUsers.innerHTML = '';
@@ -1478,17 +1396,17 @@
                     const tr = document.createElement('tr');
                     tr.className = "hover:bg-slate-50 transition-colors";
                     tr.innerHTML = `
-                        <td class="px-4 py-3 font-mono text-[10px] text-slate-550 font-semibold">${u.empId || '-'}</td>
-                        <td class="px-4 py-3 font-semibold text-slate-700">${u.name}</td>
+                        <td class="px-4 py-3 font-mono text-xs text-slate-550 font-semibold">${u.empId || '-'}</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700 text-sm">${u.name}</td>
                         <td class="px-4 py-3 font-mono text-slate-500 text-[10px]">${u.email}</td>
                         <td class="px-4 py-3 text-slate-600">
-                          <span class="${badgeColor} text-[9px] px-2 py-0.5 rounded-full font-bold">
+                          <span class="${badgeColor} text-xs px-2.5 py-1 rounded-full font-bold">
                             ${displayRole}
                           </span>
                         </td>
                         <td class="px-4 py-3 font-mono font-bold text-slate-850">${u.password}</td>
                         <td class="px-4 py-3 text-center">
-                          <button onclick="openUserModal('${u.email}')" class="text-[9px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1.5 rounded transition-all">
+                          <button onclick="openUserModal('${u.email}')" class="text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold px-3 py-2 rounded transition-all">
                             แก้ไขข้อมูล
                           </button>
                         </td>
@@ -1731,6 +1649,7 @@
             loadAdminPanel();
         }
 
+        // --- STREAMING_CHUNK: Binding confirmation events... ---
         // เชื่อมโยง Event ของกล่องข้อความยืนยันกลาง
         document.addEventListener('DOMContentLoaded', function() {
             const cancelBtn = document.getElementById('confirm-cancel-btn');
