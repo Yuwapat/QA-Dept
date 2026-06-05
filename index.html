@@ -34,141 +34,7 @@
 <body class="min-h-screen text-slate-850 flex flex-col justify-between selection:bg-emerald-100 selection:text-emerald-950">
 
     <!-- Container สำหรับแจ้งเตือนแบบกำหนดเอง (Custom Toast Notification) -->
-    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2.5 max-w-sm w-full px-4 md:px-0"></div>
-
-    <!-- กล่องยืนยันการทำรายการแบบเป็นทางการ (Custom Confirmation Modal) -->
-    <div id="confirm-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-all duration-300">
-        <div class="bg-white rounded-2xl p-7 max-w-md w-full shadow-2xl border border-slate-100 transform scale-95 transition-all">
-            <div class="flex items-center gap-3.5 mb-4 border-b border-slate-100 pb-3">
-                <div class="w-9 h-9 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 text-base font-bold" id="confirm-icon">!</div>
-                <h3 id="confirm-title" class="text-base font-bold text-slate-950">ยืนยันการดำเนินการ</h3>
-            </div>
-            <p id="confirm-msg" class="text-slate-600 text-sm leading-relaxed">กรุณาตรวจสอบความถูกต้องของข้อมูลก่อนยืนยันการบันทึกเข้าสู่ระบบสารสนเทศ</p>
-            <div class="flex justify-end gap-2.5 mt-6">
-                <button id="confirm-cancel-btn" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-bold text-slate-500 transition-colors">ยกเลิก</button>
-                <button id="confirm-ok-btn" class="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold transition-colors">ยืนยันทำรายการ</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- กล่องสำหรับแก้ไขข้อมูลบุคลากรแบบครบวงจรสำหรับแอดมิน (Admin Edit Personnel Modal) -->
-    <div id="user-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="bg-white rounded-2xl p-7 max-w-md w-full shadow-2xl border border-slate-100">
-            <div class="flex justify-between items-center mb-5 border-b pb-3.5">
-                <h3 class="text-sm font-bold text-slate-950 uppercase tracking-wider flex items-center gap-2">
-                    <span class="text-emerald-800 text-lg">👤</span>
-                    <span>แก้ไขข้อมูลและสิทธิ์บุคลากร</span>
-                </h3>
-                <button onclick="closeUserModal()" class="text-slate-400 hover:text-slate-600 text-sm font-bold">✕</button>
-            </div>
-            <input type="hidden" id="edit-user-original-email">
-            
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">รหัสพนักงานประจำตัว</label>
-                    <input type="text" id="edit-user-empId" placeholder="เช่น YW-001" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">ชื่อ-นามสกุล</label>
-                    <input type="text" id="edit-user-name" placeholder="ชื่อ และ นามสกุลจริง" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1.5">อีเมลเข้าใช้งาน (@yuwapat.ac.th)</label>
-                    <input type="email" id="edit-user-email" placeholder="username@yuwapat.ac.th" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">ตำแหน่งงาน / บทบาทสิทธิ์</label>
-                    <select id="edit-user-role" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800 cursor-pointer bg-white">
-                        <option value="Staff">คุณครู/บุคลากรทั่วไป</option>
-                        <option value="Executive">ผู้บริหาร</option>
-                        <option value="Head_Admin">หัวหน้าฝ่ายบริหารทั่วไป</option>
-                        <option value="Head_Academic">หัวหน้าฝ่ายวิชาการ</option>
-                        <option value="Head_QA">หัวหน้าฝ่ายประกันคุณภาพภายใน</option>
-                        <option value="Head_Student">หัวหน้าฝ่ายกิจการนักเรียน</option>
-                        <option value="Admin">ผู้ดูแลระบบกลาง (Admin)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">รหัสผ่านสำหรับเข้าใช้งาน (อย่างน้อย 6 ตัวอักษร)</label>
-                    <input type="text" id="edit-user-password" placeholder="กำหนดรหัสผ่านใหม่" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
-                </div>
-            </div>
-            
-            <div class="flex justify-end gap-2.5 mt-6 border-t pt-4">
-                <button onclick="closeUserModal()" class="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl text-xs font-semibold text-slate-500 transition-colors">ยกเลิก</button>
-                <button onclick="saveUserProfile()" class="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold transition-colors">บันทึกข้อมูลบุคลากร</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- กล่องสำหรับกรอกประเมินผลโครงการ (Evaluation Modal) -->
-    <div id="evaluation-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-45 hidden items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-100 my-8 overflow-hidden transform scale-95 transition-all">
-            <div class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-950 text-white px-6 py-5 border-b-2 border-yellow-400 flex justify-between items-center">
-                <div>
-                    <span id="eval-modal-id" class="text-xs text-slate-300 font-mono font-bold bg-white/10 px-2.5 py-1 rounded tracking-wider">PROJECT ID</span>
-                    <h3 id="eval-modal-name" class="text-base font-bold tracking-tight text-white mt-1.5">ชื่อโครงการกิจกรรม</h3>
-                </div>
-                <button onclick="closeEvaluationModal()" class="text-white/70 hover:text-white text-xl font-bold">✕</button>
-            </div>
-
-            <div class="px-6 py-6 max-h-[70vh] overflow-y-auto space-y-6">
-                <!-- วัตถุประสงค์ -->
-                <div id="eval-modal-objectives-container">
-                    <span class="block text-xs text-slate-400 font-bold uppercase tracking-wider mb-2">เป้าหมายและวัตถุประสงค์โครงการ:</span>
-                    <div id="eval-modal-objectives" class="text-sm text-slate-700 bg-slate-50 p-4.5 rounded-xl border border-slate-100 leading-relaxed whitespace-pre-line"></div>
-                </div>
-
-                <!-- พื้นที่โปสเตอร์กิจกรรม -->
-                <div id="eval-modal-poster-container">
-                    <span class="block text-xs text-slate-400 font-bold uppercase tracking-wider mb-2.5">โปสเตอร์ประชาสัมพันธ์โครงการ:</span>
-                    <div class="border border-slate-150 rounded-xl overflow-hidden bg-slate-50 max-h-80 flex items-center justify-center">
-                        <img id="eval-modal-poster" src="" alt="[ภาพโปสเตอร์ประชาสัมพันธ์กิจกรรม]" class="object-contain max-h-80 w-full">
-                    </div>
-                </div>
-
-                <!-- แบบฟอร์มการตอบแบบประเมินผลรายหัวข้อ -->
-                <form id="evaluationForm" onsubmit="submitEvaluationData(event)" class="space-y-6 pt-4 border-t border-slate-100">
-                    <input type="hidden" id="eval-modal-act-id">
-                    
-                    <!-- ส่วนเลือกสถานะผู้ตอบ -->
-                    <div>
-                        <label class="block text-sm font-bold text-slate-800 mb-2.5">1. สถานะของผู้ประเมินผลโครงการ</label>
-                        <div class="flex gap-8 pl-1">
-                            <label class="flex items-center gap-3 text-sm cursor-pointer font-medium text-slate-655 hover:text-slate-800 transition-colors">
-                                <input type="radio" name="eval-role" value="คุณครู/บุคลากร" required class="w-4.5 h-4.5 text-emerald-800 focus:ring-emerald-800 border-slate-300"> 
-                                <span class="text-sm">คุณครู / บุคลากร</span>
-                            </label>
-                            <label class="flex items-center gap-3 text-sm cursor-pointer font-medium text-slate-655 hover:text-slate-800 transition-colors">
-                                <input type="radio" name="eval-role" value="ผู้บริหาร" class="w-4.5 h-4.5 text-emerald-800 focus:ring-emerald-800 border-slate-300"> 
-                                <span class="text-sm">ผู้บริหาร</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- ส่วนกรอกประเมินแยกหัวข้อแบบเรขาคณิต (1-5) -->
-                    <div>
-                        <label class="block text-sm font-bold text-slate-800 mb-3.5">2. ระดับความพึงพอใจต่อการดำเนินงานแยกตามหัวข้อ (1 - 5 คะแนน)</label>
-                        <div id="eval-topics-container" class="space-y-4 pl-1">
-                            <!-- โหลดจาก JS -->
-                        </div>
-                    </div>
-
-                    <!-- ข้อเสนอแนะเชิงคุณภาพ -->
-                    <div>
-                        <label class="block text-sm font-bold text-slate-800 mb-2">3. ความคิดเห็นหรือข้อคิดเห็นเชิงพัฒนา (นิรนาม)</label>
-                        <textarea id="eval-suggestion" rows="3" placeholder="โปรดระบุข้อเสนอแนะเพิ่มเติมที่เป็นประโยชน์เพื่อนำไปพัฒนาการจัดกิจกรรมในรอบถัดไป..." class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800"></textarea>
-                    </div>
-
-                    <!-- ปุ่มควบคุมของ Modal -->
-                    <div class="flex justify-end gap-2.5 border-t pt-4 mt-6">
-                        <button type="button" onclick="closeEvaluationModal()" class="px-5 py-2.5 bg-slate-55 hover:bg-slate-100 rounded-xl text-xs font-semibold text-slate-500 transition-colors">ยกเลิก</button>
-                        <button type="submit" class="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95">ส่งผลการประเมินโครงการ</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full px-4 md:px-0"></div>
 
     <!-- ==================== 1. หน้าจอเข้าสู่ระบบ (OFFICIAL SECURE LOGIN) ==================== -->
     <div id="login-screen" class="flex-grow flex items-center justify-center p-6 bg-slate-55">
@@ -184,7 +50,7 @@
                          class="w-full h-full object-contain"
                          onerror="handleLogoError(this)">
                 </div>
-                <span class="bg-emerald-50 text-emerald-855 border border-emerald-100 text-xs font-bold px-3.5 py-1 rounded-full uppercase tracking-wider">ระบบประกันคุณภาพ ยุวพัฒน์</span>
+                <span class="bg-emerald-50 text-emerald-855 border border-emerald-100 text-[10px] font-bold px-3.5 py-1 rounded-full uppercase tracking-wider">ระบบประกันคุณภาพ ยุวพัฒน์</span>
                 <h2 class="text-xl font-bold text-slate-800 mt-4 tracking-tight">ระบบประเมินความพึงพอใจโครงการและกิจกรรม</h2>
                 <p class="text-slate-450 text-xs mt-1.5 font-semibold">โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</p>
             </div>
@@ -283,7 +149,7 @@
                     <span id="pendingBadge" class="px-2 py-0.5 text-xs bg-yellow-400 text-slate-900 font-bold rounded-full">0</span>
                 </button>
                 <button onclick="switchTab('report-tab')" id="btn-report-tab" class="py-3 px-4 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2</path></svg>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2"></path></svg>
                     <span>สรุปรายงานผลการประเมิน</span>
                 </button>
                 <button onclick="switchTab('history-tab')" id="btn-history-tab" class="py-3 px-4 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
@@ -309,7 +175,7 @@
                 </div>
                 
                 <div id="noEvaluations" class="hidden text-center py-16 bg-white rounded-2xl border border-slate-150 shadow-sm">
-                    <div class="w-12 h-12 rounded-full bg-emerald-50 text-emerald-850 flex items-center justify-center mx-auto mb-3 font-bold text-sm">✓</div>
+                    <div class="w-12 h-12 rounded-full bg-emerald-50 text-emerald-855 flex items-center justify-center mx-auto mb-3 font-bold text-sm">✓</div>
                     <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider">เสร็จสิ้นภารกิจการประเมิน</h3>
                     <p class="text-slate-400 mt-1 text-sm">ท่านได้ตอบแบบประเมินโครงการครบถ้วนทุกรายการที่มีในสารสนเทศเรียบร้อยแล้ว ขอขอบพระคุณอย่างยิ่ง</p>
                 </div>
@@ -321,7 +187,7 @@
                     <strong>เกณฑ์การวัดผลสถิติความพึงพอใจร้อยละ:</strong> 
                     การคำนวณผลร้อยละความพึงพอใจโครงการ: คะแนนระดับ <strong class="text-slate-900">4 และ 5 คิดเป็นพึงพอใจร้อยละ 100</strong> ต่อผู้โหวต 1 คน 
                     ส่วนระดับ <strong class="text-slate-900">1, 2, 3 คิดเป็นร้อยละ 0</strong> โดยเฉลี่ยจากจำนวนครูบุคลากรที่ส่งแบบสอบถามทั้งหมด 
-                    <br><strong class="text-amber-850 font-bold">ตัวอย่างสถิติ:</strong> หากมีบุคลากรทำแบบสอบถามประเมินผลทั้งหมด 50 คน และส่งคะแนนต่ำกว่า 4 ดาว จำนวน 1 คน คะแนนความพึงพอใจของกิจกรรมจะพล็อตแสดงเป็น **ร้อยละ 98.00**
+                    <br><strong class="text-amber-855 font-bold">ตัวอย่างสถิติ:</strong> หากมีบุคลากรทำแบบสอบถามประเมินผลทั้งหมด 50 คน และส่งคะแนนต่ำกว่า 4 ดาว จำนวน 1 คน คะแนนความพึงพอใจของกิจกรรมจะพล็อตแสดงเป็น **ร้อยละ 98.00**
                 </div>
                 
                 <div id="reportList" class="space-y-6">
@@ -340,19 +206,19 @@
                 </div>
             </section>
 
-            <!-- 2.4 หน้าหลังบ้านควบคุมสารสนเทศระบบ (Admin Only) - ปรับปรุงโครงสร้างเป็นแนวตั้ง (Stacked) เต็มรูปแบบ -->
+            <!-- 2.4 หน้าหลังบ้านควบคุมสารสนเทศระบบ (Admin Only) -->
             <section id="admin-tab" class="tab-content hidden">
                 <div id="adminAccessDenied" class="hidden bg-slate-50 border border-slate-150 p-10 rounded-xl text-center max-w-lg mx-auto my-8 shadow-sm">
                     <div class="w-10 h-10 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto text-base mb-4">🔒</div>
                     <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider">สิทธิ์การเข้าถึงพื้นที่ถูกจำกัด</h3>
-                    <p class="text-slate-400 mt-2 text-xs leading-relaxed">
+                    <p class="text-slate-400 mt-2 text-sm leading-relaxed">
                         หน้าต่างควบคุมและระบบแก้ไขรายสิทธิ์ผู้ใช้ สงวนสิทธิ์สำหรับ **ผู้ดูแลระบบกลาง** เท่านั้น
                     </p>
                 </div>
 
                 <div id="adminPanel" class="space-y-8 max-w-5xl mx-auto">
                     
-                    <!-- ส่วนที่ 1: ฟอร์มสร้างโครงการกิจกรรมใหม่ (จัดเต็มความกว้าง - Stacked) -->
+                    <!-- ส่วนที่ 1: ฟอร์มสร้างโครงการกิจกรรมใหม่ -->
                     <div class="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm">
                         <h3 class="text-sm font-bold text-slate-900 mb-6 border-b pb-4 flex items-center gap-2 uppercase tracking-wider">
                             <span class="text-emerald-855 text-lg">➕</span>
@@ -409,7 +275,7 @@
                         </form>
                     </div>
 
-                    <!-- ส่วนที่ 2: แผงลงทะเบียนบัญชีบุคลากรใหม่ (จัดเต็มความกว้าง - Stacked) -->
+                    <!-- ส่วนที่ 2: แผงลงทะเบียนบัญชีบุคลากรใหม่ -->
                     <div class="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm">
                         <h3 class="text-sm font-bold text-slate-900 mb-6 border-b pb-4 flex items-center gap-2 uppercase tracking-wider">
                             <span class="text-emerald-855 text-lg">👤</span>
@@ -453,7 +319,7 @@
                         </form>
                     </div>
 
-                    <!-- ส่วนที่ 3: ตารางจดทะเบียนโครงการทั้งหมด (ขยายเต็มความกว้าง - Stacked เพื่อตัวหนังสือใหญ่คมชัด) -->
+                    <!-- ส่วนที่ 3: ตารางจดทะเบียนโครงการทั้งหมด -->
                     <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
                         <h3 class="text-sm font-bold text-slate-900 mb-5 flex items-center gap-2 uppercase tracking-wider">
                             <span class="text-emerald-855 text-lg">📋</span>
@@ -476,7 +342,7 @@
                         </div>
                     </div>
 
-                    <!-- ส่วนที่ 4: ตารางแสดงบุคลากรและปุ่มแก้ไขข้อมูลเชิงลึก (ขยายเต็มความกว้าง - Stacked เพื่อตัวหนังสือใหญ่คมชัด) -->
+                    <!-- ส่วนที่ 4: ตารางแสดงบุคลากรและปุ่มแก้ไขข้อมูลเชิงลึก -->
                     <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
                         <h3 class="text-sm font-bold text-slate-900 mb-5 flex items-center gap-2 uppercase tracking-wider">
                             <span class="text-emerald-855 text-lg">🔑</span>
@@ -489,7 +355,7 @@
                                         <th class="px-6 py-4.5">รหัสพนักงาน</th>
                                         <th class="px-6 py-4.5">ชื่อ-นามสกุล</th>
                                         <th class="px-6 py-4.5">อีเมลเข้าใช้งาน</th>
-                                        <th class="px-6 py-4.5">ตำแหน่ง / บทบาท</th>
+                                        <th class="px-4 py-4.5">ตำแหน่ง / บทบาท</th>
                                         <th class="px-6 py-4.5">รหัสปัจจุบัน</th>
                                         <th class="px-6 py-4.5 text-center">การจัดการ</th>
                                     </tr>
@@ -524,9 +390,279 @@
         </footer>
     </div>
 
+    <!-- ==================== 3. กล่อง MODALS ทั้งหมด (ย้ายมาล่างสุด เพื่อป้องกันปัญหามิติ Stacking / z-index ทับซ้อน) ==================== -->
+    
+    <!-- กล่องยืนยันการทำรายการแบบเป็นทางการ (Custom Confirmation Modal - z-[100]) -->
+    <div id="confirm-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] hidden items-center justify-center p-4 transition-all duration-300">
+        <div class="bg-white rounded-2xl p-7 max-w-md w-full shadow-2xl border border-slate-100 transform scale-95 transition-all">
+            <div class="flex items-center gap-3.5 mb-4 border-b border-slate-100 pb-3">
+                <div class="w-9 h-9 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 text-base font-bold" id="confirm-icon">!</div>
+                <h3 id="confirm-title" class="text-base font-bold text-slate-955">ยืนยันการดำเนินการ</h3>
+            </div>
+            <p id="confirm-msg" class="text-slate-600 text-sm leading-relaxed">กรุณาตรวจสอบความถูกต้องของข้อมูลก่อนยืนยันการบันทึกเข้าสู่ระบบสารสนเทศ</p>
+            <div class="flex justify-end gap-2.5 mt-6">
+                <button id="confirm-cancel-btn" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-bold text-slate-500 transition-colors">ยกเลิก</button>
+                <button id="confirm-ok-btn" class="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold transition-colors">ยืนยันทำรายการ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- กล่องสำหรับแก้ไขข้อมูลบุคลากรแบบครบวงจรสำหรับแอดมิน (Admin Edit Personnel Modal - z-[90]) -->
+    <div id="user-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[90] hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-7 max-w-md w-full shadow-2xl border border-slate-100">
+            <div class="flex justify-between items-center mb-5 border-b pb-3.5">
+                <h3 class="text-sm font-bold text-slate-955 uppercase tracking-wider flex items-center gap-2">
+                    <span class="text-emerald-800 text-lg">👤</span>
+                    <span>แก้ไขข้อมูลและสิทธิ์บุคลากร</span>
+                </h3>
+                <button onclick="closeUserModal()" class="text-slate-400 hover:text-slate-600 text-sm font-bold">✕</button>
+            </div>
+            <input type="hidden" id="edit-user-original-email">
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">รหัสพนักงานประจำตัว</label>
+                    <input type="text" id="edit-user-empId" placeholder="เช่น YW-001" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">ชื่อ-นามสกุล</label>
+                    <input type="text" id="edit-user-name" placeholder="ชื่อ และ นามสกุลจริง" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1.5">อีเมลเข้าใช้งาน (@yuwapat.ac.th)</label>
+                    <input type="email" id="edit-user-email" placeholder="username@yuwapat.ac.th" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">ตำแหน่งงาน / บทบาทสิทธิ์</label>
+                    <select id="edit-user-role" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800 cursor-pointer bg-white">
+                        <option value="Staff">คุณครู/บุคลากรทั่วไป</option>
+                        <option value="Executive">ผู้บริหาร</option>
+                        <option value="Head_Admin">หัวหน้าฝ่ายบริหารทั่วไป</option>
+                        <option value="Head_Academic">หัวหน้าฝ่ายวิชาการ</option>
+                        <option value="Head_QA">หัวหน้าฝ่ายประกันคุณภาพภายใน</option>
+                        <option value="Head_Student">หัวหน้าฝ่ายกิจการนักเรียน</option>
+                        <option value="Admin">ผู้ดูแลระบบกลาง (Admin)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">รหัสผ่านสำหรับเข้าใช้งาน (อย่างน้อย 6 ตัวอักษร)</label>
+                    <input type="text" id="edit-user-password" placeholder="กำหนดรหัสผ่านใหม่" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800">
+                </div>
+            </div>
+            
+            <div class="flex justify-end gap-2.5 mt-6 border-t pt-4">
+                <button onclick="closeUserModal()" class="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl text-xs font-semibold text-slate-500 transition-colors">ยกเลิก</button>
+                <button onclick="saveUserProfile()" class="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold transition-colors">บันทึกข้อมูลบุคลากร</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- กล่องสำหรับกรอกประเมินผลโครงการ (Evaluation Modal - z-[80]) -->
+    <div id="evaluation-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[80] hidden items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-100 my-8 overflow-hidden transform scale-95 transition-all">
+            <div class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-950 text-white px-6 py-5 border-b-2 border-yellow-400 flex justify-between items-center">
+                <div>
+                    <span id="eval-modal-id" class="text-xs text-slate-300 font-mono font-bold bg-white/10 px-2.5 py-1 rounded tracking-wider">PROJECT ID</span>
+                    <h3 id="eval-modal-name" class="text-base font-bold tracking-tight text-white mt-1.5">ชื่อโครงการกิจกรรม</h3>
+                </div>
+                <button onclick="closeEvaluationModal()" class="text-white/70 hover:text-white text-xl font-bold">✕</button>
+            </div>
+
+            <div class="px-6 py-6 max-h-[70vh] overflow-y-auto space-y-6">
+                <!-- วัตถุประสงค์ -->
+                <div id="eval-modal-objectives-container">
+                    <span class="block text-xs text-slate-400 font-bold uppercase tracking-wider mb-2">เป้าหมายและวัตถุประสงค์โครงการ:</span>
+                    <div id="eval-modal-objectives" class="text-sm text-slate-700 bg-slate-50 p-4.5 rounded-xl border border-slate-100 leading-relaxed whitespace-pre-line"></div>
+                </div>
+
+                <!-- พื้นที่โปสเตอร์กิจกรรม -->
+                <div id="eval-modal-poster-container">
+                    <span class="block text-xs text-slate-400 font-bold uppercase tracking-wider mb-2.5">โปสเตอร์ประชาสัมพันธ์โครงการ:</span>
+                    <div class="border border-slate-150 rounded-xl overflow-hidden bg-slate-50 max-h-80 flex items-center justify-center">
+                        <img id="eval-modal-poster" src="" alt="[ภาพโปสเตอร์ประชาสัมพันธ์กิจกรรม]" class="object-contain max-h-80 w-full">
+                    </div>
+                </div>
+
+                <!-- แบบฟอร์มการตอบแบบประเมินผลรายหัวข้อ -->
+                <form id="evaluationForm" onsubmit="submitEvaluationData(event)" class="space-y-6 pt-4 border-t border-slate-100">
+                    <input type="hidden" id="eval-modal-act-id">
+                    
+                    <!-- ส่วนเลือกสถานะผู้ตอบ -->
+                    <div>
+                        <label class="block text-sm font-bold text-slate-800 mb-2.5">1. สถานะของผู้ประเมินผลโครงการ</label>
+                        <div class="flex gap-8 pl-1">
+                            <label class="flex items-center gap-3 text-sm cursor-pointer font-medium text-slate-655 hover:text-slate-800 transition-colors">
+                                <input type="radio" name="eval-role" value="คุณครู/บุคลากร" required class="w-4 h-4 text-emerald-800 focus:ring-emerald-800 border-slate-300"> 
+                                <span class="text-sm">คุณครู / บุคลากร</span>
+                            </label>
+                            <label class="flex items-center gap-3 text-sm cursor-pointer font-medium text-slate-655 hover:text-slate-800 transition-colors">
+                                <input type="radio" name="eval-role" value="ผู้บริหาร" class="w-4 h-4 text-emerald-800 focus:ring-emerald-800 border-slate-300"> 
+                                <span class="text-sm">ผู้บริหาร</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- ส่วนกรอกประเมินแยกหัวข้อแบบเรขาคณิต (1-5) -->
+                    <div>
+                        <label class="block text-sm font-bold text-slate-800 mb-3.5">2. ระดับความพึงพอใจต่อการดำเนินงานแยกตามหัวข้อ (1 - 5 คะแนน)</label>
+                        <div id="eval-topics-container" class="space-y-4 pl-1">
+                            <!-- โหลดจาก JS -->
+                        </div>
+                    </div>
+
+                    <!-- ข้อเสนอแนะเชิงคุณภาพ -->
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">3. ความคิดเห็นหรือข้อคิดเห็นเชิงพัฒนา (นิรนาม)</label>
+                        <textarea id="eval-suggestion" rows="3" placeholder="โปรดระบุข้อเสนอแนะเพิ่มเติมที่เป็นประโยชน์เพื่อนำไปพัฒนาการจัดกิจกรรมในรอบถัดไป..." class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800"></textarea>
+                    </div>
+
+                    <!-- ปุ่มควบคุมของ Modal -->
+                    <div class="flex justify-end gap-2.5 border-t pt-4 mt-6">
+                        <button type="button" onclick="closeEvaluationModal()" class="px-5 py-2.5 bg-slate-55 hover:bg-slate-100 rounded-xl text-xs font-semibold text-slate-500 transition-colors">ยกเลิก</button>
+                        <button type="submit" class="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95">ส่งผลการประเมินโครงการ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- JavaScript & Business Logic -->
     <script>
-        // --- STREAMING_CHUNK: Declaring global notification and data handling systems... ---
+        // --- ฟังก์ชันแจ้งเตือนสากล (Toast) และ Confirm (ประกาศด้านบนสุดของสคริปต์เพื่อป้องกัน ReferenceError) ---
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if(!container) return;
+            const toast = document.createElement('div');
+            toast.className = `flex items-center gap-3 px-4 py-3 rounded-lg shadow-xl border text-xs font-semibold transition-all duration-300 transform translate-y-2 opacity-0 ${
+                type === 'success' ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-rose-50 border-rose-200 text-rose-850'
+            }`;
+            toast.innerHTML = `
+                <span class="text-sm">${type === 'success' ? '✓' : '⚠️'}</span>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        let currentConfirmAction = null;
+
+        function customConfirm(title, message, icon, onConfirm, isDanger = false) {
+            const modal = document.getElementById('confirm-modal');
+            if(!modal) return;
+            document.getElementById('confirm-title').innerText = title;
+            document.getElementById('confirm-msg').innerText = message;
+            document.getElementById('confirm-icon').innerText = icon;
+            
+            const okBtn = document.getElementById('confirm-ok-btn');
+            if (isDanger) {
+                okBtn.className = "px-5 py-2.5 bg-rose-600 hover:bg-rose-750 text-white rounded-xl text-xs font-bold transition-colors";
+            } else {
+                okBtn.className = "px-5 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold transition-colors";
+            }
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            currentConfirmAction = onConfirm;
+        }
+
+        // ฟังก์ชันรับมือการแสดงตราสัญลักษณ์โรงเรียนในแบบปลอดภัย ป้องกัน SyntaxError จาก Quote ซ้อนใน HTML inline event
+        function handleLogoError(img) {
+            img.onerror = null;
+            img.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%23064e3b'/><text x='50' y='55' font-family='Sarabun' font-weight='bold' font-size='30' fill='%23facc15' text-anchor='middle'>YW</text></svg>";
+        }
+
+        // --- ฐานข้อมูลทดสอบโครงสร้างองค์กร (รหัสผ่านขั้นต่ำ 6 ตัวอักษร) ---
+        const defaultUsers = [
+            { email: "admin@yuwapat.ac.th", name: "นายสมศักดิ์ ปัญญาดี", role: "Admin", password: "yw123456", empId: "YW-001" },
+            { email: "director@yuwapat.ac.th", name: "ดร.วิชัย รักเรียน", role: "Executive", password: "yw123456", empId: "YW-002" },
+            { email: "executive2@yuwapat.ac.th", name: "นายปรีชา นึกดี", role: "Executive", password: "yw123456", empId: "YW-003" },
+            
+            { email: "head_admin@yuwapat.ac.th", name: "นายพชร แก้วกมล", role: "Head_Admin", password: "yw123456", empId: "YW-004" },
+            { email: "head_academic@yuwapat.ac.th", name: "นางสาวนงลักษณ์ พึ่งสอน", role: "Head_Academic", password: "yw123456", empId: "YW-005" },
+            { email: "head_qa@yuwapat.ac.th", name: "นางพรรณิภา ประกันดี", role: "Head_QA", password: "yw123456", empId: "YW-006" },
+            { email: "head_student@yuwapat.ac.th", name: "นายเกรียงไกร มีเดช", role: "Head_Student", password: "yw123456", empId: "YW-007" },
+            
+            { email: "owner_ai@yuwapat.ac.th", name: "นางสมหญิง มั่นเรียน", role: "Staff", password: "yw123456", empId: "YW-008" },
+            { email: "somchai@yuwapat.ac.th", name: "นายสมชาย ยินดี", role: "Staff", password: "yw123456", empId: "YW-009" },
+            { email: "somsri@yuwapat.ac.th", name: "นางสาวสมศรี สุขเกษม", role: "Staff", password: "yw123456", empId: "YW-010" }
+        ];
+
+        const defaultActivities = [
+            { 
+                id: "ACT-001", 
+                name: "โครงการสัมมนาเชิงปฏิบัติการ: การประยุกต์ใช้ AI ในการพัฒนาบทเรียน", 
+                owner: "owner_ai@yuwapat.ac.th",
+                poster: "", 
+                objectives: "1. เพื่อให้คุณครูและบุคลากรมีความรู้พื้นฐานในการนำเทคโนโลยี AI มาพัฒนาสื่อการเรียนการสอน\n2. เพื่อยกระดับและพัฒนาแผนจัดการเรียนรู้ให้มีความสร้างสรรค์และตอบสนองความสนใจของผู้เรียนเป็นรายบุคคล",
+                topics: [
+                    "ด้านความสอดคล้องของหัวข้ออบรมกับความต้องการของครูผู้สอน",
+                    "ด้านทักษะและความรู้ความชำนาญการถ่ายทอดของวิทยากรหลัก",
+                    "ด้านการนำความรู้ที่ได้รับไปใช้พัฒนาสื่อการสอนจริงในสถาบัน"
+                ],
+                history: { "2566": 82.00, "2567": 87.00, "2568": 92.00 }
+            },
+            { 
+                id: "ACT-002", 
+                name: "ประชุมคณะกรรมการสถานศึกษา: แนวทางการเลื่อนขั้นเงินเดือนและอัตราจ้างประจำปี", 
+                owner: "head_admin@yuwapat.ac.th",
+                poster: "",
+                objectives: "1. เพื่อสรุปและทบทวนแนวทางการพิจารณาเลื่อนขั้นเงินเดือน\n2. เพื่อยกระดับความโปร่งใสในสถาบันและสร้างขวัญกำลังใจให้บุคลากร",
+                topics: [
+                    "ด้านเกณฑ์การวัดผลชี้วัดที่โปร่งใสและตรวจสอบได้",
+                    "ด้านการมีส่วนร่วมของบุคลากรต่อข้อตกลงและกระบวนการพิจารณา",
+                    "ด้านผลลัพธ์และความพึงพอใจต่อสถิติวินัยการจัดสรรตามรอบปี"
+                ],
+                history: { "2566": 78.00, "2567": 83.00, "2568": 86.00 }
+            }
+        ];
+
+        const defaultEvaluations = [
+            { 
+                activityId: "ACT-001", 
+                email: "somchai@yuwapat.ac.th", 
+                name: "นายสมชาย ยินดี", 
+                role: "คุณครู/บุคลากร", 
+                ratings: {
+                    "ด้านความสอดคล้องของหัวข้ออบรมกับความต้องการของครูผู้สอน": 5,
+                    "ด้านทักษะและความรู้ความชำนาญการถ่ายทอดของวิทยากรหลัก": 5,
+                    "ด้านการนำความรู้ที่ได้รับไปใช้พัฒนาสื่อการสอนจริงในสถาบัน": 4
+                }, 
+                suggestion: "เนื้อหากระชับ นำไปทำสื่อและสไลด์สอนได้สวยงามจริงครับ" 
+            },
+            { 
+                activityId: "ACT-001", 
+                email: "somsri@yuwapat.ac.th", 
+                name: "นางสาวสมศรี สุขเกษม", 
+                role: "คุณครู/บุคลากร", 
+                ratings: {
+                    "ด้านความสอดคล้องของหัวข้ออบรมกับความต้องการของครูผู้สอน": 4,
+                    "ด้านทักษะและความรู้ความชำนาญการถ่ายทอดของวิทยากรหลัก": 4,
+                    "ด้านการนำความรู้ที่ได้รับไปใช้พัฒนาสื่อการสอนจริงในสถาบัน": 3
+                }, 
+                suggestion: "อยากให้มีจัดสัมมนาขั้นแอดวานซ์แยกย่อยตามสายวิชาเพิ่มเติม" 
+            },
+            { 
+                activityId: "ACT-001", 
+                email: "director@yuwapat.ac.th", 
+                name: "ดร.วิชัย รักเรียน", 
+                role: "ผู้บริหาร", 
+                ratings: {
+                    "ด้านความสอดคล้องของหัวข้ออบรมกับความต้องการ of ครูผู้สอน": 5,
+                    "ด้านทักษะและความรู้ความชำนาญการถ่ายทอดของวิทยากรหลัก": 5,
+                    "ด้านการนำความรู้ที่ได้รับไปใช้พัฒนาสื่อการสอนจริงในสถาบัน": 5
+                }, 
+                suggestion: "ระบบจัดการสิทธิ์และขั้นตอนสัมมนาทำได้ดีมาก น่าสนับสนุนอย่างสม่ำเสมอ" 
+            }
+        ];
+
         // ฟังก์ชันระบบสืบค้นและดึงข้อมูลสารสนเทศ LocalStorage
         function getUsers() {
             return JSON.parse(localStorage.getItem('eval_users')) || defaultUsers;
@@ -540,13 +676,9 @@
             return JSON.parse(localStorage.getItem('eval_submissions')) || defaultEvaluations;
         }
 
-        // ฟังก์ชันรับมือการแสดงตราสัญลักษณ์โรงเรียนในแบบปลอดภัย
-        function handleLogoError(img) {
-            img.onerror = null;
-            img.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%23064e3b'/><text x='50' y='55' font-family='Sarabun' font-weight='bold' font-size='30' fill='%23facc15' text-anchor='middle'>YW</text></svg>";
-        }
+        let currentUser = null;
 
-        // --- ระบบเซสชันเข้าใช้ (Auth Session Manager) ---
+        // --- ระบบสลับเซสชันและตรวจสอบประวัติล็อกอิน ---
         function checkSession() {
             const savedUser = localStorage.getItem('current_logged_user');
             if (savedUser) {
@@ -627,7 +759,6 @@
             );
         }
 
-        // --- STREAMING_CHUNK: Implementing navigation, evaluate grid and submission ---
         // --- ระบบสลับแท็บเมนูหลัก (Navigation Tabs) ---
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => {
@@ -843,7 +974,6 @@
             }
         }
 
-        // --- STREAMING_CHUNK: Designing satisfaction summaries and reports ---
         // --- 2. หน้าสรุปรายงานผลคะแนนปัจจุบัน (คิดร้อยละตามเกณฑ์อย่างเที่ยงตรง) ---
         function loadReportList() {
             if (!currentUser) return;
@@ -945,7 +1075,7 @@
                 topicStats.forEach(stat => {
                     htmlContent += `
                         <div>
-                            <div class="flex justify-between items-center text-xs md:text-sm mb-1.5 font-medium text-slate-650">
+                            <div class="flex justify-between items-center text-xs md:text-sm mb-1.5 font-medium text-slate-655">
                                 <span>${stat.name}</span>
                                 <span class="font-bold text-emerald-800">${stat.percentage.toFixed(2)}% (${stat.satisfied}/${totalEvaluations} ราย)</span>
                             </div>
@@ -961,7 +1091,7 @@
 
                     <!-- ข้อคิดเห็นเพิ่มเติมแบบนิรนาม -->
                     <div class="mb-4">
-                        <h4 class="text-xs font-bold text-slate-450 uppercase tracking-wider mb-2">📄 บันทึกข้อเสนอแนะเพื่อการพัฒนางานวิชาการ (นิรนาม):</h4>
+                        <h4 class="text-xs font-bold text-slate-455 uppercase tracking-wider mb-2">📄 บันทึกข้อเสนอแนะเพื่อการพัฒนางานวิชาการ (นิรนาม):</h4>
                         <div class="space-y-2 max-h-48 overflow-y-auto">
                 `;
 
@@ -1033,7 +1163,7 @@
                             let ratingsSummary = '';
                             topics.forEach((topic, tidx) => {
                                 const score = e.ratings && e.ratings[topic] ? e.ratings[topic] : 0;
-                                ratingsSummary += `<div class="mb-0.5">${tidx+1}. <span class="font-bold ${score >= 4 ? 'text-emerald-850' : 'text-slate-500'}">${score}.0</span></div>`;
+                                ratingsSummary += `<div class="mb-0.5">${tidx+1}. <span class="font-bold ${score >= 4 ? 'text-emerald-855' : 'text-slate-500'}">${score}.0</span></div>`;
                             });
 
                             const userObj = getUsers().find(u => u.email.toLowerCase() === e.email.toLowerCase());
@@ -1066,7 +1196,6 @@
             });
         }
 
-        // --- STREAMING_CHUNK: Historical chart calculation and rendering ---
         // ดาวน์โหลดรายงานการวิเคราะห์และตรวจสอบความพึงพอใจรายบุคคล (Excel Friendly CSV)
         function exportToCSV(actId) {
             const activities = getActivities();
@@ -1213,7 +1342,6 @@
             });
         }
 
-        // --- STREAMING_CHUNK: Rendering admin directory and utilities ---
         // --- 4. ส่วนหลังบ้านระบบสารสนเทศ (Admin Panel) ---
         function loadAdminPanel() {
             if (!currentUser) return;
@@ -1312,7 +1440,7 @@
                             ${displayRole}
                           </span>
                         </td>
-                        <td class="px-6 py-4 font-mono font-bold text-slate-850">${u.password}</td>
+                        <td class="px-6 py-4 font-mono font-bold text-slate-855">${u.password}</td>
                         <td class="px-6 py-4 text-center">
                           <button onclick="openUserModal('${u.email}')" class="text-[9px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1.5 rounded transition-all">
                             แก้ไขข้อมูล
