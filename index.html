@@ -97,9 +97,9 @@
                 <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-3 text-center">ข้อมูลจำลองสิทธิ์ผู้ใช้สำหรับทดสอบระบบ (รหัสผ่านคือ yw123456):</p>
                 <div class="space-y-3">
                     <div>
-                        <button type="button" onclick="autofillLogin('admin@yuwapat.ac.th')" class="bg-slate-900 hover:bg-slate-800 p-3.5 rounded-xl text-left text-white w-full transition-all text-xs flex justify-between items-center shadow-md border border-slate-800 active:scale-95">
-                            <span class="font-bold text-yellow-400 text-sm">🔑 แอดมินสมศักดิ์ (YW-001)</span>
-                            <span class="font-mono text-slate-300 text-xs">admin@yuwapat.ac.th</span>
+                        <button type="button" onclick="autofillLogin('toei@yuwapat.ac.th')" class="bg-slate-900 hover:bg-slate-800 p-3.5 rounded-xl text-left text-white w-full transition-all text-xs flex justify-between items-center shadow-md border border-slate-800 active:scale-95">
+                            <span class="font-bold text-yellow-400 text-sm">🔑 แอดมินพิมลาภัสร์ (YW-044)</span>
+                            <span class="font-mono text-slate-300 text-xs">toei@yuwapat.ac.th</span>
                         </button>
                     </div>
                 </div>
@@ -286,7 +286,7 @@
                     </form>
                 </div>
 
-                <!-- ส่วนที่ 2: ฟอร์มเพิ่ม/ดึงข้อมูลครู 49 คนจาก Google Sheets (แสดงเฉพาะสิทธิ์ Admin เท่านั้น) -->
+                <!-- ส่วนที่ 2: ฟอร์มเพิ่ม/ดึงข้อมูลครูจาก Google Sheets (แสดงเฉพาะสิทธิ์ Admin เท่านั้น) -->
                 <div id="admin-user-add-section" class="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm space-y-4 hidden">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-2 border-b pb-4">
                         <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2.5 uppercase tracking-wider text-emerald-800">
@@ -562,23 +562,59 @@
         // คุณครูสามารถนำลิงก์ Web App URL ที่ได้จาก Google Apps Script มาวางฝังตรงนี้เพื่อให้ระบบเชื่อมต่ออัตโนมัติทันที
         const DEFAULT_GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbwPu7_mDMokINwZe3BUQr6HdgOEP8YPbZpQ5BhJ0UT57Kg52k6QSwbK31W2wR_XrcY4/exec";
 
-        // รายชื่อผู้ใช้เริ่มต้นของโรงเรียน (กรณีเปิดใช้ระบบครั้งแรกแบบยังไม่เคยต่อ Google Sheets)
+        // รายชื่อผู้ใช้งานครูและแอดมินจริงของโรงเรียนอนุบาลยุวพัฒน์นครสวรรค์
         const defaultUsers = [
-            { email: "admin@yuwapat.ac.th", name: "นายสมศักดิ์ ปัญญาดี", role: "Admin", password: "yw123456", empId: "YW-001" },
-            { email: "director@yuwapat.ac.th", name: "ดร.วิชัย รักเรียน", role: "Executive", password: "yw123456", empId: "YW-002" },
-            { email: "head_student@yuwapat.ac.th", name: "นายเกรียงไกร มีเดช", role: "Head_Student", password: "yw123456", empId: "YW-007" },
-            { email: "somchai@yuwapat.ac.th", name: "นายสมชาย ยินดี", role: "Staff", password: "yw123456", empId: "YW-009" }
+            { empId: "YW-001", name: "นางสาวอุษณีย์ กัลยาณวัตร", email: "nok@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-002", name: "นางสาวนิภาพร โพธิ์ปาน", email: "kung@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-003", name: "นางบงกช จันทนะเปลิน", email: "poo@yuwapat.ac.th", role: "Head_Admin", password: "yw123456" },
+            { empId: "YW-004", name: "นางสาวพลอยไพลิน พูลธัญกิจ", email: "may@yuwapat.ac.th", role: "Head_Student", password: "yw123456" },
+            { empId: "YW-005", name: "นางสาวณัฐนันท์ ไวกสิกรรม", email: "yee@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-006", name: "นางสาวพรอุษา วงษ์สมัคร", email: "apple@yuwapat.ac.th", role: "Head_QA", password: "yw123456" },
+            { empId: "YW-007", name: "นางสาวศุภมาศ อิ่มน้อย", email: "mas@yuwapat.ac.th", role: "Head_Academic", password: "yw123456" },
+            { empId: "YW-008", name: "นางสาวปวีณา แก้วแถม", email: "a@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-009", name: "นางสาวปรียาภัทร ธรรมนิทัศนา", email: "film@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-010", name: "นางสาววรรณิศา กล่อมเกลา", email: "may2@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-011", name: "นางสาววณิชยา จำปาศักดิ์", email: "jaaey@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-012", name: "นางสาวมาลิษา ศรีวิเชียร", email: "nan@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-014", name: "นางสาววิมลรัตน์ พวงจันทร์", email: "bew@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-015", name: "นางสาวอรพิศ บิลโภชน์", email: "tuck@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-016", name: "นายจุฑาธิปกรณ์ อ่อนสุริยา", email: "news@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-017", name: "นายตระกนต์ธีร์ ธูปบูชา", email: "kon@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-018", name: "นางสาวกรรณิการ์ สนิทผล", email: "pop@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-019", name: "นางสาวธนาภร ทองคำพูล", email: "zaid@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-020", name: "นางสาวพรพรรษา เสืออุดม", email: "junjao@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-021", name: "นายวรรฐิรักษ์ โพธิ์สุวรรณ์", email: "bas@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-022", name: "นางสาวดาราณี คล้ายคลึง", email: "pae@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-023", name: "นางสาวนภัสสร คำเหม็ง", email: "filmy@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-024", name: "นางสาวเกตุสุดา โฉมศรี", email: "lookbat@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-025", name: "นางสาวงามจิต ธชีโชติกุล", email: "krong@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-026", name: "นางสาวกัลพันธ์ พิลึก", email: "aom@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-027", name: "นางสาววราภรณ์ ทั่งศิริ", email: "yui@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-029", name: "นางสาวมิ่งขวัญ แย้มวัด", email: "ming@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-030", name: "นางสาวศิริรัตน์ คชสิทธิ์", email: "poo2@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-031", name: "นางสาวอลิณดา ศิริธนวัฒนกุล", email: "dream@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-033", name: "นางสาววิภาดา บุญรักษา", email: "jum@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-034", name: "นางสาวศศิวรรณ ปั้นบรรจง", email: "baitoey@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-036", name: "นางสาวสุธิดา วุฒิ", email: "milk@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-038", name: "นางสาวศิวพร แก้วพูลศรี", email: "benzsi@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-039", name: "นางสาวกัญยานี เลากสิกรรม", email: "gun@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-040", name: "นางสาวอัญชลี ยอดนิล", email: "bee@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-041", name: "นางสาวเดือนเพ็ญ พวงศรี", email: "ae@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-043", name: "นางสาวกชพร มิ่งโสภา", email: "muay@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-044", name: "นางสาวพิมลาภัสร์ ราตรี", email: "toei@yuwapat.ac.th", role: "Admin", password: "yw123456" },
+            { empId: "YW-045", name: "นางสาวพัณณิตา เกลี้ยงล่ำ", email: "pop2@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-047", name: "นางสาวอัญชลีพร เฮียะหลง", email: "fah@yuwapat.ac.th", role: "Staff", password: "yw123456" }
         ];
 
         // รายการโครงการเริ่มต้นประจำโรงเรียน
         const defaultActivities = [
-            { id: "ACT-001", name: "โครงการสัมมนาเชิงปฏิบัติการ: การประยุกต์ใช้ AI ในการพัฒนาบทเรียน", owner: "admin@yuwapat.ac.th", poster: "", objectives: "1. เพื่อให้ครูมีความรู้พื้นฐานใน AI\n2. เพื่อยกระดับและพัฒนาแผนจัดการเรียนรู้ให้ตอบสนองผู้เรียน", topics: ["ด้านความเหมาะสมของหลักสูตรสถาบัน", "ด้านการนำทักษะสารสนเทศไปใช้ปฏิบัติงานจริง"], history: { "2566": 82.00, "2567": 87.00, "2568": 92.00 } },
-            { id: "ACT-003", name: "กิจกรรมสานสัมพันธ์และโฮมรูมร่วมใจ: พบกันฉันน้องพี่", owner: "head_student@yuwapat.ac.th", poster: "", objectives: "1. เสริมสร้างมิตรภาพศิษย์รุ่นพี่รุ่นน้องภายในสถาบัน\n2. ดูแลช่วยเหลือและสร้างความผูกพันผ่านกิจกรรม", topics: ["ด้านความผูกพันและบรรยากาศอบอุ่นของกิจกรรม", "ด้านการจัดสรรงบประมาณ อาหารว่าง และอาคารสถานที่"], rounds: ["ครั้งที่ 1 (แรกพบสบตา - วันศุกร์ที่ 12 มิ.ย. 2569)", "ครั้งที่ 2 (กีฬาพาสนุก - วันศุกร์ที่ 19 มิ.ย. 2569)", "ครั้งที่ 3 (ปัจฉิมอำลา - วันศุกร์ที่ 26 มิ.ย. 2569)"], history: { "2566": 90.00, "2567": 91.50, "2568": 95.00 } }
+            { id: "ACT-001", name: "โครงการสัมมนาเชิงปฏิบัติการ: การประยุกต์ใช้ AI ในการพัฒนาบทเรียน", owner: "toei@yuwapat.ac.th", poster: "", objectives: "1. เพื่อให้ครูมีความรู้พื้นฐานใน AI\n2. เพื่อยกระดับและพัฒนาแผนจัดการเรียนรู้ให้ตอบสนองผู้เรียน", topics: ["ด้านความเหมาะสมของหลักสูตรสถาบัน", "ด้านการนำทักษะสารสนเทศไปใช้ปฏิบัติงานจริง"], history: { "2566": 82.00, "2567": 87.00, "2568": 92.00 } },
+            { id: "ACT-003", name: "กิจกรรมสานสัมพันธ์และโฮมรูมร่วมใจ: พบกันฉันน้องพี่", owner: "may@yuwapat.ac.th", poster: "", objectives: "1. เสริมสร้างมิตรภาพศิษย์รุ่นพี่รุ่นน้องภายในสถาบัน\n2. ดูแลช่วยเหลือและสร้างความผูกพันผ่านกิจกรรม", topics: ["ด้านความผูกพันและบรรยากาศอบอุ่นของกิจกรรม", "ด้านการจัดสรรงบประมาณ อาหารว่าง และอาคารสถานที่"], rounds: ["ครั้งที่ 1 (แรกพบสบตา - วันศุกร์ที่ 12 มิ.ย. 2569)", "ครั้งที่ 2 (กีฬาพาสนุก - วันศุกร์ที่ 19 มิ.ย. 2569)", "ครั้งที่ 3 (ปัจฉิมอำลา - วันศุกร์ที่ 26 มิ.ย. 2569)"], history: { "2566": 90.00, "2567": 91.50, "2568": 95.00 } }
         ];
 
         // ข้อมูลผลการตอบประเมินเริ่มต้น
         const defaultEvaluations = [
-            { activityId: "ACT-001", email: "somchai@yuwapat.ac.th", name: "นายสมชาย ยินดี", role: "คุณครู/บุคลากร", round: "รอบปกติ", ratings: { "ด้านความเหมาะสมของหลักสูตรสถาบัน": 5, "ด้านการนำทักษะสารสนเทศไปใช้ปฏิบัติงานจริง": 4 }, suggestion: "เนื้อหาเข้าใจง่าย นำไปเขียนแผนการสอนและทำ SAR ประกอบงานส่งฝ่ายวิชาการได้เร็วขึ้นจริงครับ" }
+            { activityId: "ACT-001", email: "nok@yuwapat.ac.th", name: "นางสาวอุษณีย์ กัลยาณวัตร", role: "คุณครู/บุคลากร", round: "รอบปกติ", ratings: { "ด้านความเหมาะสมของหลักสูตรสถาบัน": 5, "ด้านการนำทักษะสารสนเทศไปใช้ปฏิบัติงานจริง": 4 }, suggestion: "เนื้อหาเข้าใจง่าย นำไปเขียนแผนการสอนและทำ SAR ประกอบงานส่งฝ่ายวิชาการได้เร็วขึ้นจริงครับ" }
         ];
 
         // ตัวแปรส่วนกลางสำหรับจัดการสถานะ
