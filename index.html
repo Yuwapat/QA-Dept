@@ -1,151 +1,23 @@
-// --------------------------------------------------------------------------------
-        // 4.2 ข้อมูลตั้งต้นทางการสำหรับใช้งานจริง (Production Baseline)
-        // --------------------------------------------------------------------------------
-
-        // รายชื่อคณะครูและบุคลากรทางการโรงเรียนอนุบาลยุวพัฒน์นครสวรรค์ 40 ท่าน
-        const defaultUsers = [
-            { empId: "YW-001", name: "อุษณีย์ กัลยาณวัตร", email: "nok@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-002", name: "นิภาพร โพธิ์ปาน", email: "kung@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-003", name: "บงกช จันทนะเปลิน", email: "poo@yuwapat.ac.th", role: "Head_Admin", password: "yw123456" },
-            { empId: "YW-004", name: "พลอยไพลิน พูลธัญกิจ", email: "may@yuwapat.ac.th", role: "Head_Student", password: "yw123456" },
-            { empId: "YW-005", name: "ณัฐนันท์ ไวกสิกรรม", email: "yee@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-006", name: "พรอุษา วงษ์สมัคร", email: "apple@yuwapat.ac.th", role: "Head_QA", password: "yw123456" },
-            { empId: "YW-007", name: "ศุภมาศ อิ่มน้อย", email: "mas@yuwapat.ac.th", role: "Head_Academic", password: "yw123456" },
-            { empId: "YW-008", name: "ปวีณา แก้วแถม", email: "a@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-009", name: "ปรียาภัทร ธรรมนิทัศนา", email: "film@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-010", name: "วรรณิศา กล่อมเกลา", email: "may2@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-011", name: "วณิชยา จำปาศักดิ์", email: "jaaey@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-012", name: "มาลิษา ศรีวิเชียร", email: "nan@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-014", name: "วิมลรัตน์ พวงจันทร์", email: "bew@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-015", name: "อรพิศ บิลโภชน์", email: "tuck@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-016", name: "จุฑาธิปกรณ์ อ่อนสุริยา", email: "news@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-017", name: "ตระกนต์ธีร์ ธูปบูชา", email: "kon@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-018", name: "กรรณิการ์ สนิทผล", email: "pop@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-019", name: "ธนาภร ทองคำพูล", email: "zaid@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-020", name: "พรพรรษา เสืออุดม", email: "junjao@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-021", name: "วรรฐิรักษ์ โพธิ์สุวรรณ์", email: "bas@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-022", name: "ดาราณี คล้ายคลึง", email: "pae@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-023", name: "นภัสสร คำเหม็ง", email: "filmy@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-024", name: "เกตุสุดา โฉมศรี", email: "lookbat@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-025", name: "งามจิต ธชีโชติกุล", email: "krong@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-026", name: "กัลพันธ์ พิลึก", email: "aom@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-027", name: "วราภรณ์ ทั่งศิริ", email: "yui@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-029", name: "มิ่งขวัญ แย้มวัด", email: "ming@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-030", name: "ศิริรัตน์ คชสิทธิ์", email: "poo2@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-031", name: "อลิณดา ศิริธนวัฒนกุล", email: "dream@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-033", name: "วิภาดา บุญรักษา", email: "jum@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-034", name: "ศศิวรรณ ปั้นบรรจง", email: "baitoey@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-036", name: "สุธิดา วุฒิ", email: "milk@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-038", name: "ศิวพร แก้วพูลศรี", email: "benzsi@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-039", name: "กัญยานี เลากสิกรรม", email: "gun@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-040", name: "อัญชลี ยอดนิล", email: "bee@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-041", name: "เดือนเพ็ญ พวงศรี", email: "ae@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-043", name: "กชพร มิ่งโสภา", email: "muay@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-044", name: "พิมลาภัสร์ ราตรี", email: "toei@yuwapat.ac.th", role: "Admin", password: "yw123456" },
-            { empId: "YW-045", name: "พัณณิตา เกลี้ยงล่ำ", email: "pop2@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-047", name: "อัญชลีพร เฮียะหลง", email: "fah@yuwapat.ac.th", role: "Staff", password: "yw123456" }
-        ];
-
-        // เคลียร์แบบประเมินและสถิติตัวอย่างเพื่อเริ่มต้นใช้งานจริงอย่างเป็นทางการ
-        const defaultActivities = [];
-        const defaultEvaluations = [];
-
-        // --------------------------------------------------------------------------------
-        // 4.3 ฟังก์ชันช่วยดึงและล้างข้อมูลตัวอย่างตกค้าง (Purge Mock Data Logic)
-        // --------------------------------------------------------------------------------
-        function getUsers() { 
-            let users = JSON.parse(localStorage.getItem('eval_users'));
-            const mockEmailsToPurge = [
-                "admin@yuwapat.ac.th", "director@yuwapat.ac.th", "executive2@yuwapat.ac.th",
-                "head_admin@yuwapat.ac.th", "head_academic@yuwapat.ac.th", "head_qa@yuwapat.ac.th",
-                "head_student@yuwapat.ac.th", "owner_ai@yuwapat.ac.th", "somchai@yuwapat.ac.th", "somsri@yuwapat.ac.th"
-            ];
-            
-            if (!users) {
-                users = defaultUsers;
-                localStorage.setItem('eval_users', JSON.stringify(users));
-            } else {
-                // ล้างรายชื่อทดสอบตัวอย่างออกจาก LocalStorage โดยอัตโนมัติ
-                users = users.filter(u => !mockEmailsToPurge.includes(u.email.toLowerCase()));
-                
-                let updated = false;
-                defaultUsers.forEach(defUser => {
-                    const exists = users.some(u => u.email.toLowerCase() === defUser.email.toLowerCase());
-                    if (!exists) {
-                        users.push(defUser);
-                        updated = true;
-                    }
-                });
-                localStorage.setItem('eval_users', JSON.stringify(users));
-            }
-            return users;
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบประเมินความพึงพอใจ - โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Sarabun) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #fafafa;
+            font-size: 16px;
         }
-
-        function getActivities() { 
-            let activities = JSON.parse(localStorage.getItem('eval_activities'));
-            if (activities) {
-                // กรองลบโครงการตัวอย่างทดสอบระบบเดิมออก
-                activities = activities.filter(a => a.id !== "ACT-001" && a.id !== "ACT-003");
-                localStorage.setItem('eval_activities', JSON.stringify(activities));
-            } else {
-                activities = defaultActivities;
-            }
-            return activities; 
-        }
-
-        function getEvaluations() { 
-            let evaluations = JSON.parse(localStorage.getItem('eval_submissions'));
-            if (evaluations) {
-                evaluations = evaluations.filter(e => e.activityId !== "ACT-001" && e.activityId !== "ACT-003");
-                localStorage.setItem('eval_submissions', JSON.stringify(evaluations));
-            } else {
-                evaluations = defaultEvaluations;
-            }
-            return evaluations; 
-        }
-        function pushUserDeleteToGoogleSheet(email, empId) {
-            const url = getGoogleSheetUrl();
-            if (!url) return;
-            const payload = {
-                action: "delete_user",
-                email: email,
-                empId: empId
-            };
-            fetch(url, {
-                method: "POST",
-                body: JSON.stringify(payload)
-            })
-            .then(res => res.json())
-            .then(resData => {
-                if (resData.status === "success") {
-                    showToast('ซิงค์การจำหน่ายออกบุคลากรลง Google Sheet เรียบร้อยแล้ว', 'success');
-                }
-            })
-            .catch(err => console.error(err));
-        }
-
-        function confirmDeleteUser(email) {
-            if (currentUser.role !== 'Admin') {
-                showToast('สิทธิ์การจัดการถูกจำกัดสำหรับผู้ดูแลระบบเท่านั้น', 'error');
-                return;
-            }
-            const u = getUsers().find(user => user.email.toLowerCase() === email.toLowerCase());
-            if (!u) return;
-
-            customConfirm(
-                "จำหน่ายออก / พ้นสภาพบุคลากร",
-                `ยืนยันการลบบัญชีและจำหน่ายคุณครู ${u.name} (${u.empId}) ออกจากระบบสารสนเทศสถาบัน?`,
-                "trash",
-                () => {
-                    let users = getUsers().filter(user => user.email.toLowerCase() !== email.toLowerCase());
-                    localStorage.setItem('eval_users', JSON.stringify(users));
-                    pushUserDeleteToGoogleSheet(u.email, u.empId);
-                    showToast(`จำหน่ายคุณครู ${u.name} ออกจากระบบเสร็จสิ้น`, 'success');
-                    loadAdminPanel();
-                },
-                true,
-                "ยืนยันจำหน่ายออก"
-            );
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
         }
         .no-scrollbar {
             -ms-overflow-style: none;
@@ -182,7 +54,7 @@
                 <p class="text-slate-500 text-sm mt-1.5 font-semibold">โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</p>
             </div>
 
-            <!-- ฟอร์มเข้าสู่ระบบโดยการระบุข้อมูลบัญชีด้วยตนเอง -->
+            <!-- ฟอร์มเข้าสู่ระบบ -->
             <form onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-sm font-bold uppercase text-slate-500 tracking-wider mb-2">ที่อยู่อีเมลบุคลากร</label>
@@ -200,7 +72,7 @@
                     <div class="relative rounded-xl shadow-sm">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2zm10-10V7a4 4 0 0 0-8 0v4h8z" />
                             </svg>
                         </div>
                         <input type="password" id="login-password" required placeholder="ระบุรหัสผ่านเข้าใช้งาน" class="w-full border border-slate-200 rounded-xl pl-10 pr-4 py-3.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800">
@@ -695,14 +567,63 @@
             { empId: "YW-047", name: "อัญชลีพร เฮียะหลง", email: "fah@yuwapat.ac.th", role: "Staff", password: "yw123456" }
         ];
 
-        const defaultActivities = [
-            { id: "ACT-001", name: "โครงการสัมมนาเชิงปฏิบัติการ: การประยุกต์ใช้ปัญญาประดิษฐ์ในการจัดการเรียนรู้", owner: "toei@yuwapat.ac.th", poster: "", objectives: "1. เพื่อสร้างความรู้ความเข้าใจพื้นฐานในการประยุกต์ใช้เทคโนโลยีสารสนเทศ\n2. เพื่อยกระดับแผนการจัดการเรียนรู้ให้สอดคล้องกับศักยภาพผู้เรียน", topics: ["ด้านความเหมาะสมของเนื้อหาและหลักสูตร", "ด้านการนำทักษะไปประยุกต์ใช้ในการปฏิบัติงานจริง"], history: { "2566": 82.00, "2567": 87.00, "2568": 92.00 } },
-            { id: "ACT-003", name: "กิจกรรมสร้างความสัมพันธ์และระบบดูแลช่วยเหลือนักเรียน", owner: "may@yuwapat.ac.th", poster: "", objectives: "1. ส่งเสริมความสัมพันธ์อันดีและสร้างบรรยากาศอบอุ่นภายในสถาบัน\n2. พัฒนาระบบดูแลช่วยเหลือนักเรียนผ่านกิจกรรมกลุ่มสัมพันธ์", topics: ["ด้านบรรยากาศและความสอดคล้องของกิจกรรม", "ด้านการบริหารจัดการสถานที่ อาหาร และสิ่งอำนวยความสะดวก"], rounds: ["ครั้งที่ 1 (วันศุกร์ที่ 12 มิถุนายน 2569)", "ครั้งที่ 2 (วันศุกร์ที่ 19 มิถุนายน 2569)", "ครั้งที่ 3 (วันศุกร์ที่ 26 มิถุนายน 2569)"], history: { "2566": 90.00, "2567": 91.50, "2568": 95.00 } }
-        ];
+        // เคลียร์แบบประเมินและสถิติตัวอย่างเพื่อเริ่มต้นใช้งานจริงอย่างเป็นทางการ
+        const defaultActivities = [];
+        const defaultEvaluations = [];
 
-        const defaultEvaluations = [
-            { activityId: "ACT-001", email: "nok@yuwapat.ac.th", name: "อุษณีย์ กัลยาณวัตร", role: "คุณครู/บุคลากร", round: "รอบปกติ", ratings: { "ด้านความเหมาะสมของเนื้อหาและหลักสูตร": 5, "ด้านการนำทักษะไปประยุกต์ใช้ในการปฏิบัติงานจริง": 4 }, suggestion: "เนื้อหาการอบรมชัดเจน เหมาะสมสำหรับการนำไปประยุกต์ใช้จัดทำแผนการจัดการเรียนรู้" }
-        ];
+        // --------------------------------------------------------------------------------
+        // ฟังก์ชันดึงและล้างข้อมูลตัวอย่างตกค้าง (Purge Mock Data Logic)
+        // --------------------------------------------------------------------------------
+        function getUsers() { 
+            let users = JSON.parse(localStorage.getItem('eval_users'));
+            const mockEmailsToPurge = [
+                "admin@yuwapat.ac.th", "director@yuwapat.ac.th", "executive2@yuwapat.ac.th",
+                "head_admin@yuwapat.ac.th", "head_academic@yuwapat.ac.th", "head_qa@yuwapat.ac.th",
+                "head_student@yuwapat.ac.th", "owner_ai@yuwapat.ac.th", "somchai@yuwapat.ac.th", "somsri@yuwapat.ac.th"
+            ];
+            
+            if (!users) {
+                users = defaultUsers;
+                localStorage.setItem('eval_users', JSON.stringify(users));
+            } else {
+                // ล้างรายชื่อทดสอบตัวอย่างออกจาก LocalStorage โดยอัตโนมัติ
+                users = users.filter(u => !mockEmailsToPurge.includes(u.email.toLowerCase()));
+                
+                let updated = false;
+                defaultUsers.forEach(defUser => {
+                    const exists = users.some(u => u.email.toLowerCase() === defUser.email.toLowerCase());
+                    if (!exists) {
+                        users.push(defUser);
+                        updated = true;
+                    }
+                });
+                localStorage.setItem('eval_users', JSON.stringify(users));
+            }
+            return users;
+        }
+
+        function getActivities() { 
+            let activities = JSON.parse(localStorage.getItem('eval_activities'));
+            if (activities) {
+                // กรองลบโครงการตัวอย่างทดสอบระบบเดิมออก
+                activities = activities.filter(a => a.id !== "ACT-001" && a.id !== "ACT-003");
+                localStorage.setItem('eval_activities', JSON.stringify(activities));
+            } else {
+                activities = defaultActivities;
+            }
+            return activities; 
+        }
+
+        function getEvaluations() { 
+            let evaluations = JSON.parse(localStorage.getItem('eval_submissions'));
+            if (evaluations) {
+                evaluations = evaluations.filter(e => e.activityId !== "ACT-001" && e.activityId !== "ACT-003");
+                localStorage.setItem('eval_submissions', JSON.stringify(evaluations));
+            } else {
+                evaluations = defaultEvaluations;
+            }
+            return evaluations; 
+        }
 
         let uploadedPosterBase64 = "";
         let currentUser = null;
@@ -756,29 +677,6 @@
             
             modal.classList.remove('hidden'); modal.classList.add('flex'); currentConfirmAction = onConfirm;
         }
-
-        function getUsers() { 
-            let users = JSON.parse(localStorage.getItem('eval_users'));
-            if (!users) {
-                users = defaultUsers;
-                localStorage.setItem('eval_users', JSON.stringify(users));
-            } else {
-                let updated = false;
-                defaultUsers.forEach(defUser => {
-                    const exists = users.some(u => u.email.toLowerCase() === defUser.email.toLowerCase());
-                    if (!exists) {
-                        users.push(defUser);
-                        updated = true;
-                    }
-                });
-                if (updated) {
-                    localStorage.setItem('eval_users', JSON.stringify(users));
-                }
-            }
-            return users;
-        }
-        function getActivities() { return JSON.parse(localStorage.getItem('eval_activities')) || defaultActivities; }
-        function getEvaluations() { return JSON.parse(localStorage.getItem('eval_submissions')) || defaultEvaluations; }
 
         function getGoogleSheetUrl() { return localStorage.getItem('google_sheet_url') || DEFAULT_GOOGLE_SHEET_URL; }
         function saveGoogleSheetsConnection() {
@@ -837,6 +735,27 @@
                 console.error(err);
                 showToast('การเชื่อมต่อกับสเปรดชีตออนไลน์ขัดข้อง ระบบจะบันทึกข้อมูลไว้ในเครื่องชั่วคราว', 'error');
             });
+        }
+
+        function pushUserDeleteToGoogleSheet(email, empId) {
+            const url = getGoogleSheetUrl();
+            if (!url) return;
+            const payload = {
+                action: "delete_user",
+                email: email,
+                empId: empId
+            };
+            fetch(url, {
+                method: "POST",
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(resData => {
+                if (resData.status === "success") {
+                    showToast('ซิงค์การจำหน่ายออกบุคลากรลง Google Sheet เรียบร้อยแล้ว', 'success');
+                }
+            })
+            .catch(err => console.error(err));
         }
 
         function pushEvaluationToGoogleSheet(evList) {
@@ -1366,6 +1285,30 @@
             showToast('การลงทะเบียนแบบประเมินโครงการสำเร็จ', 'success'); loadAdminPanel();
         }
 
+        function confirmDeleteUser(email) {
+            if (currentUser.role !== 'Admin') {
+                showToast('สิทธิ์การจัดการถูกจำกัดสำหรับผู้ดูแลระบบเท่านั้น', 'error');
+                return;
+            }
+            const u = getUsers().find(user => user.email.toLowerCase() === email.toLowerCase());
+            if (!u) return;
+
+            customConfirm(
+                "จำหน่ายออก / พ้นสภาพบุคลากร",
+                `ยืนยันการลบบัญชีและจำหน่ายคุณครู ${u.name} (${u.empId}) ออกจากระบบสารสนเทศสถาบัน?`,
+                "trash",
+                () => {
+                    let users = getUsers().filter(user => user.email.toLowerCase() !== email.toLowerCase());
+                    localStorage.setItem('eval_users', JSON.stringify(users));
+                    pushUserDeleteToGoogleSheet(u.email, u.empId);
+                    showToast(`จำหน่ายคุณครู ${u.name} ออกจากระบบเสร็จสิ้น`, 'success');
+                    loadAdminPanel();
+                },
+                true,
+                "ยืนยันจำหน่ายออก"
+            );
+        }
+
         function openUserModal(email) {
             if (currentUser.role !== 'Admin') {
                 showToast('สิทธิ์การจัดการข้อมูลถูกจำกัดสำหรับผู้ดูแลระบบเท่านั้น', 'error');
@@ -1419,6 +1362,31 @@
         }
         
         function toggleImportArea() { document.getElementById('import-sheets-area').classList.toggle('hidden'); }
+
+        function importTeachersFromPaste() {
+            if (currentUser.role !== 'Admin') {
+                showToast('สิทธิ์การจัดการถูกจำกัดเฉพาะผู้ดูแลระบบเท่านั้น', 'error');
+                return;
+            }
+            const text = document.getElementById('importTeachersText').value.trim(); if (!text) return;
+            const lines = text.split('\n'); const users = getUsers(); let count = 0;
+
+            lines.forEach(line => {
+                const cols = line.split('\t');
+                if (cols.length >= 3) {
+                    const email = cols[2].trim().toLowerCase();
+                    if(email.endsWith('@yuwapat.ac.th') && !users.some(u => u.email.toLowerCase() === email)) {
+                        const tempUser = { empId: cols[0].trim(), name: cols[1].trim(), email, role: cols[3]?.trim() || 'Staff', password: cols[4]?.trim() || 'yw123456' };
+                        users.push(tempUser);
+                        count++;
+                    }
+                }
+            });
+            localStorage.setItem('eval_users', JSON.stringify(users)); 
+
+            showToast(`นำเข้ารายชื่อบุคลากรสำเร็จ ${count} ท่าน`, 'success');
+            document.getElementById('importTeachersText').value = ''; toggleImportArea(); loadAdminPanel();
+        }
 
         function addRoundRow(name = "", detail = "") {
             const container = document.getElementById('rounds-builder-container'); if(!container) return;
