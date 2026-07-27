@@ -4,23 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ระบบสารสนเทศเพื่อการประเมินผลการดำเนินงานและกิจกรรม - โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</title>
-    
-    <!-- 1. การดึงภายนอก (CDN): Tailwind CSS สำหรับจัดสไตล์และเลย์เอาต์ระบบ -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- 2. การดึงฟอนต์ภาษาไทยมาตรฐานทางการ (Sarabun) จาก Google Fonts -->
+    <!-- Google Fonts (Sarabun) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- 3. สไตล์เพิ่มเติมเฉพาะส่วน (Custom Utility CSS) -->
+    <!-- Custom Page Styles -->
     <style>
         body {
             font-family: 'Sarabun', sans-serif;
             background-color: #fafafa;
             font-size: 16px;
         }
-        /* ซ่อนแถบ Scrollbar บนอุปกรณ์เคลื่อนที่ แต่ยังคงเลื่อน (Scroll) ได้ตามปกติ */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -28,7 +25,6 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
-        /* จำกัดการแสดงผลข้อความให้อยู่ภายใน 2 บรรทัด แล้วตัดท้ายด้วย ... (Ellipsis) */
         .limit-2-lines {
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -37,20 +33,15 @@
         }
     </style>
 </head>
-<body class="min-h-screen text-slate-800 flex flex-col justify-between selection:bg-emerald-100 selection:text-emerald-955">
+<body class="min-h-screen text-slate-800 flex flex-col justify-between selection:bg-emerald-100 selection:text-emerald-950">
 
-    <!-- ==================== [TOAST CONTAINER] ==================== -->
-    <!-- พื้นที่สำหรับแสดงกล่องแจ้งเตือนความสำเร็จ/ข้อผิดพลาดแบบป๊อปอัปมุมขวาบน -->
     <div id="toast-container" class="fixed top-5 right-5 z-[110] flex flex-col gap-2 max-w-sm w-full px-4 md:px-0"></div>
 
-    <!-- ==================== 1. หน้าจอเข้าสู่ระบบ (OFFICIAL SECURE LOGIN) ==================== -->
-    <!-- แสดงผลเป็นหน้าแรกเมื่อผู้ใช้งานยังไม่ได้ลงชื่อเข้าใช้ (Session เป็น Null) -->
     <div id="login-screen" class="flex-grow flex items-center justify-center p-6 bg-slate-50">
         <div class="bg-white rounded-3xl p-8 max-w-lg w-full shadow-2xl border border-slate-200/60 relative overflow-hidden">
-            <!-- เส้นประดับแถบสีเขียวเข้มและสีทองสัญลักษณ์สถาบัน -->
+            <!-- แถบสีประดับสถาบัน -->
             <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-800 via-emerald-700 to-yellow-400"></div>
             
-            <!-- ตราโรงเรียนและหัวข้อระบบ -->
             <div class="text-center mb-8 mt-4">
                 <div class="w-24 h-24 rounded-2xl overflow-hidden bg-slate-50 flex items-center justify-center shadow mx-auto mb-5 border border-slate-100">
                     <img src="https://lh3.googleusercontent.com/d/1c3cjNBo_XSXdYjn6RAWkodMqChNPrk49" 
@@ -63,13 +54,12 @@
                 <p class="text-slate-500 text-sm mt-1.5 font-semibold">โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</p>
             </div>
 
-            <!-- แบบฟอร์มป้อนข้อมูลล็อกอิน -->
             <form onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-sm font-bold uppercase text-slate-500 tracking-wider mb-2">ที่อยู่อีเมลสถาบัน</label>
                     <div class="relative rounded-xl shadow-sm">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.206" />
                             </svg>
                         </div>
@@ -80,37 +70,31 @@
                     <label class="block text-sm font-bold uppercase text-slate-500 tracking-wider mb-2">รหัสผ่าน</label>
                     <div class="relative rounded-xl shadow-sm">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                             </svg>
                         </div>
                         <input type="password" id="login-password" required placeholder="รหัสผ่านเข้าใช้งาน" class="w-full border border-slate-200 rounded-xl pl-10 pr-4 py-3.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800">
                     </div>
                 </div>
-                <button type="submit" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-3.5 rounded-xl text-sm transition-all shadow-md active:scale-95 mt-4">
-                  เข้าสู่ระบบสารสนเทศสถาบัน
+                <button type="submit" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-3.5 rounded-xl text-sm transition-all shadow-md active:scale-95 mt-4 cursor-pointer">
+                  เข้าสู่ระบบ
                 </button>
             </form>
 
-            <!-- ปุ่มลัดสำหรับกรอกข้อมูลตัวอย่างแอดมิน เพื่อความสะดวกในการทดสอบ -->
             <div class="mt-6 pt-5 border-t border-slate-100">
                 <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-3 text-center">ข้อมูลจำลองสิทธิ์ผู้ใช้สำหรับทดสอบระบบ (รหัสผ่านคือ yw123456):</p>
                 <div class="space-y-3">
-                    <div>
-                        <button type="button" onclick="autofillLogin('toei@yuwapat.ac.th')" class="bg-slate-900 hover:bg-slate-800 p-3.5 rounded-xl text-left text-white w-full transition-all text-xs flex justify-between items-center shadow-md border border-slate-800 active:scale-95">
-                            <span class="font-bold text-yellow-400 text-sm">🔑 แอดมินพิมลาภัสร์ (YW-044)</span>
-                            <span class="font-mono text-slate-300 text-xs">toei@yuwapat.ac.th</span>
-                        </button>
-                    </div>
+                    <button type="button" onclick="autofillLogin('toei@yuwapat.ac.th')" class="bg-slate-900 hover:bg-slate-800 p-3.5 rounded-xl text-left text-white w-full transition-all text-xs flex justify-between items-center shadow-md border border-slate-800 active:scale-95 cursor-pointer">
+                        <span class="font-bold text-yellow-400 text-sm">🔑 แอดมินพิมลาภัสร์ (YW-044)</span>
+                        <span class="font-mono text-slate-300 text-xs">toei@yuwapat.ac.th</span>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ==================== 2. หน้าหลักแดชบอร์ดหลังล็อกอินสำเร็จ ==================== -->
     <div id="main-dashboard" class="hidden flex-col justify-between min-h-screen">
-        
-        <!-- แถบด้านบนแสดงโลโก้ ชื่อระบบ และข้อมูลโปรไฟล์ผู้ใช้งาน -->
         <header class="bg-white border-b border-slate-100 shadow-sm">
             <div class="h-1.5 bg-gradient-to-r from-emerald-800 via-emerald-700 to-yellow-400"></div>
             <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
@@ -126,45 +110,39 @@
                         <h1 class="text-lg md:text-xl font-bold tracking-tight text-slate-800 mt-0.5">ระบบประเมินสถิติและสรุปผลความพึงพอใจการจัดโครงการ</h1>
                     </div>
                 </div>
-                
-                <!-- การแสดงชื่อผู้ใช้ และปุ่มออกจากระบบ -->
                 <div class="flex flex-row items-center gap-3.5 bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-200/80 w-full lg:w-auto justify-between lg:justify-start">
                     <div class="flex flex-col text-left">
                         <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">บัญชีผู้ใช้งานระบบ</span>
                         <span id="userProfileDisplay" class="text-sm text-slate-800 font-bold">กำลังโหลด...</span>
                     </div>
                     <div class="w-px h-6 bg-slate-200 hidden lg:block"></div>
-                    <button onclick="handleLogout()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold px-3.5 py-2.5 rounded-lg transition-all border border-rose-100 active:scale-95">ออกจากระบบ</button>
+                    <button onclick="handleLogout()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold px-3.5 py-2.5 rounded-lg transition-all border border-rose-100 active:scale-95 cursor-pointer">ออกจากระบบ</button>
                 </div>
             </div>
         </header>
 
-        <!-- พื้นที่เนื้อหาหลัก แบ่งออกเป็น 4 แท็บ -->
         <main class="max-w-6xl mx-auto px-6 py-6 flex-grow w-full">
-            
-            <!-- ปุ่มสลับแท็บเมนูการทำงานหลัก (Tab Navigation) -->
             <div class="flex border-b border-slate-200 mb-6 overflow-x-auto no-scrollbar gap-1">
-                <button onclick="switchTab('evaluate-tab')" id="btn-evaluate-tab" class="py-3 px-4 font-bold border-b-2 border-emerald-800 text-emerald-800 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
+                <button onclick="switchTab('evaluate-tab')" id="btn-evaluate-tab" class="py-3 px-4 font-bold border-b-2 border-emerald-800 text-emerald-800 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                     <span>ทำแบบประเมินโครงการ</span>
                     <span id="pendingBadge" class="px-2.5 py-0.5 text-xs bg-yellow-400 text-slate-900 font-bold rounded-full">0</span>
                 </button>
-                <button onclick="switchTab('report-tab')" id="btn-report-tab" class="py-3 px-4 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
+                <button onclick="switchTab('report-tab')" id="btn-report-tab" class="py-3 px-4 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2"></path></svg>
                     <span>สรุปรายงานผลการประเมิน</span>
                 </button>
-                <button onclick="switchTab('history-tab')" id="btn-history-tab" class="py-3 px-4 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
+                <button onclick="switchTab('history-tab')" id="btn-history-tab" class="py-3 px-4 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <span>สถิติดำเนินการย้อนหลัง 3 ปี</span>
                 </button>
-                <button onclick="switchTab('admin-tab')" id="btn-admin-tab" class="py-3 px-4 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2">
+                <button onclick="switchTab('admin-tab')" id="btn-admin-tab" class="py-3 px-4 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
                     <span>บริหารจัดการสารสนเทศ</span>
                     <span class="text-xs bg-slate-100 text-slate-500 font-bold px-2.5 py-0.5 rounded-full" id="adminTabBadge">แอดมิน</span>
                 </button>
             </div>
 
-            <!-- 2.1 [TAB 1]: หน้าแสดงแบบประเมินที่ค้างอยู่ (Grid Cards) -->
             <section id="evaluate-tab" class="tab-content block">
                 <div class="bg-emerald-50 border-l-4 border-emerald-700 p-4 rounded-r-lg mb-6 text-sm text-emerald-900 leading-relaxed shadow-sm">
                     <strong>คำแนะนำเบื้องต้น:</strong> แบบประเมินโครงการความพึงพอใจของสถาบันที่ท่านยังค้างประเมินผลจะแสดงดังตารางข้างล่าง หากดำเนินการประเมินครบทุกรอบ โครงการจะถูกเก็บเข้าระบบสถิติและซ่อนออกทันทีเพื่อความคลีนสูงสุด
@@ -176,11 +154,9 @@
                 </div>
             </section>
 
-            <!-- 2.2 [TAB 2]: หน้าสรุปรายงานผลสถิติและตารางผู้โหวตรายคน -->
             <section id="report-tab" class="tab-content hidden space-y-6">
                 <div class="flex justify-between items-center bg-white p-4 rounded-2xl border shadow-sm flex-wrap gap-2">
                     <span class="text-sm font-bold text-slate-655">วิเคราะห์ข้อมูลสรุปผลความพึงพอใจประกันคุณภาพสถาบัน</span>
-                    <!-- ปุ่มส่งออกสถิติภาพรวมทั้งหมดเป็นไฟล์ CSV สำหรับ Excel/Google Sheets -->
                     <button onclick="exportAllEvaluationsToCSV()" class="bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow flex items-center gap-1.5 active:scale-95 cursor-pointer">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4m4-5l5 5 5-5m-5 5V3" /></svg>
                         <span>ส่งออกผลการประเมินโครงการทั้งหมด (CSV)</span>
@@ -192,15 +168,12 @@
                 <div id="reportList" class="space-y-6"></div>
             </section>
 
-            <!-- 2.3 [TAB 3]: หน้าแสดงกราฟสถิติความพึงพอใจเปรียบเทียบย้อนหลัง 3 ปี -->
             <section id="history-tab" class="tab-content hidden">
                 <div id="historyList" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
             </section>
 
-            <!-- 2.4 [TAB 4]: หน้าบริหารจัดการสารสนเทศ (ผู้รับผิดชอบสร้างโครงการ / แอดมินจัดการครู) -->
             <section id="admin-tab" class="tab-content hidden max-w-5xl mx-auto space-y-8">
-                
-                <!-- ส่วนที่ 0: ตั้งค่า URL เชื่อมต่อ Google Sheets API (แสดงเฉพาะบทบาท Admin) -->
+                <!-- Google Sheets Config (Admin Only) -->
                 <div id="admin-sheet-config" class="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm space-y-4 hidden">
                     <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2.5 uppercase tracking-wider text-emerald-800">
                         <svg class="w-5 h-5 text-emerald-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>
@@ -217,7 +190,7 @@
                     </div>
                 </div>
 
-                <!-- ส่วนที่ 1: ฟอร์มสร้างทะเบียนประเมินโครงการใหม่ (ครูทุกคนมีสิทธิ์สร้างโครงการที่ตนรับผิดชอบได้) -->
+                <!-- Create Activity Form -->
                 <div class="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm">
                     <h3 class="text-sm font-bold text-slate-900 mb-6 border-b pb-4 flex items-center gap-2.5 uppercase tracking-wider text-emerald-855">
                         <svg class="w-5 h-5 text-emerald-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -229,7 +202,7 @@
                     </h3>
                     <form id="addActivityForm" onsubmit="createNewActivity(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="md:col-span-2">
-                            <label class="block text-xs font-bold uppercase text-slate-450 tracking-wider mb-2">ระบุชื่อโครงการ / กิจกรรม</label>
+                            <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">ระบุชื่อโครงการ / กิจกรรม</label>
                             <input type="text" id="newActName" required placeholder="เช่น กิจกรรมพบกันฉันน้องพี่ หรือ โครงการพัฒนาทักษะวิชาชีพครู" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800">
                         </div>
                         <div class="md:col-span-1">
@@ -286,7 +259,6 @@
                     </form>
                 </div>
 
-                <!-- ส่วนที่ 2: ฟอร์มเพิ่ม/ดึงข้อมูลครูจาก Google Sheets (แสดงเฉพาะสิทธิ์ Admin เท่านั้น) -->
                 <div id="admin-user-add-section" class="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm space-y-4 hidden">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-2 border-b pb-4">
                         <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2.5 uppercase tracking-wider text-emerald-800">
@@ -318,7 +290,6 @@
                         </div>
                     </div>
                     
-                    <!-- ช่องวางข้อความคัดลอกตารางจาก Google Sheets (TSV Format) -->
                     <div id="import-sheets-area" class="hidden p-5 bg-slate-50 border rounded-xl space-y-3.5">
                         <span class="block text-xs font-bold text-slate-600 flex items-center gap-1.5">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -337,7 +308,6 @@
                     </div>
                 </div>
 
-                <!-- ส่วนที่ 3: ตารางแสดงรายการแผนโครงการทั้งหมด -->
                 <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
                     <h3 class="text-sm font-bold text-slate-900 mb-5 flex items-center gap-2.5 uppercase tracking-wider text-emerald-800">
                         <svg class="w-5 h-5 text-emerald-800" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -366,7 +336,6 @@
                     </div>
                 </div>
 
-                <!-- ส่วนที่ 4: ตารางจัดการและแก้ไขข้อมูลบุคลากรรายบุคคล (แสดงเฉพาะสิทธิ์ Admin) -->
                 <div id="admin-user-list-section" class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hidden">
                     <h3 class="text-sm font-bold text-slate-900 mb-5 flex items-center gap-2.5 uppercase tracking-wider text-emerald-800">
                         <svg class="w-5 h-5 text-emerald-800" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -391,7 +360,6 @@
                     </div>
                 </div>
 
-                <!-- ส่วนปุ่มล้างคืนค่าข้อมูลสารสนเทศทั้งหมด (แสดงเฉพาะสิทธิ์ Admin) -->
                 <div id="admin-reset-section" class="border-t border-slate-200 pt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hidden">
                     <div class="flex items-start gap-2.5">
                         <div class="p-2 bg-rose-50 rounded-xl border border-rose-100 text-rose-700 mt-1 flex-shrink-0">
@@ -417,9 +385,6 @@
         </footer>
     </div>
 
-    <!-- ==================== Modals Layer (กล่องป๊อปอัปแจ้งเตือนและแก้ไขข้อมูล) ==================== -->
-    
-    <!-- 1. Modal ยืนยันการทำรายการ (Confirm Modal) -->
     <div id="confirm-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[120] hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl p-7 max-w-md w-full shadow-2xl border border-slate-100 transform scale-95 transition-all">
             <div class="flex items-center gap-3.5 mb-4 border-b pb-3">
@@ -440,7 +405,6 @@
         </div>
     </div>
 
-    <!-- 2. Modal แก้ไขข้อมูลและสิทธิ์ครูรายบุคคล (User Edit Modal) -->
     <div id="user-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[95] hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl p-7 max-w-md w-full shadow-2xl border border-slate-100">
             <div class="flex justify-between items-center mb-5 border-b pb-3.5">
@@ -452,7 +416,6 @@
                 </h3>
                 <button onclick="closeUserModal()" class="text-slate-400 hover:text-slate-600 text-sm font-bold">✕</button>
             </div>
-            <!-- บันทึกอีเมลเดิมเพื่อนำไปใช้อ้างอิงการค้นหาบรรทัดใน Google Sheets เพื่อเขียนทับอย่างถูกต้อง -->
             <input type="hidden" id="edit-user-original-email">
             <div class="space-y-4">
                 <div>
@@ -491,7 +454,6 @@
         </div>
     </div>
 
-    <!-- 3. Modal ตอบแบบสอบถามประเมินความพึงพอใจสเกล Google Forms (Linear Scale 1-5) -->
     <div id="evaluation-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[90] hidden items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden my-8 transform scale-95 transition-all">
             <div class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-950 text-white px-6 py-5 border-b-2 border-yellow-400 flex justify-between items-center">
@@ -553,78 +515,67 @@
         </div>
     </div>
 
-    <!-- ==================== 4. ส่วนคำสั่งควบคุมระบบ (JAVASCRIPT ENGINE) ==================== -->
     <script>
-        // --------------------------------------------------------------------------------
-        // 4.1 ค่าตั้งต้นและการกำหนดค่าลิงก์เชื่อมต่อ Google Sheets API
-        // --------------------------------------------------------------------------------
-        
-        // คุณครูสามารถนำลิงก์ Web App URL ที่ได้จาก Google Apps Script มาวางฝังตรงนี้เพื่อให้ระบบเชื่อมต่ออัตโนมัติทันที
+        // กำหนด URL ของ Google Apps Script Web App เมื่อต่อชีทโรงเรียน
         const DEFAULT_GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbwPu7_mDMokINwZe3BUQr6HdgOEP8YPbZpQ5BhJ0UT57Kg52k6QSwbK31W2wR_XrcY4/exec";
 
-        // รายชื่อผู้ใช้งานครูและแอดมินจริงของโรงเรียนอนุบาลยุวพัฒน์นครสวรรค์
+        // รายชื่อบุคลากรครูทั้ง 40 ท่าน สมบูรณ์แบบ
         const defaultUsers = [
-            { empId: "YW-001", name: "นางสาวอุษณีย์ กัลยาณวัตร", email: "nok@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-002", name: "นางสาวนิภาพร โพธิ์ปาน", email: "kung@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-003", name: "นางบงกช จันทนะเปลิน", email: "poo@yuwapat.ac.th", role: "Head_Admin", password: "yw123456" },
-            { empId: "YW-004", name: "นางสาวพลอยไพลิน พูลธัญกิจ", email: "may@yuwapat.ac.th", role: "Head_Student", password: "yw123456" },
-            { empId: "YW-005", name: "นางสาวณัฐนันท์ ไวกสิกรรม", email: "yee@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-006", name: "นางสาวพรอุษา วงษ์สมัคร", email: "apple@yuwapat.ac.th", role: "Head_QA", password: "yw123456" },
-            { empId: "YW-007", name: "นางสาวศุภมาศ อิ่มน้อย", email: "mas@yuwapat.ac.th", role: "Head_Academic", password: "yw123456" },
-            { empId: "YW-008", name: "นางสาวปวีณา แก้วแถม", email: "a@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-009", name: "นางสาวปรียาภัทร ธรรมนิทัศนา", email: "film@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-010", name: "นางสาววรรณิศา กล่อมเกลา", email: "may2@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-011", name: "นางสาววณิชยา จำปาศักดิ์", email: "jaaey@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-012", name: "นางสาวมาลิษา ศรีวิเชียร", email: "nan@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-014", name: "นางสาววิมลรัตน์ พวงจันทร์", email: "bew@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-015", name: "นางสาวอรพิศ บิลโภชน์", email: "tuck@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-016", name: "นายจุฑาธิปกรณ์ อ่อนสุริยา", email: "news@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-017", name: "นายตระกนต์ธีร์ ธูปบูชา", email: "kon@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-018", name: "นางสาวกรรณิการ์ สนิทผล", email: "pop@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-019", name: "นางสาวธนาภร ทองคำพูล", email: "zaid@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-020", name: "นางสาวพรพรรษา เสืออุดม", email: "junjao@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-021", name: "นายวรรฐิรักษ์ โพธิ์สุวรรณ์", email: "bas@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-022", name: "นางสาวดาราณี คล้ายคลึง", email: "pae@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-023", name: "นางสาวนภัสสร คำเหม็ง", email: "filmy@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-024", name: "นางสาวเกตุสุดา โฉมศรี", email: "lookbat@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-025", name: "นางสาวงามจิต ธชีโชติกุล", email: "krong@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-026", name: "นางสาวกัลพันธ์ พิลึก", email: "aom@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-027", name: "นางสาววราภรณ์ ทั่งศิริ", email: "yui@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-029", name: "นางสาวมิ่งขวัญ แย้มวัด", email: "ming@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-030", name: "นางสาวศิริรัตน์ คชสิทธิ์", email: "poo2@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-031", name: "นางสาวอลิณดา ศิริธนวัฒนกุล", email: "dream@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-033", name: "นางสาววิภาดา บุญรักษา", email: "jum@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-034", name: "นางสาวศศิวรรณ ปั้นบรรจง", email: "baitoey@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-036", name: "นางสาวสุธิดา วุฒิ", email: "milk@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-038", name: "นางสาวศิวพร แก้วพูลศรี", email: "benzsi@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-039", name: "นางสาวกัญยานี เลากสิกรรม", email: "gun@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-040", name: "นางสาวอัญชลี ยอดนิล", email: "bee@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-041", name: "นางสาวเดือนเพ็ญ พวงศรี", email: "ae@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-043", name: "นางสาวกชพร มิ่งโสภา", email: "muay@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-044", name: "นางสาวพิมลาภัสร์ ราตรี", email: "toei@yuwapat.ac.th", role: "Admin", password: "yw123456" },
-            { empId: "YW-045", name: "นางสาวพัณณิตา เกลี้ยงล่ำ", email: "pop2@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-047", name: "นางสาวอัญชลีพร เฮียะหลง", email: "fah@yuwapat.ac.th", role: "Staff", password: "yw123456" }
+            { empId: "YW-001", name: "อุษณีย์ กัลยาณวัตร", email: "nok@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-002", name: "นิภาพร โพธิ์ปาน", email: "kung@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-003", name: "บงกช จันทนะเปลิน", email: "poo@yuwapat.ac.th", role: "Head_Admin", password: "yw123456" },
+            { empId: "YW-004", name: "พลอยไพลิน พูลธัญกิจ", email: "may@yuwapat.ac.th", role: "Head_Student", password: "yw123456" },
+            { empId: "YW-005", name: "ณัฐนันท์ ไวกสิกรรม", email: "yee@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-006", name: "พรอุษา วงษ์สมัคร", email: "apple@yuwapat.ac.th", role: "Head_QA", password: "yw123456" },
+            { empId: "YW-007", name: "ศุภมาศ อิ่มน้อย", email: "mas@yuwapat.ac.th", role: "Head_Academic", password: "yw123456" },
+            { empId: "YW-008", name: "ปวีณา แก้วแถม", email: "a@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-009", name: "ปรียาภัทร ธรรมนิทัศนา", email: "film@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-010", name: "วรรณิศา กล่อมเกลา", email: "may2@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-011", name: "วณิชยา จำปาศักดิ์", email: "jaaey@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-012", name: "มาลิษา ศรีวิเชียร", email: "nan@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-014", name: "วิมลรัตน์ พวงจันทร์", email: "bew@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-015", name: "อรพิศ บิลโภชน์", email: "tuck@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-016", name: "จุฑาธิปกรณ์ อ่อนสุริยา", email: "news@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-017", name: "ตระกนต์ธีร์ ธูปบูชา", email: "kon@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-018", name: "กรรณิการ์ สนิทผล", email: "pop@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-019", name: "ธนาภร ทองคำพูล", email: "zaid@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-020", name: "พรพรรษา เสืออุดม", email: "junjao@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-021", name: "วรรฐิรักษ์ โพธิ์สุวรรณ์", email: "bas@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-022", name: "ดาราณี คล้ายคลึง", email: "pae@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-023", name: "นภัสสร คำเหม็ง", email: "filmy@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-024", name: "เกตุสุดา โฉมศรี", email: "lookbat@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-025", name: "งามจิต ธชีโชติกุล", email: "krong@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-026", name: "กัลพันธ์ พิลึก", email: "aom@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-027", name: "วราภรณ์ ทั่งศิริ", email: "yui@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-029", name: "มิ่งขวัญ แย้มวัด", email: "ming@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-030", name: "ศิริรัตน์ คชสิทธิ์", email: "poo2@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-031", name: "อลิณดา ศิริธนวัฒนกุล", email: "dream@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-033", name: "วิภาดา บุญรักษา", email: "jum@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-034", name: "ศศิวรรณ ปั้นบรรจง", email: "baitoey@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-036", name: "สุธิดา วุฒิ", email: "milk@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-038", name: "ศิวพร แก้วพูลศรี", email: "benzsi@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-039", name: "กัญยานี เลากสิกรรม", email: "gun@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-040", name: "อัญชลี ยอดนิล", email: "bee@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-041", name: "เดือนเพ็ญ พวงศรี", email: "ae@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-043", name: "กชพร มิ่งโสภา", email: "muay@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-044", name: "พิมลาภัสร์ ราตรี", email: "toei@yuwapat.ac.th", role: "Admin", password: "yw123456" },
+            { empId: "YW-045", name: "พัณณิตา เกลี้ยงล่ำ", email: "pop2@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "YW-047", name: "อัญชลีพร เฮียะหลง", email: "fah@yuwapat.ac.th", role: "Staff", password: "yw123456" }
         ];
 
-        // รายการโครงการเริ่มต้นประจำโรงเรียน
         const defaultActivities = [
             { id: "ACT-001", name: "โครงการสัมมนาเชิงปฏิบัติการ: การประยุกต์ใช้ AI ในการพัฒนาบทเรียน", owner: "toei@yuwapat.ac.th", poster: "", objectives: "1. เพื่อให้ครูมีความรู้พื้นฐานใน AI\n2. เพื่อยกระดับและพัฒนาแผนจัดการเรียนรู้ให้ตอบสนองผู้เรียน", topics: ["ด้านความเหมาะสมของหลักสูตรสถาบัน", "ด้านการนำทักษะสารสนเทศไปใช้ปฏิบัติงานจริง"], history: { "2566": 82.00, "2567": 87.00, "2568": 92.00 } },
             { id: "ACT-003", name: "กิจกรรมสานสัมพันธ์และโฮมรูมร่วมใจ: พบกันฉันน้องพี่", owner: "may@yuwapat.ac.th", poster: "", objectives: "1. เสริมสร้างมิตรภาพศิษย์รุ่นพี่รุ่นน้องภายในสถาบัน\n2. ดูแลช่วยเหลือและสร้างความผูกพันผ่านกิจกรรม", topics: ["ด้านความผูกพันและบรรยากาศอบอุ่นของกิจกรรม", "ด้านการจัดสรรงบประมาณ อาหารว่าง และอาคารสถานที่"], rounds: ["ครั้งที่ 1 (แรกพบสบตา - วันศุกร์ที่ 12 มิ.ย. 2569)", "ครั้งที่ 2 (กีฬาพาสนุก - วันศุกร์ที่ 19 มิ.ย. 2569)", "ครั้งที่ 3 (ปัจฉิมอำลา - วันศุกร์ที่ 26 มิ.ย. 2569)"], history: { "2566": 90.00, "2567": 91.50, "2568": 95.00 } }
         ];
 
-        // ข้อมูลผลการตอบประเมินเริ่มต้น
         const defaultEvaluations = [
-            { activityId: "ACT-001", email: "nok@yuwapat.ac.th", name: "นางสาวอุษณีย์ กัลยาณวัตร", role: "คุณครู/บุคลากร", round: "รอบปกติ", ratings: { "ด้านความเหมาะสมของหลักสูตรสถาบัน": 5, "ด้านการนำทักษะสารสนเทศไปใช้ปฏิบัติงานจริง": 4 }, suggestion: "เนื้อหาเข้าใจง่าย นำไปเขียนแผนการสอนและทำ SAR ประกอบงานส่งฝ่ายวิชาการได้เร็วขึ้นจริงครับ" }
+            { activityId: "ACT-001", email: "nok@yuwapat.ac.th", name: "อุษณีย์ กัลยาณวัตร", role: "คุณครู/บุคลากร", round: "รอบปกติ", ratings: { "ด้านความเหมาะสมของหลักสูตรสถาบัน": 5, "ด้านการนำทักษะสารสนเทศไปใช้ปฏิบัติงานจริง": 4 }, suggestion: "เนื้อหาเข้าใจง่าย นำไปเขียนแผนการสอนและทำ SAR ประกอบงานส่งฝ่ายวิชาการได้เร็วขึ้นจริงครับ" }
         ];
 
-        // ตัวแปรส่วนกลางสำหรับจัดการสถานะ
         let uploadedPosterBase64 = "";
         let currentUser = null;
         let currentConfirmAction = null;
 
-        // --------------------------------------------------------------------------------
-        // 4.2 ฟังก์ชันระบบการแจ้งเตือน (Toast Notification) และ หน้าต่างยืนยัน (Custom Confirm)
-        // --------------------------------------------------------------------------------
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
             if(!container) return;
@@ -639,7 +590,6 @@
             setTimeout(() => { toast.classList.add('translate-y-2', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3500);
         }
 
-        // หน้าต่างยืนยันแบบกำหนดเอง (Custom Confirm Modal)
         function customConfirm(title, message, iconType, onConfirm, isDanger = false, okText = "ตกลง") {
             const modal = document.getElementById('confirm-modal');
             if(!modal) return;
@@ -675,34 +625,36 @@
             modal.classList.remove('hidden'); modal.classList.add('flex'); currentConfirmAction = onConfirm;
         }
 
-        // กรณีตราสัญลักษณ์โรงเรียนโหลดไม่สำเร็จ ให้สร้าง SVG สำรองอัตโนมัติ
-        function handleLogoError(img) {
-            img.onerror = null;
-            img.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%23064e3b'/><text x='50' y='55' font-family='Sarabun' font-weight='bold' font-size='30' fill='%23facc15' text-anchor='middle'>YW</text></svg>";
+        function getUsers() { 
+            let users = JSON.parse(localStorage.getItem('eval_users'));
+            if (!users) {
+                users = defaultUsers;
+                localStorage.setItem('eval_users', JSON.stringify(users));
+            } else {
+                let updated = false;
+                defaultUsers.forEach(defUser => {
+                    const exists = users.some(u => u.email.toLowerCase() === defUser.email.toLowerCase());
+                    if (!exists) {
+                        users.push(defUser);
+                        updated = true;
+                    }
+                });
+                if (updated) {
+                    localStorage.setItem('eval_users', JSON.stringify(users));
+                }
+            }
+            return users;
         }
-
-        // --------------------------------------------------------------------------------
-        // 4.3 ฟังก์ชันช่วยดึงและจัดเก็บข้อมูลลงใน LocalStorage (Browser Memory)
-        // --------------------------------------------------------------------------------
-        function getUsers() { return JSON.parse(localStorage.getItem('eval_users')) || defaultUsers; }
         function getActivities() { return JSON.parse(localStorage.getItem('eval_activities')) || defaultActivities; }
         function getEvaluations() { return JSON.parse(localStorage.getItem('eval_submissions')) || defaultEvaluations; }
 
-        function getGoogleSheetUrl() { 
-            return localStorage.getItem('google_sheet_url') || DEFAULT_GOOGLE_SHEET_URL; 
-        }
-        
+        function getGoogleSheetUrl() { return localStorage.getItem('google_sheet_url') || DEFAULT_GOOGLE_SHEET_URL; }
         function saveGoogleSheetsConnection() {
             const url = document.getElementById('googleSheetUrl').value.trim();
             localStorage.setItem('google_sheet_url', url);
             showToast('บันทึกการเชื่อมโยง Google Sheets เรียบร้อย', 'success');
         }
 
-        // --------------------------------------------------------------------------------
-        // 4.4 ฟังก์ชันเชื่อมต่อและซิงค์ข้อมูลกับ Google Sheets API
-        // --------------------------------------------------------------------------------
-
-        // ดึงรายชื่อคุณครูล่าสุดจากแผ่นงาน "ครูและบุคลากร" บน Google Sheets
         function syncTeachersFromGoogleSheets() {
             const url = getGoogleSheetUrl();
             if (!url) {
@@ -727,16 +679,15 @@
                 });
         }
 
-        // ส่งข้อมูลครู 1 คนขึ้นไปบันทึกเขียนทับบรรทัดเดิมบน Google Sheets
-        function pushUserToGoogleSheet(userData, originalEmail = "") {
+        function pushUserToGoogleSheet(userData, originalEmail = null) {
             const url = getGoogleSheetUrl();
             if (!url) return;
             const payload = {
                 action: "save_user",
-                originalEmail: originalEmail || userData.email, // ใช้อีเมลเดิมในการค้นหาแถวแม้จะมีการเปลี่ยนอีเมลใหม่
                 empId: userData.empId,
                 name: userData.name,
                 email: userData.email,
+                originalEmail: originalEmail || userData.email,
                 role: userData.role,
                 password: userData.password
             };
@@ -756,22 +707,6 @@
             });
         }
 
-        // ส่งรายชื่อครูกลุ่มใหญ่ทั้งหมดขึ้นไปเขียนทับลง Google Sheets
-        function pushAllUsersToGoogleSheet(usersList) {
-            const url = getGoogleSheetUrl();
-            if (!url) return;
-            const payload = { action: "bulk_import", users: usersList };
-            fetch(url, { method: "POST", body: JSON.stringify(payload) })
-            .then(res => res.json())
-            .then(resData => {
-                if (resData.status === "success") {
-                    showToast('เขียนทับประวัติครูทุกคนลงชีทเรียบร้อย', 'success');
-                }
-            })
-            .catch(err => console.error(err));
-        }
-
-        // ส่งผลคะแนนประเมินดิบรายข้อขึ้นไปบันทึกลงแผ่นงาน "ผลการประเมิน" บน Google Sheets
         function pushEvaluationToGoogleSheet(evList) {
             const url = getGoogleSheetUrl();
             if (!url) return;
@@ -795,9 +730,6 @@
             });
         }
 
-        // --------------------------------------------------------------------------------
-        // 4.5 ฟังก์ชันจัดการเซสชัน การเข้าสู่ระบบ (Login) และ ออกจากระบบ (Logout)
-        // --------------------------------------------------------------------------------
         function checkSession() {
             const savedUser = localStorage.getItem('current_logged_user');
             if (savedUser) {
@@ -828,7 +760,7 @@
         }
 
         function autofillLogin(email) {
-            const found = getUsers().find(u => u.email === email);
+            const found = getUsers().find(u => u.email.toLowerCase() === email.toLowerCase());
             if (found) {
                 document.getElementById('login-email').value = found.email;
                 document.getElementById('login-password').value = found.password;
@@ -843,9 +775,6 @@
             });
         }
 
-        // --------------------------------------------------------------------------------
-        // 4.6 ฟังก์ชันสลับแท็บการทำงานหลัก
-        // --------------------------------------------------------------------------------
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(tabId).classList.remove('hidden');
@@ -857,11 +786,6 @@
             if (tabId === 'admin-tab') loadAdminPanel();
         }
 
-        // --------------------------------------------------------------------------------
-        // 4.7 ฟังก์ชันแสดงผลและตอบแบบสอบถามประเมินความพึงพอใจโครงการ
-        // --------------------------------------------------------------------------------
-
-        // แสดงการ์ดโครงการที่ผู้ใช้ยังทำแบบประเมินไม่ครบ
         function loadEvaluationForms() {
             if (!currentUser) return;
             const activities = getActivities(); const evaluations = getEvaluations();
@@ -908,7 +832,6 @@
             });
         }
 
-        // เปิด Modal แบบสอบถาม Google Forms สเกล 1-5 (Linear Scale)
         function openEvaluationModal(actId) {
             const act = getActivities().find(a => a.id === actId); if (!act) return;
             document.getElementById('eval-modal-act-id').value = act.id;
@@ -963,7 +886,6 @@
 
         function closeEvaluationModal() { document.getElementById('evaluation-modal').classList.add('hidden'); document.getElementById('evaluation-modal').classList.remove('flex'); }
 
-        // บันทึกคำตอบแบบประเมิน พร้อมส่งซิงค์ลง Google Sheets
         function submitEvaluationData(e) {
             e.preventDefault(); const actId = document.getElementById('eval-modal-act-id').value;
             const act = getActivities().find(a => a.id === actId); if (!act) return;
@@ -992,15 +914,11 @@
             evals.push({ activityId: actId, email: currentUser.email, name: currentUser.name, role, round, ratings, suggestion });
             localStorage.setItem('eval_submissions', JSON.stringify(evals));
             
-            // ซิงค์ผลการประเมินยิงเข้า Google Sheet แผ่นงาน "ผลการประเมิน"
             pushEvaluationToGoogleSheet(evListForSheet);
 
             closeEvaluationModal(); showToast('ส่งผลการประเมินโครงการสำเร็จ', 'success'); loadEvaluationForms();
         }
 
-        // --------------------------------------------------------------------------------
-        // 4.8 ฟังก์ชันคำนวณสถิติมูลฐาน และสร้างรายงานผลสรุปประกันคุณภาพ
-        // --------------------------------------------------------------------------------
         function loadReportList() {
             const container = document.getElementById('reportList'); container.innerHTML = '';
             
@@ -1060,7 +978,6 @@
                         <div class="bg-slate-50 px-4 py-2 border rounded-xl text-center"><span class="block text-[10px] text-slate-400 font-bold uppercase">พึงพอใจร้อยละ</span><span class="text-base font-bold text-emerald-800">${rate}%</span></div>
                     </div>
                     
-                    <!-- ส่วนแสดงข้อเสนอแนะนิรนาม -->
                     <div class="mb-4 mt-4">
                         <h4 class="text-xs font-bold text-slate-455 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                             <svg class="w-4 h-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1073,7 +990,6 @@
                         </div>
                     </div>
 
-                    <!-- ตารางผลคะแนนรายคน (แสดงเฉพาะผู้มีสิทธิ์เข้าถึง) -->
                     ${isAuthorized ? `
                     <div class="bg-amber-50/20 border border-amber-200 rounded-xl p-5 mt-6 text-sm">
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4 border-b border-amber-100 pb-3">
@@ -1112,9 +1028,6 @@
             });
         }
 
-        // --------------------------------------------------------------------------------
-        // 4.9 ฟังก์ชันส่งออกรายงานสถิติเป็นไฟล์เอกสารสเปรดชีต (CSV Export)
-        // --------------------------------------------------------------------------------
         function exportAllEvaluationsToCSV() {
             const activities = getActivities();
             const evaluations = getEvaluations();
@@ -1122,7 +1035,7 @@
                 showToast('ยังไม่มีข้อมูลการประเมินผลโครงการในระบบสำหรับดาวน์โหลด', 'error');
                 return;
             }
-            let csvContent = "\uFEFF"; // ใส่อักขระ UTF-8 BOM เพื่อให้โปรแกรม Excel อ่านภาษาไทยได้อย่างถูกต้อง
+            let csvContent = "\uFEFF";
             csvContent += "รหัสโครงการ,ชื่อโครงการ,รหัสพนักงาน,ผู้ประเมิน,ตำแหน่ง,ครั้งที่จัด,หัวข้อประเมิน,คะแนนโหวต,ข้อเสนอแนะเพิ่มเติม\n";
 
             evaluations.forEach(e => {
@@ -1152,9 +1065,6 @@
             showToast('ส่งออกผลรวมแบบประเมินเรียบร้อยแล้ว', 'success');
         }
 
-        // --------------------------------------------------------------------------------
-        // 4.10 ฟังก์ชันเรนเดอร์กราฟสถิตย้อนหลัง 3 ปี
-        // --------------------------------------------------------------------------------
         function loadHistoryReports() {
             const container = document.getElementById('historyList'); container.innerHTML = '';
             getActivities().forEach(act => {
@@ -1228,9 +1138,6 @@
             });
         }
 
-        // --------------------------------------------------------------------------------
-        // 4.11 ฟังก์ชันโหลดแผงควบคุมหลังบ้าน และคุมสิทธิ์เข้าถึงระบบบุคคล (Role-Based Access)
-        // --------------------------------------------------------------------------------
         function loadAdminPanel() {
             if (!currentUser) return;
             const isAdmin = currentUser.role === 'Admin';
@@ -1240,7 +1147,6 @@
             const resetSec = document.getElementById('admin-reset-section');
             const sheetConfigSec = document.getElementById('admin-sheet-config');
 
-            // บังคับกติกาความปลอดภัยอย่างสูงสุด: ซ่อนระบบจัดการประวัติครูทันทีหากไม่ใช่สิทธิ์ Admin
             if (!isAdmin) {
                 if (userAddSec) userAddSec.classList.add('hidden');
                 if (userListSec) userListSec.classList.add('hidden');
@@ -1292,7 +1198,6 @@
             }
 
             const tbodyAct = document.getElementById('adminActivitiesTable'); tbodyAct.innerHTML = '';
-            // ครูแต่ละท่านเห็นและสแกนแก้ไขได้เฉพาะแบบประเมินที่ตนพิมพ์สร้างขึ้นมา แอดมินเห็นทั้งหมด
             const displayActivities = isAdmin ? activities : activities.filter(a => a.owner && a.owner.toLowerCase() === currentUser.email.toLowerCase());
             displayActivities.forEach(act => {
                 const tr = document.createElement('tr'); tr.className = "hover:bg-slate-50 text-sm";
@@ -1310,9 +1215,6 @@
             if(!isAdmin) { ownerSelect.value = currentUser.email; ownerSelect.disabled = true; } else { ownerSelect.disabled = false; }
         }
 
-        // --------------------------------------------------------------------------------
-        // 4.12 ฟังก์ชันจัดการข้อมูล การสร้างโครงการ และการแก้ไขผู้ใช้งาน
-        // --------------------------------------------------------------------------------
         function createNewActivity(e) {
             e.preventDefault(); const name = document.getElementById('newActName').value.trim();
             const objectives = document.getElementById('newActObjectives').value.trim();
@@ -1331,77 +1233,12 @@
             showToast('สร้างแบบประเมินโครงการสำเร็จ', 'success'); loadAdminPanel();
         }
 
-        function createNewUser(e) {
-            e.preventDefault(); 
-            if (currentUser.role !== 'Admin') {
-                showToast('สิทธิ์ถูกปฏิเสธ: เฉพาะแอดมินเท่านั้นที่ลงทะเบียนเพิ่มครูได้', 'error');
-                return;
-            }
-            const empId = document.getElementById('newUserEmpId').value.trim();
-            const name = document.getElementById('newUserName').value.trim(); const email = document.getElementById('newUserEmail').value.trim().toLowerCase();
-            const role = document.getElementById('newUserRole').value; const password = document.getElementById('newUserPassword').value.trim();
-            if(!email.endsWith('@yuwapat.ac.th') || password.length < 6) { showToast('ข้อมูลอีเมลโดเมนหรือรหัสผ่านไม่ถูกต้อง', 'error'); return; }
-            
-            const users = getUsers();
-            const newUserObj = { empId, name, email, role, password };
-            users.push(newUserObj);
-            localStorage.setItem('eval_users', JSON.stringify(users)); 
-            
-            pushUserToGoogleSheet(newUserObj);
-
-            document.getElementById('addUserForm').reset();
-            showToast('เพิ่มรายชื่อบุคลากรและซิงค์ข้อมูล Google Sheet สำเร็จ', 'success'); loadAdminPanel();
-        }
-
-        function confirmDeleteActivity(actId) { customConfirm("ถอนทะเบียนโครงการ", "ยืนยันการลบแบบสอบถามและสถิติมูลฐานทั้งหมดของโครงการนี้ถาวร?", "trash", () => { let acts = getActivities().filter(a => a.id !== actId); localStorage.setItem('eval_activities', JSON.stringify(acts)); showToast('ลบโครงการเรียบร้อย', 'success'); loadAdminPanel(); }, true); }
-        
-        function confirmResetSystem() { 
-            if (currentUser.role !== 'Admin') {
-                showToast('สิทธิ์ถูกปฏิเสธ: คุณไม่มีสิทธิ์ล้างข้อมูลส่วนกลาง', 'error');
-                return;
-            }
-            customConfirm("รีเซ็ตระบบกลาง", "ยืนยันการล้างข้อมูลบันทึกทั้งหมดเพื่อกู้คืนฐานสารสนเทศดั้งเดิม?", "danger", () => { localStorage.clear(); showToast('กู้คืนฐานข้อมูลเริ่มต้นสำเร็จ', 'success'); checkSession(); }, true); 
-        }
-        
-        function toggleImportArea() { document.getElementById('import-sheets-area').classList.toggle('hidden'); }
-
-        function importTeachersFromPaste() {
-            if (currentUser.role !== 'Admin') {
-                showToast('สิทธิ์ถูกปฏิเสธ', 'error');
-                return;
-            }
-            const text = document.getElementById('importTeachersText').value.trim(); if (!text) return;
-            const lines = text.split('\n'); const users = getUsers(); let count = 0;
-            const importedList = [];
-
-            lines.forEach(line => {
-                const cols = line.split('\t');
-                if (cols.length >= 3) {
-                    const email = cols[2].trim().toLowerCase();
-                    if(email.endsWith('@yuwapat.ac.th') && !users.some(u => u.email === email)) {
-                        const tempUser = { empId: cols[0].trim(), name: cols[1].trim(), email, role: cols[3]?.trim() || 'Staff', password: cols[4]?.trim() || 'yw123456' };
-                        users.push(tempUser);
-                        importedList.push(tempUser);
-                        count++;
-                    }
-                }
-            });
-            localStorage.setItem('eval_users', JSON.stringify(users)); 
-            
-            if (importedList.length > 0) {
-                pushAllUsersToGoogleSheet(users);
-            }
-
-            showToast(`นำเข้าครูจาก Google Sheets สำเร็จ ${count} ท่าน`, 'success');
-            document.getElementById('importTeachersText').value = ''; toggleImportArea(); loadAdminPanel();
-        }
-
         function openUserModal(email) {
             if (currentUser.role !== 'Admin') {
                 showToast('สิทธิ์การจัดการถูกจำกัดสำหรับแอดมินเท่านั้น', 'error');
                 return;
             }
-            const u = getUsers().find(user => user.email === email); if(!u) return;
+            const u = getUsers().find(user => user.email.toLowerCase() === email.toLowerCase()); if(!u) return;
             document.getElementById('edit-user-original-email').value = u.email;
             document.getElementById('edit-user-empId').value = u.empId; document.getElementById('edit-user-name').value = u.name;
             document.getElementById('edit-user-email').value = u.email; document.getElementById('edit-user-role').value = u.role;
@@ -1415,11 +1252,17 @@
                 showToast('สิทธิ์การจัดการถูกจำกัด', 'error');
                 return;
             }
-            const orig = document.getElementById('edit-user-original-email').value;
+            const origEmail = document.getElementById('edit-user-original-email').value;
             let updatedUser = null;
             let users = getUsers().map(u => {
-                if(u.email === orig) {
-                    updatedUser = { empId: document.getElementById('edit-user-empId').value.trim(), name: document.getElementById('edit-user-name').value.trim(), email: document.getElementById('edit-user-email').value.trim().toLowerCase(), role: document.getElementById('edit-user-role').value, password: document.getElementById('edit-user-password').value.trim() };
+                if(u.email.toLowerCase() === origEmail.toLowerCase()) {
+                    updatedUser = { 
+                        empId: document.getElementById('edit-user-empId').value.trim(), 
+                        name: document.getElementById('edit-user-name').value.trim(), 
+                        email: document.getElementById('edit-user-email').value.trim().toLowerCase(), 
+                        role: document.getElementById('edit-user-role').value, 
+                        password: document.getElementById('edit-user-password').value.trim() 
+                    };
                     return updatedUser;
                 }
                 return u;
@@ -1427,11 +1270,22 @@
             localStorage.setItem('eval_users', JSON.stringify(users)); 
             
             if (updatedUser) {
-                pushUserToGoogleSheet(updatedUser, orig);
+                pushUserToGoogleSheet(updatedUser, origEmail);
             }
 
             showToast('ปรับปรุงข้อมูลส่วนบุคคลและเขียนทับลงสเปรดชีตเรียบร้อย', 'success'); closeUserModal(); loadAdminPanel();
         }
+
+        function confirmDeleteActivity(actId) { customConfirm("ถอนทะเบียนโครงการ", "ยืนยันการลบแบบสอบถามและสถิติมูลฐานทั้งหมดของโครงการนี้ถาวร?", "trash", () => { let acts = getActivities().filter(a => a.id !== actId); localStorage.setItem('eval_activities', JSON.stringify(acts)); showToast('ลบโครงการเรียบร้อย', 'success'); loadAdminPanel(); }, true); }
+        function confirmResetSystem() { 
+            if (currentUser.role !== 'Admin') {
+                showToast('สิทธิ์ถูกปฏิเสธ: คุณไม่มีสิทธิ์ล้างข้อมูลส่วนกลาง', 'error');
+                return;
+            }
+            customConfirm("รีเซ็ตระบบกลาง", "ยืนยันการล้างข้อมูลบันทึกทั้งหมดเพื่อกู้คืนฐานสารสนเทศดั้งเดิม?", "danger", () => { localStorage.clear(); showToast('กู้คืนฐานข้อมูลเริ่มต้นสำเร็จ', 'success'); checkSession(); }, true); 
+        }
+        
+        function toggleImportArea() { document.getElementById('import-sheets-area').classList.toggle('hidden'); }
 
         function addRoundRow(name = "", detail = "") {
             const container = document.getElementById('rounds-builder-container'); if(!container) return;
@@ -1500,11 +1354,7 @@
             showToast(`ทำรายการส่งออกข้อมูลของโครงการ ${act.id} เรียบร้อยแล้ว`, 'success');
         }
 
-        // --------------------------------------------------------------------------------
-        // 4.13 เริ่มต้นทำงานเมื่อหน้าจอโหลดสำเร็จ (DOM Loaded Initializer)
-        // --------------------------------------------------------------------------------
         document.addEventListener('DOMContentLoaded', function() {
-            // ระบบแปลงรูปภาพโปสเตอร์ที่อัปโหลดเป็นรหัส Base64
             const fInput = document.getElementById('newActPosterFile');
             if (fInput) {
                 fInput.addEventListener('change', function(e) {
@@ -1516,15 +1366,9 @@
                     }
                 });
             }
-            
-            // เพิ่มแถวรอบการจัดกิจกรรมเริ่มต้น
             addRoundRow("ครั้งที่ 1", "ระบุรายละเอียดรอบจัดกิจกรรม");
-            
-            // ผูกเหตุการณ์ปุ่มกดยืนยัน/ยกเลิกใน Custom Modal
             document.getElementById('confirm-cancel-btn').addEventListener('click', () => document.getElementById('confirm-modal').classList.add('hidden'));
             document.getElementById('confirm-ok-btn').addEventListener('click', () => { document.getElementById('confirm-modal').classList.add('hidden'); if(currentConfirmAction) currentConfirmAction(); });
-            
-            // ตรวจสอบเซสชันผู้เข้าใช้ปัจจุบัน
             checkSession();
         });
     </script>
