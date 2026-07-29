@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ระบบประเมินความพึงพอใจ - โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</title>
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts (Sarabun) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
         * {
             -webkit-font-smoothing: antialiased;
@@ -18,518 +19,386 @@
         }
         body {
             font-family: 'Sarabun', 'Prompt', 'Kanit', 'Thonburi', 'Tahoma', sans-serif;
-            background-color: #fafafa;
+            background-color: #f8fafc;
             font-size: 16px;
             line-height: 1.6;
         }
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .limit-2-lines {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;  
-            overflow: hidden;
-        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .limit-2-lines { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        /* Custom Sidebar Scrollbar */
+        .sidebar-scroll::-webkit-scrollbar { width: 4px; }
+        .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body class="min-h-screen text-slate-800 flex flex-col justify-between selection:bg-emerald-100 selection:text-emerald-950">
+<body class="text-slate-800 selection:bg-emerald-100 selection:text-emerald-950 overflow-hidden">
 
-    <!-- Container สำหรับแสดงข้อความแจ้งเตือนระบบ (Toast Notifications) -->
-    <div id="toast-container" class="fixed top-5 right-5 z-[110] flex flex-col gap-2 max-w-sm w-full px-4 md:px-0"></div>
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="fixed top-5 right-5 z-[150] flex flex-col gap-2 max-w-sm w-full px-4 md:px-0 pointer-events-none"></div>
 
-    <!-- ==================== 1. หน้าจอเข้าสู่ระบบทางการ (OFFICIAL LOGIN SCREEN) ==================== -->
-    <div id="login-screen" class="flex-grow flex items-center justify-center p-6 bg-slate-50">
-        <div class="bg-white rounded-3xl p-8 max-w-lg w-full shadow-2xl border border-slate-200/60 relative overflow-hidden">
-            <!-- แถบสีประดับสถาบัน -->
+    <!-- 1. หน้าจอเข้าสู่ระบบ (Login Screen) -->
+    <div id="login-screen" class="fixed inset-0 flex items-center justify-center p-6 bg-slate-50 z-[100]">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-200/60 relative overflow-hidden">
             <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-800 via-emerald-700 to-yellow-400"></div>
             
             <div class="text-center mb-8 mt-4">
-                <div class="w-24 h-24 rounded-2xl overflow-hidden bg-slate-50 flex items-center justify-center shadow mx-auto mb-5 border border-slate-100">
-                    <img src="https://lh3.googleusercontent.com/d/1c3cjNBo_XSXdYjn6RAWkodMqChNPrk49" 
-                         alt="ตราสัญลักษณ์โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์" 
-                         class="w-full h-full object-contain"
-                         onerror="handleLogoError(this)">
+                <div class="w-20 h-20 rounded-2xl overflow-hidden bg-slate-50 flex items-center justify-center shadow mx-auto mb-5 border border-slate-100">
+                    <img src="https://lh3.googleusercontent.com/d/1c3cjNBo_XSXdYjn6RAWkodMqChNPrk49" alt="ตราสัญลักษณ์โรงเรียน" class="w-14 h-14 object-contain">
                 </div>
-                <span class="bg-emerald-50 text-emerald-800 border border-emerald-100 text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">ระบบประกันคุณภาพการศึกษาภายใน</span>
-                <h2 class="text-xl font-bold text-slate-800 mt-4 tracking-tight">ระบบประเมินความพึงพอใจการดำเนินงานโครงการ</h2>
-                <p class="text-slate-500 text-sm mt-1.5 font-semibold">โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</p>
+                <span class="bg-emerald-50 text-emerald-800 border border-emerald-100 text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">ระบบประกันคุณภาพ ยุวพัฒน์</span>
+                <h2 class="text-xl font-bold text-slate-800 mt-4 tracking-tight">ระบบประเมินความพึงพอใจโครงการ</h2>
+                <p class="text-xs text-slate-400 mt-1">โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</p>
             </div>
 
-            <!-- ฟอร์มเข้าสู่ระบบ -->
             <form onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-bold uppercase text-slate-500 tracking-wider mb-2">ที่อยู่อีเมลบุคลากร</label>
-                    <div class="relative rounded-xl shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.206" />
-                            </svg>
-                        </div>
-                        <input type="email" id="login-email" required placeholder="ระบุอีเมลสถาบัน (@yuwapat.ac.th)" class="w-full border border-slate-200 rounded-xl pl-10 pr-4 py-3.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800">
-                    </div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">ที่อยู่อีเมลสถาบัน</label>
+                    <input type="email" id="login-email" required placeholder="name@yuwapat.ac.th" class="w-full border border-slate-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800 bg-slate-50/50">
                 </div>
                 <div>
-                    <label class="block text-sm font-bold uppercase text-slate-500 tracking-wider mb-2">รหัสผ่าน</label>
-                    <div class="relative rounded-xl shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2zm10-10V7a4 4 0 0 0-8 0v4h8z" />
-                            </svg>
-                        </div>
-                        <input type="password" id="login-password" required placeholder="ระบุรหัสผ่านเข้าใช้งาน" class="w-full border border-slate-200 rounded-xl pl-10 pr-4 py-3.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800">
-                    </div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">รหัสผ่าน</label>
+                    <input type="password" id="login-password" required placeholder="ระบุรหัสผ่าน" class="w-full border border-slate-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800 bg-slate-50/50">
                 </div>
                 <button type="submit" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-3.5 rounded-xl text-sm transition-all shadow-md active:scale-95 mt-4 cursor-pointer">
-                  เข้าสู่ระบบสารสนเทศ
+                    เข้าสู่ระบบสารสนเทศ
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- ==================== 2. หน้าแดชบอร์ดหลักหลังเข้าสู่ระบบ ==================== -->
-    <div id="main-dashboard" class="hidden flex-col justify-between min-h-screen">
-        <header class="bg-white border-b border-slate-100 shadow-sm">
-            <div class="h-1.5 bg-gradient-to-r from-emerald-800 via-emerald-700 to-yellow-400"></div>
-            <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-                <div class="flex items-center gap-4">
-                    <div class="w-16 h-16 rounded-2xl overflow-hidden bg-slate-50 flex items-center justify-center border border-slate-150 shadow-sm flex-shrink-0">
-                        <img src="https://lh3.googleusercontent.com/d/1c3cjNBo_XSXdYjn6RAWkodMqChNPrk49" alt="ตราสัญลักษณ์โรงเรียน" class="w-14 h-14 object-contain" onerror="handleLogoError(this)">
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-2 flex-wrap">
-                            <span class="bg-emerald-50 text-emerald-800 border border-emerald-100 text-xs font-bold px-2.5 py-0.5 rounded uppercase tracking-wider">ระบบประกันคุณภาพการศึกษาภายใน</span>
-                            <span class="text-slate-400 text-sm font-semibold">| โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</span>
-                        </div>
-                        <h1 class="text-lg md:text-xl font-bold tracking-tight text-slate-800 mt-0.5">ระบบประเมินสถิติและสรุปผลความพึงพอใจการดำเนินงานโครงการ</h1>
-                    </div>
-                </div>
-                <div class="flex flex-row items-center gap-3.5 bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-200/80 w-full lg:w-auto justify-between lg:justify-start">
-                    <div class="flex flex-col text-left">
-                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">บัญชีผู้ใช้งานระบบ</span>
-                        <span id="userProfileDisplay" class="text-sm text-slate-800 font-bold">กำลังโหลดข้อมูล...</span>
-                    </div>
-                    <div class="w-px h-6 bg-slate-200 hidden lg:block"></div>
-                    <button onclick="handleLogout()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold px-3.5 py-2.5 rounded-lg transition-all border border-rose-100 active:scale-95 cursor-pointer">ออกจากระบบ</button>
-                </div>
-            </div>
-        </header>
+    <!-- 2. แดชบอร์ดหลัก (Main Sidebar Dashboard) -->
+    <div id="main-dashboard" class="hidden h-screen flex overflow-hidden bg-slate-50">
+        
+        <!-- Mobile Sidebar Overlay -->
+        <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-slate-900/50 z-40 hidden md:hidden backdrop-blur-sm transition-opacity" onclick="toggleSidebar()"></div>
 
-        <main class="max-w-6xl mx-auto px-6 py-6 flex-grow w-full">
-            <!-- เมนูหลัก 4 ส่วนงานทางการ -->
-            <div class="flex border-b border-slate-200 mb-6 overflow-x-auto no-scrollbar gap-1">
-                <button onclick="switchTab('evaluate-tab')" id="btn-evaluate-tab" class="py-3 px-4 font-bold border-b-2 border-emerald-800 text-emerald-800 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                    <span>ทำแบบประเมินโครงการ</span>
-                    <span id="pendingBadge" class="px-2.5 py-0.5 text-xs bg-yellow-400 text-slate-900 font-bold rounded-full">0</span>
+        <!-- Sidebar (แถบเมนูด้านซ้าย) -->
+        <aside id="sidebar" class="fixed md:static inset-y-0 left-0 z-50 w-72 bg-white border-r border-slate-200 flex flex-col transition-transform transform -translate-x-full md:translate-x-0 duration-300 shadow-2xl md:shadow-none">
+            <div class="h-1.5 bg-gradient-to-r from-emerald-800 via-emerald-700 to-yellow-400 flex-shrink-0"></div>
+            
+            <!-- Logo Area -->
+            <div class="p-6 border-b border-slate-100 flex items-center gap-4 flex-shrink-0">
+                <div class="w-12 h-12 rounded-xl bg-slate-50 border flex items-center justify-center flex-shrink-0">
+                    <img src="https://lh3.googleusercontent.com/d/1c3cjNBo_XSXdYjn6RAWkodMqChNPrk49" class="w-8 h-8 object-contain" alt="โลโก้">
+                </div>
+                <div>
+                    <h1 class="text-sm font-bold text-slate-800 leading-tight">ระบบประเมินความพึงพอใจ</h1>
+                    <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5">ยุวพัฒน์นครสวรรค์</p>
+                </div>
+                <button onclick="toggleSidebar()" class="md:hidden ml-auto text-slate-400 hover:text-slate-700">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
-                <button onclick="switchTab('report-tab')" id="btn-report-tab" class="py-3 px-4 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2"></path></svg>
-                    <span>สรุปรายงานผลการประเมิน</span>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="flex-1 overflow-y-auto sidebar-scroll py-4 px-3 space-y-1.5">
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2 mt-2">เมนูการประเมินผล</div>
+                
+                <button onclick="switchTab('evaluate-tab')" id="btn-evaluate-tab" class="w-full flex items-center justify-between px-3 py-3 rounded-xl text-sm font-bold transition-colors sidebar-btn bg-emerald-50 text-emerald-800 cursor-pointer">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                        <span>ทำแบบประเมินโครงการ</span>
+                    </div>
+                    <span id="pendingBadge" class="bg-yellow-400 text-slate-900 text-[10px] font-bold px-2 py-0.5 rounded-full">0</span>
                 </button>
-                <button onclick="switchTab('history-tab')" id="btn-history-tab" class="py-3 px-4 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+
+                <button onclick="switchTab('report-tab')" id="btn-report-tab" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors sidebar-btn cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2"/></svg>
+                    <span>สรุปสถิติผลการประเมิน</span>
+                </button>
+
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2 mt-6">ฐานข้อมูลประวัติและสถิติ</div>
+
+                <button onclick="switchTab('history-tab')" id="btn-history-tab" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors sidebar-btn cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
                     <span>สถิติดำเนินการย้อนหลัง 3 ปี</span>
                 </button>
-                <button onclick="switchTab('admin-tab')" id="btn-admin-tab" class="py-3 px-4 font-bold border-b-2 border-transparent text-slate-400 hover:text-emerald-800 hover:border-slate-200 text-sm focus:outline-none whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-                    <span>บริหารจัดการสารสนเทศ</span>
-                    <span class="text-xs bg-slate-100 text-slate-500 font-bold px-2.5 py-0.5 rounded-full" id="adminTabBadge">ผู้ดูแลระบบ</span>
+
+                <button onclick="switchTab('created-history-tab')" id="btn-created-history-tab" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors sidebar-btn cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span>ประวัติการสร้างแบบสอบถาม</span>
                 </button>
-            </div>
 
-            <!-- แท็บที่ 1: รายการทำแบบประเมินโครงการ -->
-            <section id="evaluate-tab" class="tab-content block">
-                <div class="bg-emerald-50 border-l-4 border-emerald-700 p-4 rounded-r-lg mb-6 text-sm text-emerald-900 leading-relaxed shadow-sm">
-                    <strong>ข้อแนะนำการใช้งาน:</strong> รายการแบบประเมินความพึงพอใจการจัดโครงการของสถาบันที่ท่านยังค้างการประเมินจะแสดงผลในตารางด้านล่าง เมื่อดำเนินการประเมินเสร็จสิ้นครบถ้วน โครงการจะถูกบันทึกเข้าระบบประมวลผลสถิติโดยอัตโนมัติ
-                </div>
-                <div id="evaluationList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-                <div id="noEvaluations" class="hidden text-center py-16 bg-white rounded-2xl border border-slate-150 shadow-sm">
-                    <div class="w-12 h-12 rounded-full bg-emerald-50 text-emerald-800 flex items-center justify-center mx-auto mb-3 font-bold text-sm">✓</div>
-                    <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider">เสร็จสิ้นภารกิจการประเมินโครงการครบถ้วน</h3>
-                </div>
-            </section>
+                <button onclick="switchTab('input-history-tab')" id="btn-input-history-tab" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors sidebar-btn cursor-pointer hidden admin-only-btn">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                    <span>ลงรายละเอียดคะแนนย้อนหลัง</span>
+                </button>
 
-            <!-- แท็บที่ 2: สรุปรายงานผลการประเมินโครงการ -->
-            <section id="report-tab" class="tab-content hidden space-y-6">
-                <div class="flex justify-between items-center bg-white p-4 rounded-2xl border shadow-sm flex-wrap gap-2">
-                    <span class="text-sm font-bold text-slate-700">วิเคราะห์ข้อมูลสรุปผลความพึงพอใจประกันคุณภาพการศึกษาภายใน</span>
-                    <button onclick="exportAllEvaluationsToCSV()" class="bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow flex items-center gap-1.5 active:scale-95 cursor-pointer">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4m4-5l5 5 5-5m-5 5V3" /></svg>
-                        <span>ส่งออกผลการประเมินโครงการทั้งหมด (CSV)</span>
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2 mt-6 admin-only-btn hidden">การตั้งค่าระบบ</div>
+
+                <button onclick="switchTab('admin-tab')" id="btn-admin-tab" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors sidebar-btn cursor-pointer hidden admin-only-btn">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <span>บริหารจัดการสารสนเทศ</span>
+                </button>
+            </nav>
+
+            <!-- User Profile Area -->
+            <div class="p-4 border-t border-slate-100 bg-slate-50/50 flex-shrink-0">
+                <div class="flex items-center justify-between">
+                    <div class="overflow-hidden">
+                        <p id="sidebar-user-name" class="text-sm font-bold text-slate-800 truncate">กำลังโหลด...</p>
+                        <p id="sidebar-user-role" class="text-[10px] font-semibold text-emerald-700 uppercase tracking-wider truncate">กำลังโหลด...</p>
+                    </div>
+                    <button onclick="handleLogout()" class="p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer" title="ออกจากระบบ">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                     </button>
                 </div>
-                <div class="bg-amber-50/40 border-l-4 border-amber-500 p-4 rounded-r-lg text-sm text-slate-700 leading-relaxed shadow-sm">
-                    <strong>เกณฑ์การประมวลผลสถิติความพึงพอใจร้อยละ:</strong> คะแนนระดับ 4 และ 5 คิดเป็นระดับพึงพอใจร้อยละ 100 คะแนนระดับ 1, 2 และ 3 คิดเป็นร้อยละ 0 โดยคำนวณค่าเฉลี่ยจากจำนวนผู้ส่งผลประเมินทั้งหมด
+            </div>
+        </aside>
+
+        <!-- Main Content Wrapper -->
+        <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+            
+            <!-- Mobile Header Topbar -->
+            <header class="md:hidden bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between flex-shrink-0 z-30">
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleSidebar()" class="text-slate-500 focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    </button>
+                    <span class="font-bold text-slate-800 text-sm">ระบบประเมินความพึงพอใจ</span>
                 </div>
-                <div id="reportList" class="space-y-6"></div>
-            </section>
+            </header>
 
-            <!-- แท็บที่ 3: สถิติดำเนินการย้อนหลัง 3 ปี -->
-            <section id="history-tab" class="tab-content hidden">
-                <div id="historyList" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-            </section>
+            <!-- Content Scroll Area -->
+            <div class="flex-1 overflow-y-auto p-4 md:p-8">
+                <div class="max-w-6xl mx-auto space-y-6">
 
-            <!-- แท็บที่ 4: บริหารจัดการสารสนเทศระบบ -->
-            <section id="admin-tab" class="tab-content hidden max-w-5xl mx-auto space-y-8">
-                <!-- ส่วนตั้งค่า Google Sheets API (จำกัดการเข้าถึงเฉพาะผู้ดูแลระบบ) -->
-                <div id="admin-sheet-config" class="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm space-y-4 hidden">
-                    <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2.5 uppercase tracking-wider text-emerald-800">
-                        <svg class="w-5 h-5 text-emerald-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>
-                        <span>🔗 การเชื่อมโยงฐานข้อมูล Google Sheets</span>
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-                        <div class="md:col-span-2">
-                            <label class="block text-xs font-bold text-slate-500 mb-1.5">Google Apps Script Web App URL</label>
-                            <input type="url" id="googleSheetUrl" placeholder="ระบุลิงก์ Web App URL ที่ได้จากการดำเนินการ Deploy" class="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 font-mono">
+                    <!-- Tab 1: ทำแบบประเมินโครงการ -->
+                    <section id="evaluate-tab" class="tab-content block">
+                        <div class="bg-emerald-50 border-l-4 border-emerald-700 p-4 rounded-r-lg mb-6 text-sm text-emerald-900 leading-relaxed shadow-sm">
+                            <strong>ข้อแนะนำการใช้งาน:</strong> รายการแบบประเมินความพึงพอใจการจัดโครงการที่ท่านยังค้างการประเมินจะแสดงผลในตารางด้านล่าง เมื่อดำเนินการครบถ้วน โครงการจะถูกบันทึกเข้าระบบประมวลผลสถิติโดยอัตโนมัติ
                         </div>
-                        <div>
-                            <button onclick="saveGoogleSheetsConnection()" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-3.5 px-4 rounded-xl text-xs transition-all shadow-sm active:scale-95 cursor-pointer">บันทึกการเชื่อมโยงฐานข้อมูล</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ฟอร์มสร้างทะเบียนประเมินโครงการใหม่ -->
-                <div class="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm">
-                    <h3 class="text-sm font-bold text-slate-900 mb-6 border-b pb-4 flex items-center gap-2.5 uppercase tracking-wider text-emerald-800">
-                        <svg class="w-5 h-5 text-emerald-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                            <line x1="12" y1="8" x2="12" y2="16" />
-                            <line x1="8" y1="12" x2="16" y2="12" />
-                        </svg>
-                        <span>ลงทะเบียนแบบประเมินโครงการใหม่</span>
-                    </h3>
-                    <form id="addActivityForm" onsubmit="createNewActivity(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="md:col-span-2">
-                            <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">ชื่อโครงการ / กิจกรรม</label>
-                            <input type="text" id="newActName" required placeholder="เช่น โครงการพัฒนาทักษะวิชาชีพครู หรือ กิจกรรมพบกันฉันน้องพี่" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800">
-                        </div>
-                        <div class="md:col-span-1">
-                            <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">เป้าหมายและวัตถุประสงค์โครงการ</label>
-                            <textarea id="newActObjectives" rows="4" placeholder="ระบุวัตถุประสงค์โครงการ (แยกบรรทัดละ 1 ข้อ)" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800"></textarea>
-                        </div>
-                        <div class="md:col-span-1">
-                            <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">หัวข้อการประเมินผล (ระบุบรรทัดละ 1 ข้อ)</label>
-                            <textarea id="newActTopics" rows="4" required placeholder="ด้านความเหมาะสมของหัวข้อการสัมมนา&#10;ด้านการอำนวยความสะดวกเรื่องอาคารสถานที่" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800"></textarea>
-                        </div>
-                        <div class="md:col-span-1 bg-slate-50 p-4 rounded-xl border border-slate-200">
-                            <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2 flex items-center gap-1.5">
-                                <svg class="w-4 h-4 text-emerald-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                                    <circle cx="8.5" cy="8.5" r="1.5" />
-                                    <polyline points="21 15 16 10 5 21" />
-                                </svg>
-                                <span>อัปโหลดรูปภาพโปสเตอร์ประชาสัมพันธ์โครงการ</span>
-                            </label>
-                            <input type="file" id="newActPosterFile" accept="image/*" class="w-full text-xs">
-                        </div>
-                        <div class="md:col-span-1 bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between">
-                            <div>
-                                <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2 flex items-center gap-1.5">
-                                    <svg class="w-5 h-5 text-emerald-800" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                                        <line x1="16" y1="2" x2="16" y2="6" />
-                                        <line x1="8" y1="2" x2="8" y2="6" />
-                                        <line x1="3" y1="10" x2="21" y2="10" />
-                                    </svg>
-                                    <span>กำหนดครั้งที่จัดกิจกรรม (พร้อมรายละเอียดประกอบ)</span>
-                                </label>
-                                <div id="rounds-builder-container" class="space-y-2 max-h-32 overflow-y-auto pr-1 font-semibold"></div>
+                        <div id="evaluationList" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6"></div>
+                        <div id="noEvaluations" class="hidden text-center py-20 bg-white rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="w-16 h-16 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                             </div>
-                            <button type="button" onclick="addRoundRow()" class="mt-2 text-xs bg-white hover:bg-slate-100 border border-slate-250 px-3 py-2 rounded-lg font-bold w-full text-slate-700 flex items-center justify-center gap-1 cursor-pointer">
-                                <span>＋ เพิ่มครั้งที่จัดกิจกรรม</span>
-                            </button>
+                            <h3 class="text-base font-bold text-slate-700 uppercase tracking-wider">เสร็จสิ้นภารกิจการประเมินโครงการครบถ้วน</h3>
                         </div>
-                        <div class="md:col-span-1">
-                            <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">ผู้รับผิดชอบโครงการ (ผู้กำกับดูแลสิทธิ์)</label>
-                            <select id="newActOwner" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 bg-white cursor-pointer"></select>
-                        </div>
-                        <div class="md:col-span-1 grid grid-cols-3 gap-2">
-                            <div><span class="block text-[10px] font-bold text-slate-400 mb-1">ปี 2566 (%)</span><input type="number" step="0.01" id="history2566" required value="85.00" class="w-full border rounded-xl p-2.5 text-center text-sm focus:outline-none"></div>
-                            <div><span class="block text-[10px] font-bold text-slate-400 mb-1">ปี 2567 (%)</span><input type="number" step="0.01" id="history2567" required value="88.00" class="w-full border rounded-xl p-2.5 text-center text-sm focus:outline-none"></div>
-                            <div><span class="block text-[10px] font-bold text-slate-400 mb-1">ปี 2568 (%)</span><input type="number" step="0.01" id="history2568" required value="92.00" class="w-full border rounded-xl p-2.5 text-center text-sm focus:outline-none"></div>
-                        </div>
-                        <div class="md:col-span-2 flex justify-end pt-2">
-                            <button type="submit" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-8 py-3.5 rounded-xl text-sm transition-all shadow-md active:scale-95 flex items-center gap-2 cursor-pointer">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                                <span>บันทึกและเปิดใช้งานแบบประเมิน</span>
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    </section>
 
-                <!-- ส่วนเพิ่มและดึงข้อมูลบุคลากร (เฉพาะผู้ดูแลระบบ) -->
-                <div id="admin-user-add-section" class="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm space-y-4 hidden">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-2 border-b pb-4">
-                        <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2.5 uppercase tracking-wider text-emerald-800">
-                            <svg class="w-5 h-5 text-emerald-800" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                <circle cx="8.5" cy="7" r="4" />
-                                <line x1="20" y1="8" x2="20" y2="14" />
-                                <line x1="23" y1="11" x2="17" y2="11" />
-                            </svg>
-                            <span>การจัดการรายชื่อบุคลากรครู</span>
-                        </h3>
-                        <div class="flex flex-wrap gap-2">
-                            <button type="button" onclick="syncTeachersFromGoogleSheets()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-sm active:scale-95 flex items-center gap-1.5 cursor-pointer">
-                                <svg class="w-4 h-4 text-emerald-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
-                                </svg>
-                                <span>ดึงรายชื่อบุคลิกล่าสุดจาก Google Sheets</span>
-                            </button>
-                            <button type="button" onclick="toggleImportArea()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-sm active:scale-95 flex items-center gap-1.5 cursor-pointer">
-                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                    <polyline points="14 2 14 8 20 8" />
-                                    <line x1="16" y1="13" x2="8" y2="13" />
-                                    <line x1="16" y1="17" x2="8" y2="17" />
-                                </svg>
-                                <span>วางตารางนำเข้ารายชื่อ</span>
+                    <!-- Tab 2: สรุปสถิติผลการประเมิน (ทุกคนเข้าถึงได้) -->
+                    <section id="report-tab" class="tab-content hidden space-y-6">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-5 rounded-2xl border border-slate-200 shadow-sm gap-4">
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-800">สรุปรายงานสถิติผลการประเมินโครงการ</h2>
+                                <p class="text-sm text-slate-500 mt-1">แสดงค่าร้อยละ ค่าเฉลี่ย (Mean: x̄) และส่วนเบี่ยงเบนมาตรฐาน (S.D.) เพื่อประกอบการจัดทำรายงาน</p>
+                            </div>
+                            <button onclick="exportAllEvaluationsToCSV()" class="bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow flex items-center gap-2 active:scale-95 cursor-pointer flex-shrink-0">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                <span>ส่งออกข้อมูลทั้งหมด (CSV)</span>
                             </button>
                         </div>
-                    </div>
-                    
-                    <div id="import-sheets-area" class="hidden p-5 bg-slate-50 border rounded-xl space-y-3.5">
-                        <span class="block text-xs font-bold text-slate-600 flex items-center gap-1.5">
-                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10" />
-                                <line x1="12" y1="16" x2="12" y2="12" />
-                                <line x1="12" y1="8" x2="12.01" y2="8" />
-                            </svg>
-                            <span>คำแนะนำ: คัดลอกแถวข้อมูล 5 คอลัมน์จาก Google Sheets วางลงในช่องด้านล่างเพื่อนำเข้าข้อมูล</span>
-                        </span>
-                        <textarea id="importTeachersText" rows="4" placeholder="คัดลอกตารางมาวางที่นี่... (รหัสพนักงาน [Tab] ชื่อ-นามสกุล [Tab] อีเมล [Tab] ตำแหน่ง [Tab] รหัสผ่าน)" class="w-full border border-slate-200 bg-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-emerald-800"></textarea>
-                        <div class="flex justify-end">
-                            <button type="button" onclick="importTeachersFromPaste()" class="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold rounded-xl shadow-sm transition-all cursor-pointer">
-                                ยืนยันนำเข้ารายชื่อและบันทึกลงฐานข้อมูล
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                        <div id="reportList" class="space-y-6"></div>
+                    </section>
 
-                <!-- ตารางโครงการทั้งหมด -->
-                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
-                    <h3 class="text-sm font-bold text-slate-900 mb-5 flex items-center gap-2.5 uppercase tracking-wider text-emerald-800">
-                        <svg class="w-5 h-5 text-emerald-800" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="8" y1="6" x2="21" y2="6" />
-                            <line x1="8" y1="12" x2="21" y2="12" />
-                            <line x1="8" y1="18" x2="21" y2="18" />
-                            <line x1="3" y1="6" x2="3.01" y2="6" />
-                            <line x1="3" y1="12" x2="3.01" y2="12" />
-                            <line x1="3" y1="18" x2="3.01" y2="18" />
-                        </svg>
-                        <span>ทะเบียนแบบประเมินโครงการทั้งหมดในระบบ</span>
-                    </h3>
-                    <div class="overflow-x-auto border border-slate-200 rounded-xl shadow-inner">
-                        <table class="min-w-full text-sm text-left">
-                            <thead class="bg-slate-50 text-slate-600 font-bold border-b text-xs tracking-wider">
-                                <tr>
-                                    <th class="px-6 py-4">รหัสโครงการ</th>
-                                    <th class="px-6 py-4">ชื่อโครงการ / กิจกรรม</th>
-                                    <th class="px-6 py-4 text-center">จำนวนครั้งที่จัด</th>
-                                    <th class="px-6 py-4">ผู้กำกับดูแลสิทธิ์</th>
-                                    <th class="px-6 py-4 text-center">การจัดการ</th>
-                                </tr>
-                            </thead>
-                            <tbody id="adminActivitiesTable" class="divide-y divide-slate-100 bg-white"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- ตารางจัดการสิทธิ์บุคลากร (เฉพาะผู้ดูแลระบบ) -->
-                <div id="admin-user-list-section" class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hidden">
-                    <h3 class="text-sm font-bold text-slate-900 mb-5 flex items-center gap-2.5 uppercase tracking-wider text-emerald-800">
-                        <svg class="w-5 h-5 text-emerald-800" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" />
-                        </svg>
-                        <span>ทะเบียนข้อมูลและแก้ไขสิทธิ์บุคลากรรายบุคคล (เฉพาะสิทธิ์ผู้ดูแลระบบ)</span>
-                    </h3>
-                    <div class="overflow-x-auto border border-slate-200 rounded-xl shadow-inner">
-                        <table class="min-w-full text-sm text-left">
-                            <thead class="bg-slate-50 text-slate-600 font-bold border-b text-xs tracking-wider">
-                                <tr>
-                                    <th class="px-6 py-4">รหัสพนักงาน</th>
-                                    <th class="px-6 py-4">ชื่อ-นามสกุล</th>
-                                    <th class="px-6 py-4">ที่อยู่อีเมล</th>
-                                    <th class="px-4 py-4">ตำแหน่ง / บทบาท</th>
-                                    <th class="px-6 py-4">รหัสผ่านปัจจุบัน</th>
-                                    <th class="px-6 py-4 text-center">การจัดการ</th>
-                                </tr>
-                            </thead>
-                            <tbody id="adminUsersTable" class="divide-y divide-slate-100 bg-white"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- ปุ่มคืนค่าข้อมูลเริ่มต้นระบบ (เฉพาะผู้ดูแลระบบ) -->
-                <div id="admin-reset-section" class="border-t border-slate-200 pt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hidden">
-                    <div class="flex items-start gap-2.5">
-                        <div class="p-2 bg-rose-50 rounded-xl border border-rose-100 text-rose-700 mt-1 flex-shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    <!-- Tab 3: สถิติดำเนินการย้อนหลัง 3 ปี -->
+                    <section id="history-tab" class="tab-content hidden">
+                        <div class="mb-6 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <h2 class="text-lg font-bold text-slate-800">แผนภูมิเปรียบเทียบร้อยละความพึงพอใจสะสมย้อนหลัง</h2>
+                            <p class="text-sm text-slate-500 mt-1">เปรียบเทียบสถิติร้อยละของผู้พึงพอใจ (เกณฑ์ระดับ 4-5) ย้อนหลัง 3 ปีการศึกษาล่าสุด</p>
                         </div>
-                        <div>
-                            <h4 class="font-bold text-rose-700 text-sm uppercase tracking-wider">คืนค่าสารสนเทศเริ่มต้น</h4>
-                            <p class="text-xs text-slate-400 mt-1">กดยืนยันเพื่อกู้คืนฐานข้อมูลโครงการและสิทธิ์เข้าใช้งานดั้งเดิมของสถาบัน</p>
+                        <div id="historyList" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
+                    </section>
+
+                    <!-- Tab 4: ประวัติการสร้างแบบสอบถาม -->
+                    <section id="created-history-tab" class="tab-content hidden space-y-6">
+                        <div class="mb-2 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <h2 class="text-lg font-bold text-slate-800">ประวัติการสร้างแบบสอบถามของฉัน</h2>
+                            <p class="text-sm text-slate-500 mt-1">รายการโครงการและแบบประเมินทั้งหมดที่คุณรับผิดชอบและสร้างขึ้นในระบบ</p>
                         </div>
-                    </div>
-                    <button onclick="confirmResetSystem()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs px-5 py-3 rounded-xl font-bold transition-all shadow-sm active:scale-95 flex items-center gap-1.5 border border-rose-100 cursor-pointer">
-                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
-                        </svg>
-                        <span>กู้คืนข้อมูลระบบทั้งหมด</span>
-                    </button>
+                        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full text-sm text-left">
+                                    <thead class="bg-slate-50 text-slate-600 font-bold border-b text-xs tracking-wider uppercase">
+                                        <tr>
+                                            <th class="px-6 py-4">รหัส</th>
+                                            <th class="px-6 py-4">ชื่อโครงการ</th>
+                                            <th class="px-6 py-4 text-center">หัวข้อคำถาม</th>
+                                            <th class="px-6 py-4 text-center">ผู้ตอบประเมินแล้ว</th>
+                                            <th class="px-6 py-4 text-center">สถานะ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="createdHistoryTable" class="divide-y divide-slate-100 bg-white"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Tab 5: ลงรายละเอียดคะแนนย้อนหลัง -->
+                    <section id="input-history-tab" class="tab-content hidden space-y-6">
+                        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg text-sm text-amber-900 leading-relaxed shadow-sm">
+                            <strong>ส่วนการจัดการสถิติย้อนหลัง:</strong> สำหรับกรอกผลคะแนนร้อยละความพึงพอใจของปีการศึกษาที่ผ่านมา (2566, 2567, 2568) เพื่อนำไปแสดงเป็นกราฟเปรียบเทียบในหน้าสถิติย้อนหลัง
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full text-sm text-left">
+                                    <thead class="bg-slate-50 text-slate-600 font-bold border-b text-[11px] tracking-wider uppercase">
+                                        <tr>
+                                            <th class="px-5 py-4 w-1/3">ชื่อโครงการ</th>
+                                            <th class="px-3 py-4 text-center">ปี 2566 (%)</th>
+                                            <th class="px-3 py-4 text-center">ปี 2567 (%)</th>
+                                            <th class="px-3 py-4 text-center">ปี 2568 (%)</th>
+                                            <th class="px-5 py-4 text-center">บันทึก</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="inputHistoryTable" class="divide-y divide-slate-100 bg-white"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Tab 6: บริหารจัดการสารสนเทศ (เฉพาะผู้ดูแลระบบ) -->
+                    <section id="admin-tab" class="tab-content hidden space-y-8 pb-10">
+                        
+                        <!-- ฟอร์มสร้างทะเบียนประเมินโครงการใหม่ -->
+                        <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm">
+                            <h3 class="text-sm font-bold text-slate-900 mb-6 border-b pb-4 flex items-center gap-2 uppercase tracking-wider text-emerald-800">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><line x1="12" y1="8" x2="12" y2="16" /><line x1="8" y1="12" x2="16" y2="12" /></svg>
+                                <span>ลงทะเบียนแบบประเมินโครงการใหม่</span>
+                            </h3>
+                            <form id="addActivityForm" onsubmit="createNewActivity(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="md:col-span-2">
+                                    <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">ชื่อโครงการ / กิจกรรม</label>
+                                    <input type="text" id="newActName" required class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800 bg-slate-50/50">
+                                </div>
+                                <div class="md:col-span-1">
+                                    <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">เป้าหมายและวัตถุประสงค์โครงการ</label>
+                                    <textarea id="newActObjectives" rows="4" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800 bg-slate-50/50"></textarea>
+                                </div>
+                                <div class="md:col-span-1">
+                                    <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">หัวข้อการประเมินผล (ระบุบรรทัดละ 1 ข้อ)</label>
+                                    <textarea id="newActTopics" rows="4" required class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800 bg-slate-50/50"></textarea>
+                                </div>
+                                <div class="md:col-span-1 bg-slate-50/50 p-4 rounded-xl border border-slate-200">
+                                    <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">อัปโหลดโปสเตอร์ประชาสัมพันธ์</label>
+                                    <input type="file" id="newActPosterFile" accept="image/*" class="w-full text-xs">
+                                </div>
+                                <div class="md:col-span-1 bg-slate-50/50 p-4 rounded-xl border border-slate-200 flex flex-col">
+                                    <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">กำหนดครั้งที่จัดกิจกรรม</label>
+                                    <div id="rounds-builder-container" class="space-y-2 max-h-32 overflow-y-auto pr-1"></div>
+                                    <button type="button" onclick="addRoundRow()" class="mt-2 text-xs bg-white border border-slate-250 px-3 py-2 rounded-lg font-bold w-full text-slate-600 hover:bg-slate-100 transition-colors">＋ เพิ่มครั้งที่จัด</button>
+                                </div>
+                                <div class="md:col-span-1">
+                                    <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">ผู้รับผิดชอบโครงการ</label>
+                                    <select id="newActOwner" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800 bg-white"></select>
+                                </div>
+                                <div class="md:col-span-2 flex justify-end pt-4 border-t border-slate-100">
+                                    <button type="submit" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-6 py-3 rounded-xl text-sm transition-all shadow-md active:scale-95 cursor-pointer">บันทึกเปิดใช้งานแบบประเมิน</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- ส่วนจัดการบุคลากร และ ตารางสิทธิ์บริหาร -->
+                        <div id="admin-user-list-section" class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex justify-between items-center mb-5">
+                                <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider text-emerald-800">ทะเบียนข้อมูลและแก้ไขสิทธิ์บุคลากร</h3>
+                                <button type="button" onclick="syncTeachersFromGoogleSheets()" class="bg-emerald-50 text-emerald-800 text-xs font-bold px-3 py-2 rounded-lg border border-emerald-200 hover:bg-emerald-100 transition-colors cursor-pointer">ดึงข้อมูลล่าสุดจาก Sheets</button>
+                            </div>
+                            <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                                <table class="min-w-full text-sm text-left">
+                                    <thead class="bg-slate-50 text-slate-600 font-bold border-b text-xs">
+                                        <tr>
+                                            <th class="px-4 py-3">รหัส</th>
+                                            <th class="px-4 py-3">ชื่อ-นามสกุล</th>
+                                            <th class="px-4 py-3">อีเมล</th>
+                                            <th class="px-4 py-3">ตำแหน่ง</th>
+                                            <th class="px-4 py-3 text-center">จัดการสถานะ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminUsersTable" class="divide-y divide-slate-100 bg-white"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </section>
                 </div>
-            </section>
+                
+                <!-- Footer -->
+                <footer class="mt-12 text-center pb-6 text-slate-400 text-[10px] uppercase tracking-widest font-semibold">
+                    &copy; โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์ ระบบประกันคุณภาพภายใน
+                </footer>
+            </div>
         </main>
-
-        <footer class="text-center py-6 text-slate-400 text-xs border-t border-slate-100 bg-white tracking-wider">
-            หากพบปัญหาการใช้งานระบบ โปรดติดต่อฝ่ายเทคโนโลยีสารสนเทศ โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์
-        </footer>
     </div>
 
-    <!-- ==================== Modals Layer ==================== -->
+    <!-- Modals Layer -->
+    <!-- Modal: Confirm Action -->
     <div id="confirm-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[120] hidden items-center justify-center p-4">
-        <div class="bg-white rounded-2xl p-7 max-w-md w-full shadow-2xl border border-slate-100 transform scale-95 transition-all">
-            <div class="flex items-center gap-3.5 mb-4 border-b pb-3">
-                <div id="confirm-icon-wrapper" class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
-                    <svg class="w-6 h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                        <line x1="12" y1="9" x2="12" y2="13" />
-                        <line x1="12" y1="17" x2="12.01" y2="17" />
-                    </svg>
-                </div>
-                <h3 id="confirm-title" class="text-base font-bold text-slate-900">ยืนยันการดำเนินการ</h3>
-            </div>
-            <p id="confirm-msg" class="text-slate-600 text-sm leading-relaxed"></p>
-            <div class="flex justify-end gap-2.5 mt-6">
-                <button id="confirm-cancel-btn" class="px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition-all active:scale-95 shadow-sm cursor-pointer">ยกเลิก</button>
-                <button id="confirm-ok-btn" class="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold transition-all active:scale-95 shadow-sm cursor-pointer">ตกลง</button>
+        <div class="bg-white rounded-2xl p-7 max-w-sm w-full shadow-2xl border border-slate-100">
+            <h3 id="confirm-title" class="text-base font-bold text-slate-900 mb-2">ยืนยันทำรายการ</h3>
+            <p id="confirm-msg" class="text-slate-600 text-sm leading-relaxed mb-6"></p>
+            <div class="flex justify-end gap-2">
+                <button id="confirm-cancel-btn" class="px-4 py-2 bg-slate-100 text-slate-600 rounded-xl text-xs font-bold hover:bg-slate-200 transition-colors cursor-pointer">ยกเลิก</button>
+                <button id="confirm-ok-btn" class="px-4 py-2 bg-emerald-800 text-white rounded-xl text-xs font-bold hover:bg-emerald-900 transition-colors cursor-pointer">ตกลง</button>
             </div>
         </div>
     </div>
 
-    <!-- หน้าต่างแก้ไขข้อมูลบุคลากร -->
-    <div id="user-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[95] hidden items-center justify-center p-4">
-        <div class="bg-white rounded-2xl p-7 max-w-md w-full shadow-2xl border border-slate-100">
-            <div class="flex justify-between items-center mb-5 border-b pb-3.5">
-                <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2.5">
-                    <svg class="w-5 h-5 text-emerald-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                    <span>แก้ไขข้อมูลและสิทธิ์บุคลากร</span>
-                </h3>
-                <button onclick="closeUserModal()" class="text-slate-400 hover:text-slate-600 text-sm font-bold">✕</button>
+    <!-- Modal: Evaluation Form -->
+    <div id="evaluation-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[110] hidden items-center justify-center p-4 md:p-6 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-3xl w-full shadow-2xl overflow-hidden my-8 flex flex-col max-h-[90vh]">
+            <!-- Header -->
+            <div class="bg-emerald-900 text-white px-6 py-4 flex justify-between items-center flex-shrink-0">
+                <div>
+                    <span id="eval-modal-id" class="text-[10px] font-mono bg-white/20 px-2 py-0.5 rounded">ID</span>
+                    <h3 id="eval-modal-name" class="text-sm font-bold mt-1">ชื่อโครงการ</h3>
+                </div>
+                <button onclick="closeEvaluationModal()" class="text-white/70 hover:text-white text-xl font-bold focus:outline-none cursor-pointer">&times;</button>
             </div>
-            <input type="hidden" id="edit-user-original-email">
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-bold uppercase text-slate-500 tracking-wider mb-2">รหัสพนักงานประจำตัว</label>
-                    <input type="text" id="edit-user-empId" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800">
+            
+            <!-- Body Scroll -->
+            <div class="p-6 overflow-y-auto sidebar-scroll bg-slate-50/50">
+                <div class="mb-6">
+                    <span class="block text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1">เป้าหมายและวัตถุประสงค์</span>
+                    <div id="eval-modal-objectives" class="text-sm text-slate-700 bg-white p-4 rounded-xl border border-slate-200"></div>
                 </div>
-                <div>
-                    <label class="block text-sm font-bold uppercase text-slate-500 tracking-wider mb-2">ชื่อ-นามสกุล</label>
-                    <input type="text" id="edit-user-name" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold uppercase text-slate-500 tracking-wider mb-2">ที่อยู่อีเมลสถาบัน</label>
-                    <input type="email" id="edit-user-email" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold uppercase text-slate-500 tracking-wider mb-2">ตำแหน่งงาน / บทบาทสิทธิ์</label>
-                    <select id="edit-user-role" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 bg-white cursor-pointer">
-                        <option value="Staff">คุณครู / บุคลากรทั่วไป</option>
-                        <option value="Executive">ผู้บริหาร</option>
-                        <option value="Head_Admin">หัวหน้าฝ่ายบริหารทั่วไป</option>
-                        <option value="Head_Academic">หัวหน้าฝ่ายวิชาการ</option>
-                        <option value="Head_QA">หัวหน้าฝ่ายประกันคุณภาพภายใน</option>
-                        <option value="Head_Student">หัวหน้าฝ่ายกิจการนักเรียน</option>
-                        <option value="Admin">ผู้ดูแลระบบกลาง (Admin)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-bold uppercase text-slate-500 tracking-wider mb-2">รหัสผ่านเข้าใช้งาน</label>
-                    <input type="text" id="edit-user-password" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800">
-                </div>
-            </div>
-            <div class="flex justify-end gap-2.5 mt-6 border-t pt-4">
-                <button onclick="closeUserModal()" class="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl text-xs font-semibold text-slate-600">ยกเลิก</button>
-                <button onclick="saveUserProfile()" class="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold cursor-pointer">บันทึกข้อมูลบุคลากร</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- หน้าต่างทำแบบประเมินโครงการ -->
-    <div id="evaluation-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[90] hidden items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden my-8 transform scale-95 transition-all">
-            <div class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-950 text-white px-6 py-5 border-b-2 border-yellow-400 flex justify-between items-center">
-                <div>
-                    <span id="eval-modal-id" class="text-xs font-mono font-bold bg-white/10 px-2.5 py-1 rounded">PROJECT ID</span>
-                    <h3 id="eval-modal-name" class="text-base font-bold text-white mt-1.5">ชื่อโครงการ</h3>
-                </div>
-                <button onclick="closeEvaluationModal()" class="text-white/70 hover:text-white text-xl font-bold">✕</button>
-            </div>
-            <div class="px-6 py-6 max-h-[70vh] overflow-y-auto space-y-6">
-                <div id="eval-modal-objectives-container">
-                    <span class="block text-xs text-slate-400 font-bold uppercase tracking-wider mb-2">เป้าหมายและวัตถุประสงค์โครงการ:</span>
-                    <div id="eval-modal-objectives" class="text-sm text-slate-700 bg-slate-50 p-4.5 rounded-xl border leading-relaxed whitespace-pre-line"></div>
-                </div>
-                <div id="eval-modal-poster-container">
-                    <span class="block text-xs text-slate-400 font-bold uppercase tracking-wider mb-2.5">โปสเตอร์ประชาสัมพันธ์โครงการ:</span>
-                    <div class="border rounded-xl overflow-hidden bg-slate-50 max-h-80 flex items-center justify-center shadow-inner">
-                        <img id="eval-modal-poster" src="" alt="[ภาพโปสเตอร์ประชาสัมพันธ์กิจกรรม]" class="object-contain max-h-80 w-full">
-                    </div>
-                </div>
-                <form id="evaluationForm" onsubmit="submitEvaluationData(event)" class="space-y-6 pt-4 border-t border-slate-100">
+                
+                <form id="evaluationForm" onsubmit="submitEvaluationData(event)" class="space-y-6">
                     <input type="hidden" id="eval-modal-act-id">
                     
-                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                        <label class="block text-sm font-bold text-slate-800 mb-2.5">1. สถานะของผู้ตอบแบบประเมิน <span class="text-rose-500">*</span></label>
-                        <div class="flex gap-8 pl-1">
-                            <label class="flex items-center gap-3 text-sm cursor-pointer font-medium text-slate-700">
-                                <input type="radio" name="eval-role" value="คุณครู/บุคลากร" required class="w-4 h-4 accent-emerald-800"> 
-                                <span>คุณครู / บุคลากร</span>
-                            </label>
-                            <label class="flex items-center gap-3 text-sm cursor-pointer font-medium text-slate-700">
-                                <input type="radio" name="eval-role" value="ผู้บริหาร" class="w-4 h-4 accent-emerald-800"> 
-                                <span>ผู้บริหาร</span>
-                            </label>
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <label class="block text-sm font-bold text-slate-800 mb-3">1. สถานะของผู้ตอบแบบประเมิน <span class="text-rose-500">*</span></label>
+                        <div class="flex flex-wrap gap-6 pl-1">
+                            <label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="eval-role" value="คุณครู/บุคลากร" required class="w-4 h-4 accent-emerald-700"><span>คุณครู / บุคลากร</span></label>
+                            <label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="eval-role" value="ผู้บริหาร" class="w-4 h-4 accent-emerald-700"><span>ผู้บริหาร</span></label>
                         </div>
                     </div>
 
-                    <div id="eval-modal-round-container" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hidden">
-                        <label class="block text-sm font-bold text-slate-800 mb-2.5">เลือกรอบการจัดงาน / ครั้งที่ต้องการประเมินผล <span class="text-rose-500">*</span></label>
-                        <select id="eval-modal-round-select" class="w-full border border-slate-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none bg-white cursor-pointer"></select>
+                    <div id="eval-modal-round-container" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hidden">
+                        <label class="block text-sm font-bold text-slate-800 mb-2">เลือกรอบการจัดงานที่ต้องการประเมิน <span class="text-rose-500">*</span></label>
+                        <select id="eval-modal-round-select" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-700"></select>
                     </div>
 
-                    <div class="space-y-4">
-                        <label class="block text-sm font-bold text-slate-800 pl-1">2. ระดับความพึงพอใจแยกตามหัวข้อการประเมิน (1 - 5 คะแนน)</label>
-                        <div id="eval-topics-container" class="space-y-4"></div>
+                    <div class="space-y-3">
+                        <label class="block text-sm font-bold text-slate-800">2. ระดับความพึงพอใจ (1-5 คะแนน)</label>
+                        <div id="eval-topics-container" class="space-y-3"></div>
                     </div>
 
-                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                        <label class="block text-sm font-bold text-slate-700 mb-2">3. ข้อเสนอแนะเพิ่มเติมเพื่อการพัฒนา (การประเมินแบบไม่ระบุตัวตน)</label>
-                        <textarea id="eval-suggestion" rows="3" placeholder="ระบุข้อเสนอแนะเพิ่มเติมที่เป็นประโยชน์ต่อการพัฒนาโครงการ..." class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-800 bg-slate-50/20"></textarea>
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <label class="block text-sm font-bold text-slate-800 mb-2">3. ข้อเสนอแนะเพิ่มเติม</label>
+                        <textarea id="eval-suggestion" rows="3" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-700 bg-slate-50"></textarea>
                     </div>
-
-                    <div class="flex justify-end gap-2.5 border-t pt-4 mt-6">
-                        <button type="button" onclick="closeEvaluationModal()" class="px-5 py-2.5 bg-slate-50 text-slate-500 font-bold rounded-xl text-xs">ยกเลิก</button>
-                        <button type="submit" class="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95 cursor-pointer">ส่งผลการประเมิน</button>
+                    
+                    <!-- Footer Form Submit -->
+                    <div class="flex justify-end gap-3 pt-2">
+                        <button type="button" onclick="closeEvaluationModal()" class="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl text-xs transition-colors cursor-pointer">ยกเลิก</button>
+                        <button type="submit" class="px-6 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold transition-transform active:scale-95 shadow-md cursor-pointer">ส่งผลการประเมิน</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- ==================== 3. สคริปต์การทำงานฝั่ง JavaScript ==================== -->
     <script>
-        // URL เชื่อมต่อ Google Sheets Web App
+        // --------------------------------------------------------------------------------
+        // 1. การตั้งค่า Google Sheets API และข้อมูลบุคลากรทางการ 40 ท่าน
+        // --------------------------------------------------------------------------------
         const DEFAULT_GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbwPu7_mDMokINwZe3BUQr6HdgOEP8YPbZpQ5BhJ0UT57Kg52k6QSwbK31W2wR_XrcY4/exec";
 
-        // รายชื่อคณะครูและบุคลากรโรงเรียนอนุบาลยุวพัฒน์นครสวรรค์ทั้ง 40 ท่าน (ข้อมูลทางการ)
         const defaultUsers = [
             { empId: "YW-001", name: "อุษณีย์ กัลยาณวัตร", email: "nok@yuwapat.ac.th", role: "Staff", password: "yw123456" },
             { empId: "YW-002", name: "นิภาพร โพธิ์ปาน", email: "kung@yuwapat.ac.th", role: "Staff", password: "yw123456" },
@@ -573,229 +442,91 @@
             { empId: "YW-047", name: "อัญชลีพร เฮียะหลง", email: "fah@yuwapat.ac.th", role: "Staff", password: "yw123456" }
         ];
 
-        // เคลียร์แบบประเมินและสถิติตัวอย่างเพื่อเริ่มต้นใช้งานจริงอย่างเป็นทางการ
-        const defaultActivities = [];
-        const defaultEvaluations = [];
+        let currentUser = null;
+        let uploadedPosterBase64 = "";
 
-        // --------------------------------------------------------------------------------
-        // ฟังก์ชันดึงและล้างข้อมูลตัวอย่างตกค้าง (Purge Mock Data Logic)
-        // --------------------------------------------------------------------------------
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `flex items-center gap-3 px-5 py-3.5 rounded-xl shadow-xl border text-sm font-semibold transition-all duration-300 transform translate-y-2 opacity-0 bg-white ${type === 'success' ? 'border-emerald-200 text-emerald-800' : 'border-rose-200 text-rose-800'}`;
+            toast.innerHTML = `<span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 10);
+            setTimeout(() => { toast.classList.add('translate-y-2', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3000);
+        }
+
+        function customConfirm(title, message, onConfirm) {
+            const modal = document.getElementById('confirm-modal');
+            document.getElementById('confirm-title').innerText = title;
+            document.getElementById('confirm-msg').innerText = message;
+            const okBtn = document.getElementById('confirm-ok-btn');
+            okBtn.onclick = () => { modal.classList.add('hidden'); onConfirm(); };
+            document.getElementById('confirm-cancel-btn').onclick = () => modal.classList.add('hidden');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-sidebar-overlay');
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        // ฟังก์ชันคำนวณสถิติ ค่าเฉลี่ย (Mean) และส่วนเบี่ยงเบนมาตรฐาน (S.D.)
+        function calculateStatistics(scoresArray) {
+            if (!scoresArray || scoresArray.length === 0) return { mean: "0.00", sd: "0.00", n: 0 };
+            const n = scoresArray.length;
+            const sum = scoresArray.reduce((acc, val) => acc + val, 0);
+            const mean = sum / n;
+            
+            // Variance & Sample S.D. (n-1)
+            const squaredDifferencesSum = scoresArray.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0);
+            const variance = squaredDifferencesSum / (n > 1 ? n - 1 : 1);
+            const sd = Math.sqrt(variance);
+
+            return { 
+                mean: mean.toFixed(2), 
+                sd: sd.toFixed(2), 
+                n: n 
+            };
+        }
+
         function getUsers() { 
             let users = JSON.parse(localStorage.getItem('eval_users'));
-            const mockEmailsToPurge = [
-                "admin@yuwapat.ac.th", "director@yuwapat.ac.th", "executive2@yuwapat.ac.th",
-                "head_admin@yuwapat.ac.th", "head_academic@yuwapat.ac.th", "head_qa@yuwapat.ac.th",
-                "head_student@yuwapat.ac.th", "owner_ai@yuwapat.ac.th", "somchai@yuwapat.ac.th", "somsri@yuwapat.ac.th"
-            ];
-            
             if (!users) {
-                users = defaultUsers;
+                users = defaultUsers; 
                 localStorage.setItem('eval_users', JSON.stringify(users));
             } else {
-                // ล้างรายชื่อทดสอบตัวอย่างออกจาก LocalStorage โดยอัตโนมัติ
+                // Purge testing accounts and ensure official 40 users exist
+                const mockEmailsToPurge = ["admin@yuwapat.ac.th", "director@yuwapat.ac.th", "somchai@yuwapat.ac.th", "somsri@yuwapat.ac.th"];
                 users = users.filter(u => !mockEmailsToPurge.includes(u.email.toLowerCase()));
-                
                 let updated = false;
                 defaultUsers.forEach(defUser => {
                     const exists = users.some(u => u.email.toLowerCase() === defUser.email.toLowerCase());
-                    if (!exists) {
-                        users.push(defUser);
-                        updated = true;
-                    }
+                    if (!exists) { users.push(defUser); updated = true; }
                 });
-                localStorage.setItem('eval_users', JSON.stringify(users));
+                if (updated) localStorage.setItem('eval_users', JSON.stringify(users));
             }
             return users;
         }
 
         function getActivities() { 
-            let activities = JSON.parse(localStorage.getItem('eval_activities'));
-            if (activities) {
-                // กรองลบโครงการตัวอย่างทดสอบระบบเดิมออกทั้งหมดอย่างเด็ดขาด
-                activities = activities.filter(a => 
-                    a.id !== "ACT-001" && 
-                    a.id !== "ACT-002" && 
-                    a.id !== "ACT-003" && 
-                    !a.name.includes("ประชุมคณะกรรมการ") && 
-                    !a.name.includes("โครงการพัฒนาทักษะ") && 
-                    !a.name.includes("กิจกรรมพบกันฉันน้องพี่")
-                );
-                localStorage.setItem('eval_activities', JSON.stringify(activities));
-            } else {
-                activities = defaultActivities;
-            }
+            let activities = JSON.parse(localStorage.getItem('eval_activities')) || [];
+            activities = activities.filter(a => !['ACT-001','ACT-002','ACT-003'].includes(a.id));
+            localStorage.setItem('eval_activities', JSON.stringify(activities));
             return activities; 
         }
 
         function getEvaluations() { 
-            let evaluations = JSON.parse(localStorage.getItem('eval_submissions'));
-            if (evaluations) {
-                evaluations = evaluations.filter(e => 
-                    e.activityId !== "ACT-001" && 
-                    e.activityId !== "ACT-002" && 
-                    e.activityId !== "ACT-003"
-                );
-                localStorage.setItem('eval_submissions', JSON.stringify(evaluations));
-            } else {
-                evaluations = defaultEvaluations;
-            }
+            let evaluations = JSON.parse(localStorage.getItem('eval_submissions')) || [];
+            evaluations = evaluations.filter(e => !['ACT-001','ACT-002','ACT-003'].includes(e.activityId));
+            localStorage.setItem('eval_submissions', JSON.stringify(evaluations));
             return evaluations; 
-        }
-
-        let uploadedPosterBase64 = "";
-        let currentUser = null;
-        let currentConfirmAction = null;
-
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            if(!container) return;
-            const toast = document.createElement('div');
-            toast.className = `flex items-center gap-3 px-5 py-4 rounded-xl shadow-xl border text-sm font-semibold transition-all duration-300 transform translate-y-2 opacity-0 bg-white ${type === 'success' ? 'border-emerald-200 text-emerald-900' : 'border-rose-200 text-rose-800'}`;
-            const iconSvg = type === 'success' 
-                ? `<svg class="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>`
-                : `<svg class="w-5 h-5 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>`;
-            toast.innerHTML = `<div class="flex-shrink-0">${iconSvg}</div><span>${message}</span>`;
-            container.appendChild(toast);
-            setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 10);
-            setTimeout(() => { toast.classList.add('translate-y-2', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3500);
-        }
-
-        function customConfirm(title, message, iconType, onConfirm, isDanger = false, okText = "ตกลง") {
-            const modal = document.getElementById('confirm-modal');
-            if(!modal) return;
-            document.getElementById('confirm-title').innerText = title;
-            document.getElementById('confirm-msg').innerText = message;
-            
-            const okBtn = document.getElementById('confirm-ok-btn');
-            okBtn.innerText = okText;
-            
-            const cancelBtn = document.getElementById('confirm-cancel-btn');
-            cancelBtn.className = "px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition-all active:scale-95 shadow-sm cursor-pointer";
-            
-            if (isDanger) {
-                okBtn.className = "px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-all active:scale-95 shadow-sm cursor-pointer";
-            } else {
-                okBtn.className = "px-5 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold transition-all active:scale-95 shadow-sm cursor-pointer";
-            }
-            
-            const iconWrapper = document.getElementById('confirm-icon-wrapper');
-            if (iconWrapper) {
-                if (isDanger) {
-                    iconWrapper.className = "w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-600 border border-rose-100";
-                    iconWrapper.innerHTML = `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg> `;
-                } else if (iconType === 'logout') {
-                    iconWrapper.className = "w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-800 border border-emerald-100";
-                    iconWrapper.innerHTML = `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>`;
-                } else {
-                    iconWrapper.className = "w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-600 border border-amber-100";
-                    iconWrapper.innerHTML = `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>`;
-                }
-            }
-            
-            modal.classList.remove('hidden'); modal.classList.add('flex'); currentConfirmAction = onConfirm;
-        }
-
-        function getGoogleSheetUrl() { return localStorage.getItem('google_sheet_url') || DEFAULT_GOOGLE_SHEET_URL; }
-        function saveGoogleSheetsConnection() {
-            const url = document.getElementById('googleSheetUrl').value.trim();
-            localStorage.setItem('google_sheet_url', url);
-            showToast('บันทึกการเชื่อมโยง Google Sheets เรียบร้อยแล้ว', 'success');
-        }
-
-        function syncTeachersFromGoogleSheets() {
-            const url = getGoogleSheetUrl();
-            if (!url) {
-                showToast('กรุณาระบุและบันทึก Web App URL ก่อนดำเนินการซิงค์ข้อมูล', 'error');
-                return;
-            }
-            showToast('กำลังดึงข้อมูลบุคลากรจาก Google Sheets...', 'info');
-            fetch(url)
-                .then(res => res.json())
-                .then(data => {
-                    if (Array.isArray(data) && data.length > 0) {
-                        localStorage.setItem('eval_users', JSON.stringify(data));
-                        showToast(`การซิงค์ข้อมูลบุคลากรจำนวน ${data.length} ท่านเสร็จสมบูรณ์`, 'success');
-                        loadAdminPanel();
-                    } else {
-                        showToast('ไม่พบข้อมูลบุคลากร หรือสเปรดชีตไม่มีข้อมูล', 'error');
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    showToast('การเชื่อมต่อ Google Sheets ขัดข้อง โปรดตรวจสอบสิทธิ์การรับส่งข้อมูล', 'error');
-                });
-        }
-
-        function pushUserToGoogleSheet(userData, originalEmail = null) {
-            const url = getGoogleSheetUrl();
-            if (!url) return;
-            const payload = {
-                action: "save_user",
-                empId: userData.empId,
-                name: userData.name,
-                email: userData.email,
-                originalEmail: originalEmail || userData.email,
-                role: userData.role,
-                password: userData.password
-            };
-            fetch(url, {
-                method: "POST",
-                body: JSON.stringify(payload)
-            })
-            .then(res => res.json())
-            .then(resData => {
-                if (resData.status === "success") {
-                    showToast('การปรับปรุงข้อมูลลง Google Sheet เสร็จสมบูรณ์', 'success');
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                showToast('การเชื่อมต่อกับสเปรดชีตออนไลน์ขัดข้อง ระบบจะบันทึกข้อมูลไว้ในเครื่องชั่วคราว', 'error');
-            });
-        }
-
-        function pushUserDeleteToGoogleSheet(email, empId) {
-            const url = getGoogleSheetUrl();
-            if (!url) return;
-            const payload = {
-                action: "delete_user",
-                email: email,
-                empId: empId
-            };
-            fetch(url, {
-                method: "POST",
-                body: JSON.stringify(payload)
-            })
-            .then(res => res.json())
-            .then(resData => {
-                if (resData.status === "success") {
-                    showToast('ซิงค์การจำหน่ายออกบุคลากรลง Google Sheet เรียบร้อยแล้ว', 'success');
-                }
-            })
-            .catch(err => console.error(err));
-        }
-
-        function pushEvaluationToGoogleSheet(evList) {
-            const url = getGoogleSheetUrl();
-            if (!url) return;
-            const payload = {
-                action: "submit_evaluation",
-                evaluations: evList
-            };
-            fetch(url, {
-                method: "POST",
-                body: JSON.stringify(payload)
-            })
-            .then(res => res.json())
-            .then(resData => {
-                if (resData.status === "success") {
-                    showToast('ซิงค์ผลการประเมินขึ้น Google Sheet เรียบร้อยแล้ว', 'success');
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                showToast('การซิงค์ผลประเมินออนไลน์ขัดข้อง แต่ระบบได้บันทึกข้อมูลไว้เรียบร้อยแล้ว', 'error');
-            });
         }
 
         function checkSession() {
@@ -804,11 +535,26 @@
                 currentUser = JSON.parse(savedUser);
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('main-dashboard').classList.remove('hidden');
-                document.getElementById('main-dashboard').classList.add('flex');
                 
-                let roleText = currentUser.role === 'Admin' ? 'ผู้ดูแลระบบกลาง' : 'คุณครู/บุคลากร';
-                document.getElementById('adminTabBadge').innerText = currentUser.role === 'Admin' ? 'ผู้ดูแลระบบ' : 'สร้างแบบประเมิน';
-                document.getElementById('userProfileDisplay').innerText = `${currentUser.name} (${roleText})`;
+                // Set sidebar profile
+                document.getElementById('sidebar-user-name').innerText = currentUser.name;
+                const roleLabels = { 
+                    'Admin': 'ผู้ดูแลระบบกลาง', 
+                    'Head_Admin': 'หัวหน้าฝ่ายบริหารทั่วไป', 
+                    'Head_Student':'หัวหน้าฝ่ายกิจการนักเรียน', 
+                    'Head_QA':'หัวหน้าฝ่ายประกันคุณภาพ', 
+                    'Head_Academic':'หัวหน้าฝ่ายวิชาการ', 
+                    'Executive':'ผู้บริหาร', 
+                    'Staff':'คุณครู/บุคลากร' 
+                };
+                document.getElementById('sidebar-user-role').innerText = roleLabels[currentUser.role] || currentUser.role;
+
+                // Show/Hide Admin restricted tabs
+                const isAdmin = (currentUser.role === 'Admin');
+                document.querySelectorAll('.admin-only-btn').forEach(el => {
+                    if(isAdmin) el.classList.remove('hidden'); else el.classList.add('hidden');
+                });
+
                 switchTab('evaluate-tab');
             } else {
                 document.getElementById('login-screen').classList.remove('hidden');
@@ -816,677 +562,586 @@
             }
         }
 
-        function handleLogin(event) {
-            event.preventDefault();
+        function handleLogin(e) {
+            e.preventDefault();
             const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value.trim();
             const found = getUsers().find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
             if (found) {
                 localStorage.setItem('current_logged_user', JSON.stringify(found));
-                showToast('เข้าสู่ระบบสำเร็จ', 'success'); checkSession();
-            } else { showToast('ที่อยู่อีเมลหรือรหัสผ่านไม่ถูกต้อง', 'error'); }
+                showToast('เข้าสู่ระบบสำเร็จ'); 
+                checkSession();
+            } else { 
+                showToast('ที่อยู่อีเมลหรือรหัสผ่านไม่ถูกต้อง', 'error'); 
+            }
         }
 
         function handleLogout() {
-            customConfirm("ออกจากระบบ", "ยืนยันการออกจากระบบสารสนเทศในขณะนี้?", "logout", () => {
-                localStorage.removeItem('current_logged_user'); currentUser = null;
-                showToast('ออกจากระบบเรียบร้อยแล้ว', 'success'); checkSession();
+            customConfirm("ออกจากระบบ", "ต้องการออกจากระบบสารสนเทศใช่หรือไม่?", () => {
+                localStorage.removeItem('current_logged_user'); 
+                currentUser = null; 
+                checkSession();
             });
         }
 
         function switchTab(tabId) {
+            // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            // Reset sidebar buttons styles
+            document.querySelectorAll('.sidebar-btn').forEach(btn => {
+                btn.classList.remove('bg-emerald-50', 'text-emerald-800');
+                btn.classList.add('text-slate-500', 'hover:bg-slate-50');
+            });
+            
+            // Show target tab and style active button
             document.getElementById(tabId).classList.remove('hidden');
-            document.querySelectorAll('button[id^="btn-"]').forEach(btn => { btn.classList.remove('border-emerald-800', 'text-emerald-800'); btn.classList.add('border-transparent', 'text-slate-400'); });
-            document.getElementById('btn-' + tabId).classList.add('border-emerald-800', 'text-emerald-800');
+            document.getElementById('btn-' + tabId).classList.remove('text-slate-500', 'hover:bg-slate-50');
+            document.getElementById('btn-' + tabId).classList.add('bg-emerald-50', 'text-emerald-800');
+
+            // Close mobile sidebar on navigate
+            if(window.innerWidth < 768) toggleSidebar();
+
+            // Load contextual data
             if (tabId === 'evaluate-tab') loadEvaluationForms();
             if (tabId === 'report-tab') loadReportList();
             if (tabId === 'history-tab') loadHistoryReports();
+            if (tabId === 'created-history-tab') loadCreatedHistory();
+            if (tabId === 'input-history-tab') loadInputHistory();
             if (tabId === 'admin-tab') loadAdminPanel();
         }
 
+        // --------------------------------------------------------------------------------
+        // 1. Tab: ทำแบบประเมิน (Evaluate)
+        // --------------------------------------------------------------------------------
         function loadEvaluationForms() {
             if (!currentUser) return;
-            const activities = getActivities(); const evaluations = getEvaluations();
+            const activities = getActivities(); 
+            const evaluations = getEvaluations();
             const userEvaluatedKeys = evaluations.filter(ev => ev.email.toLowerCase() === currentUser.email.toLowerCase()).map(ev => `${ev.activityId}_${ev.round}`);
             const pendingActivities = activities.filter(act => {
                 const rounds = act.rounds && act.rounds.length > 0 ? act.rounds : ["รอบปกติ"];
                 return rounds.some(round => !userEvaluatedKeys.includes(`${act.id}_${round}`));
             });
+            
             document.getElementById('pendingBadge').innerText = pendingActivities.length;
-            const container = document.getElementById('evaluationList'); container.innerHTML = '';
-            if (pendingActivities.length === 0) { container.classList.add('hidden'); document.getElementById('noEvaluations').classList.remove('hidden'); return; }
-            container.classList.remove('hidden'); document.getElementById('noEvaluations').classList.add('hidden');
+            const container = document.getElementById('evaluationList'); 
+            container.innerHTML = '';
+            
+            if (pendingActivities.length === 0) { 
+                container.classList.add('hidden'); 
+                document.getElementById('noEvaluations').classList.remove('hidden'); 
+                return; 
+            }
+            container.classList.remove('hidden'); 
+            document.getElementById('noEvaluations').classList.add('hidden');
 
             pendingActivities.forEach(act => {
                 const card = document.createElement('div');
-                card.className = "bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col justify-between";
-                const rounds = act.rounds && act.rounds.length > 0 ? act.rounds : ["รอบปกติ"];
-                const finished = rounds.filter(r => userEvaluatedKeys.includes(`${act.id}_${r}`));
+                card.className = "bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col hover:shadow-md transition-shadow";
+                const posterSrc = act.poster || "https://placehold.co/400x200/064e3b/facc15?text=" + encodeURIComponent(act.name);
                 
-                const posterSrc = act.poster && act.poster.trim() !== "" ? act.poster : "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'><rect width='100%' height='100%' fill='%23064e3b'/><text x='50%' y='50%' fill='%23facc15' font-family='sans-serif, Tahoma, Arial' font-weight='bold' font-size='16' text-anchor='middle'>โรงเรียนอนุบาลยุวพัฒน์นครสวรรค์</text></svg>";
-
                 card.innerHTML = `
-                    <div class="relative h-44 bg-slate-100 overflow-hidden border-b">
-                        <img src="${posterSrc}" alt="ภาพโปสเตอร์โครงการ" class="w-full h-full object-cover">
-                        <div class="absolute top-2.5 left-2.5">
-                            <span class="bg-emerald-950/80 text-white text-xs font-mono font-bold px-2.5 py-1 rounded tracking-wider border border-white/10 shadow-sm">${act.id}</span>
-                        </div>
+                    <div class="h-40 bg-slate-100 overflow-hidden relative">
+                        <img src="${posterSrc}" class="w-full h-full object-cover">
+                        <span class="absolute top-3 left-3 bg-slate-900/80 text-white text-[10px] font-mono px-2 py-1 rounded shadow">${act.id}</span>
                     </div>
-                    <div class="p-5 flex-grow flex flex-col justify-between">
+                    <div class="p-5 flex-1 flex flex-col justify-between">
                         <div>
-                            <h4 class="text-base font-bold text-slate-800 leading-snug limit-2-lines min-h-12">${act.name}</h4>
-                            ${act.rounds ? `<p class="text-xs text-amber-700 font-bold mt-1.5 flex items-center gap-1.5">
-                                <svg class="w-4 h-4 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
-                                </svg>
-                                <span>จัดกิจกรรมหลายรุ่น (ดำเนินการแล้ว ${finished.length}/${rounds.length})</span>
-                            </p>` : ''}
-                            <p class="text-sm text-slate-500 mt-2.5 h-10 limit-2-lines">${act.objectives || ''}</p>
+                            <h4 class="font-bold text-slate-800 text-sm mb-2 limit-2-lines min-h-10">${act.name}</h4>
+                            <p class="text-xs text-slate-500 limit-2-lines leading-relaxed">${act.objectives || 'ไม่มีรายละเอียดวัตถุประสงค์'}</p>
                         </div>
-                        <button onclick="openEvaluationModal('${act.id}')" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold py-2.5 rounded-xl mt-4 transition-all cursor-pointer">เริ่มทำแบบประเมิน</button>
+                        <button onclick="openEvaluationModal('${act.id}')" class="w-full mt-4 bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold py-2.5 rounded-xl transition-all shadow-md active:scale-95 cursor-pointer">ประเมินผลโครงการ</button>
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
 
+        // --------------------------------------------------------------------------------
+        // 2. Tab: สรุปรายงานสถิติ (Public Reports with Mean & SD)
+        // --------------------------------------------------------------------------------
+        function loadReportList() {
+            const container = document.getElementById('reportList'); 
+            container.innerHTML = '';
+            const activities = getActivities();
+            const evaluations = getEvaluations();
+
+            if (activities.length === 0) {
+                container.innerHTML = `<div class="bg-white p-12 rounded-2xl border border-slate-200 text-center text-sm text-slate-400">ยังไม่มีโครงการในระบบสารสนเทศ</div>`; 
+                return;
+            }
+
+            activities.forEach(act => {
+                const actEvals = evaluations.filter(e => e.activityId === act.id);
+                const totalEvals = actEvals.length;
+                const topics = act.topics || ["ความเห็นในภาพรวม"];
+
+                // Build Statistics Rows for Each Topic
+                let statsHtml = '';
+                let overallScores = [];
+
+                topics.forEach((topic, idx) => {
+                    const topicScores = actEvals.map(e => e.ratings && e.ratings[topic] ? e.ratings[topic] : 0).filter(s => s > 0);
+                    overallScores = overallScores.concat(topicScores);
+                    const stats = calculateStatistics(topicScores);
+                    
+                    statsHtml += `
+                        <tr class="border-b border-slate-100 hover:bg-slate-50 text-sm">
+                            <td class="py-3 px-4 text-slate-700">${idx+1}. ${topic}</td>
+                            <td class="py-3 px-4 text-center font-mono font-bold text-slate-800">${stats.mean}</td>
+                            <td class="py-3 px-4 text-center font-mono text-slate-500">${stats.sd}</td>
+                        </tr>
+                    `;
+                });
+
+                const overallStats = calculateStatistics(overallScores);
+                
+                // Calculate Percentage (Score 4-5)
+                const satisfiedCount = overallScores.filter(s => s >= 4).length;
+                const percentage = overallScores.length > 0 ? ((satisfiedCount / overallScores.length) * 100).toFixed(1) : "0.0";
+
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-2xl shadow-sm border border-slate-200 overflow-hidden";
+                card.innerHTML = `
+                    <div class="flex flex-col lg:flex-row justify-between gap-6 mb-6 pb-6 border-b border-slate-100">
+                        <div class="flex-1">
+                            <span class="inline-block bg-slate-100 text-slate-600 text-[10px] font-mono px-2 py-1 rounded mb-2">${act.id}</span>
+                            <h3 class="text-base font-bold text-slate-800">${act.name}</h3>
+                            <p class="text-xs text-slate-500 mt-2">จำนวนผู้ตอบแบบประเมินทั้งหมด: <strong class="text-slate-800">${totalEvals}</strong> รายการ</p>
+                        </div>
+                        <div class="flex gap-4 items-center">
+                            <div class="text-center p-4 bg-emerald-50 rounded-xl border border-emerald-100 min-w-28">
+                                <span class="block text-[10px] text-emerald-700 font-bold uppercase mb-1">ร้อยละความพึงพอใจ</span>
+                                <span class="text-2xl font-extrabold text-emerald-800">${percentage}%</span>
+                            </div>
+                            <div class="text-center p-4 bg-slate-50 rounded-xl border border-slate-200 min-w-28">
+                                <span class="block text-[10px] text-slate-500 font-bold uppercase mb-1">ค่าเฉลี่ยรวม (x̄)</span>
+                                <span class="text-2xl font-extrabold text-slate-800">${overallStats.mean}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-50 text-slate-500 text-[11px] uppercase tracking-wider font-bold">
+                                <tr>
+                                    <th class="py-3 px-4 rounded-tl-lg">หัวข้อการประเมินผล</th>
+                                    <th class="py-3 px-4 text-center w-28">ค่าเฉลี่ย (x̄)</th>
+                                    <th class="py-3 px-4 text-center w-28 rounded-tr-lg">S.D.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${totalEvals > 0 ? statsHtml : '<tr><td colspan="3" class="py-6 text-center text-xs text-slate-400">ยังไม่มีข้อมูลผลการประเมินในระบบ</td></tr>'}
+                            </tbody>
+                            <tfoot class="bg-slate-50 font-bold text-sm text-slate-800 border-t border-slate-200">
+                                <tr>
+                                    <td class="py-3 px-4 text-right text-xs uppercase tracking-wider text-slate-500">สรุปรวมสถิติทุกลำดับหัวข้อ:</td>
+                                    <td class="py-3 px-4 text-center font-mono text-emerald-800 font-extrabold">${overallStats.mean}</td>
+                                    <td class="py-3 px-4 text-center font-mono text-slate-600">${overallStats.sd}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // --------------------------------------------------------------------------------
+        // 3. Tab: ประวัติการสร้างแบบสอบถาม (Created History)
+        // --------------------------------------------------------------------------------
+        function loadCreatedHistory() {
+            const tbody = document.getElementById('createdHistoryTable'); 
+            tbody.innerHTML = '';
+            const activities = getActivities().filter(a => a.owner === currentUser.email);
+            const evaluations = getEvaluations();
+
+            if (activities.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-sm text-slate-400">คุณยังไม่ได้เป็นผู้รับผิดชอบหรือสร้างแบบประเมินโครงการใดๆ</td></tr>`;
+                return;
+            }
+
+            activities.forEach(act => {
+                const evalCount = evaluations.filter(e => e.activityId === act.id).length;
+                const topicCount = act.topics ? act.topics.length : 1;
+                const status = evalCount > 0 
+                    ? `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] px-2.5 py-1 rounded-full font-bold">ดำเนินการแล้ว</span>` 
+                    : `<span class="bg-slate-100 text-slate-500 border border-slate-200 text-[10px] px-2.5 py-1 rounded-full font-bold">รอประเมิน</span>`;
+                
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition-colors";
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-mono text-xs font-bold text-slate-500">${act.id}</td>
+                    <td class="px-6 py-4 text-sm font-bold text-slate-800">${act.name}</td>
+                    <td class="px-6 py-4 text-center text-sm">${topicCount} หัวข้อ</td>
+                    <td class="px-6 py-4 text-center text-sm font-bold text-emerald-700">${evalCount} รายการ</td>
+                    <td class="px-6 py-4 text-center">${status}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // --------------------------------------------------------------------------------
+        // 4. Tab: ลงรายละเอียดคะแนนย้อนหลัง (Input History)
+        // --------------------------------------------------------------------------------
+        function loadInputHistory() {
+            const tbody = document.getElementById('inputHistoryTable'); 
+            tbody.innerHTML = '';
+            const activities = getActivities();
+            
+            const visibleActivities = currentUser.role === 'Admin' ? activities : activities.filter(a => a.owner === currentUser.email);
+
+            if (visibleActivities.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-sm text-slate-400">ไม่มีโครงการที่ท่านมีสิทธิ์จัดการสถิติย้อนหลัง</td></tr>`;
+                return;
+            }
+
+            visibleActivities.forEach(act => {
+                const h66 = act.history?.["2566"] || 0;
+                const h67 = act.history?.["2567"] || 0;
+                const h68 = act.history?.["2568"] || 0;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="px-5 py-4">
+                        <div class="text-xs font-mono text-slate-400 mb-0.5">${act.id}</div>
+                        <div class="text-sm font-bold text-slate-800 limit-2-lines">${act.name}</div>
+                    </td>
+                    <td class="px-3 py-4"><input type="number" id="inp-66-${act.id}" value="${h66}" step="0.1" max="100" min="0" class="w-20 border border-slate-200 rounded-xl p-2 text-center text-sm focus:ring-2 focus:ring-emerald-700 bg-slate-50/50 mx-auto block"></td>
+                    <td class="px-3 py-4"><input type="number" id="inp-67-${act.id}" value="${h67}" step="0.1" max="100" min="0" class="w-20 border border-slate-200 rounded-xl p-2 text-center text-sm focus:ring-2 focus:ring-emerald-700 bg-slate-50/50 mx-auto block"></td>
+                    <td class="px-3 py-4"><input type="number" id="inp-68-${act.id}" value="${h68}" step="0.1" max="100" min="0" class="w-20 border border-slate-200 rounded-xl p-2 text-center text-sm focus:ring-2 focus:ring-emerald-700 bg-slate-50/50 mx-auto block"></td>
+                    <td class="px-5 py-4 text-center">
+                        <button onclick="saveInputHistory('${act.id}')" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm active:scale-95 cursor-pointer">บันทึก</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function saveInputHistory(actId) {
+            const h66 = parseFloat(document.getElementById(`inp-66-${actId}`).value) || 0;
+            const h67 = parseFloat(document.getElementById(`inp-67-${actId}`).value) || 0;
+            const h68 = parseFloat(document.getElementById(`inp-68-${actId}`).value) || 0;
+
+            let activities = getActivities();
+            const actIndex = activities.findIndex(a => a.id === actId);
+            if(actIndex !== -1) {
+                activities[actIndex].history = { "2566": h66, "2567": h67, "2568": h68 };
+                localStorage.setItem('eval_activities', JSON.stringify(activities));
+                showToast(`บันทึกคะแนนย้อนหลังของ ${actId} สำเร็จเรียบร้อย`);
+            }
+        }
+
+        // --------------------------------------------------------------------------------
+        // 5. Tab: สถิติดำเนินการย้อนหลัง 3 ปี (History Charts)
+        // --------------------------------------------------------------------------------
+        function loadHistoryReports() {
+            const container = document.getElementById('historyList'); 
+            container.innerHTML = '';
+            const activities = getActivities();
+
+            if (activities.length === 0) {
+                container.innerHTML = `<div class="lg:col-span-2 bg-white p-12 rounded-2xl border border-slate-200 text-center text-sm text-slate-400">ยังไม่มีข้อมูลโครงการย้อนหลังในระบบ</div>`;
+                return;
+            }
+
+            activities.forEach(act => {
+                const actEvals = getEvaluations().filter(e => e.activityId === act.id);
+                const totalEvals = actEvals.length;
+                let currentPercent = 0;
+                
+                if(totalEvals > 0 && act.topics) {
+                    let overallScores = [];
+                    act.topics.forEach(topic => {
+                        const scores = actEvals.map(e => e.ratings && e.ratings[topic] ? e.ratings[topic] : 0).filter(s => s > 0);
+                        overallScores = overallScores.concat(scores);
+                    });
+                    const satisfied = overallScores.filter(s => s >= 4).length;
+                    currentPercent = overallScores.length > 0 ? (satisfied / overallScores.length) * 100 : 0;
+                }
+
+                const h66 = act.history?.["2566"] || 0;
+                const h67 = act.history?.["2567"] || 0;
+                const h68 = act.history?.["2568"] || 0;
+
+                const getBarHtml = (yearLabel, score, isCurrent = false) => {
+                    const formattedScore = score > 0 ? score.toFixed(1) + "%" : "0%";
+                    const bgClass = isCurrent ? 'bg-amber-400' : 'bg-emerald-700';
+                    const textClass = isCurrent ? 'text-amber-700 font-extrabold' : 'text-slate-500 font-bold';
+                    return `
+                        <div class="flex flex-col items-center flex-1">
+                            <span class="text-[10px] ${textClass} mb-1">${formattedScore}</span>
+                            <div class="w-full max-w-[32px] bg-slate-100 rounded-t-lg h-32 flex items-end overflow-hidden border border-slate-200">
+                                <div class="w-full ${bgClass} transition-all duration-700" style="height: ${Math.min(score, 100)}%"></div>
+                            </div>
+                            <span class="text-[10px] text-slate-400 font-semibold mt-2">${yearLabel}</span>
+                        </div>
+                    `;
+                };
+
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm";
+                card.innerHTML = `
+                    <div class="mb-4">
+                        <span class="text-[10px] font-mono text-slate-400 border px-1.5 py-0.5 rounded bg-slate-50">${act.id}</span>
+                        <h4 class="text-sm font-bold text-slate-800 mt-2 limit-2-lines h-10">${act.name}</h4>
+                    </div>
+                    <div class="flex items-end justify-between gap-2 px-2 pb-2 border-b border-dashed border-slate-200">
+                        ${getBarHtml("ปี 2566", h66)}
+                        ${getBarHtml("ปี 2567", h67)}
+                        ${getBarHtml("ปี 2568", h68)}
+                        ${getBarHtml("ปัจจุบัน", currentPercent, true)}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // --------------------------------------------------------------------------------
+        // 6. Modal & Evaluation Submission Logic
+        // --------------------------------------------------------------------------------
         function openEvaluationModal(actId) {
-            const act = getActivities().find(a => a.id === actId); if (!act) return;
+            const act = getActivities().find(a => a.id === actId); 
+            if (!act) return;
+            
             document.getElementById('eval-modal-act-id').value = act.id;
             document.getElementById('eval-modal-id').innerText = act.id;
             document.getElementById('eval-modal-name').innerText = act.name;
-            document.getElementById('eval-modal-objectives').innerText = act.objectives || '-';
-            document.getElementById('eval-modal-poster').src = act.poster || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'><rect width='100%' height='100%' fill='%23064e3b'/><text x='50%' y='50%' fill='%23facc15' font-family='Sarabun' font-weight='bold' text-anchor='middle'>ยุวพัฒน์นครสวรรค์</text></svg>";
+            document.getElementById('eval-modal-objectives').innerText = act.objectives || 'ไม่มีรายละเอียดวัตถุประสงค์';
 
             const roundContainer = document.getElementById('eval-modal-round-container');
             const roundSelect = document.getElementById('eval-modal-round-select');
+            
             const actRounds = act.rounds || ["รอบปกติ"];
             const userDone = getEvaluations().filter(e => e.email.toLowerCase() === currentUser.email.toLowerCase() && e.activityId === act.id).map(e => e.round);
             const avRounds = actRounds.filter(r => !userDone.includes(r));
 
-            if (act.rounds && act.rounds.length > 0) {
-                if (avRounds.length === 0) {
-                    showToast('ท่านได้ทำแบบประเมินของกิจกรรมนี้ครบทุกรุ่นเรียบร้อยแล้ว', 'success');
-                    closeEvaluationModal();
-                    return;
-                }
-                roundContainer.classList.remove('hidden'); roundSelect.innerHTML = '';
-                avRounds.forEach(r => { const opt = document.createElement('option'); opt.value = r; opt.innerText = r; roundSelect.appendChild(opt); });
-                roundSelect.required = true;
-            } else {
-                roundContainer.classList.add('hidden'); roundSelect.innerHTML = '<option value="รอบปกติ">รอบปกติ</option>'; roundSelect.required = false;
+            if (actRounds.length > 0 && avRounds.length === 0) {
+                showToast('ท่านได้ประเมินโครงการนี้ครบทุกรอบแล้ว'); 
+                return;
             }
 
-            const topicsContainer = document.getElementById('eval-topics-container'); topicsContainer.innerHTML = '';
+            roundSelect.innerHTML = '';
+            if (act.rounds && act.rounds.length > 0) {
+                roundContainer.classList.remove('hidden'); 
+                roundSelect.required = true;
+                avRounds.forEach(r => { 
+                    const opt = document.createElement('option'); 
+                    opt.value = r; 
+                    opt.innerText = r; 
+                    roundSelect.appendChild(opt); 
+                });
+            } else {
+                roundContainer.classList.add('hidden'); 
+                roundSelect.innerHTML = '<option value="รอบปกติ">รอบปกติ</option>'; 
+                roundSelect.required = false;
+            }
+
+            const topicsContainer = document.getElementById('eval-topics-container'); 
+            topicsContainer.innerHTML = '';
             (act.topics || ["ความเห็นในภาพรวม"]).forEach((topic, idx) => {
-                const div = document.createElement('div'); div.className = "bg-white p-5 rounded-2xl border border-slate-200 shadow-sm";
+                const div = document.createElement('div'); 
+                div.className = "bg-slate-50 p-4 rounded-xl border border-slate-200";
                 let opts = '';
                 for(let i=1; i<=5; i++) {
-                    opts += `
-                        <label class="flex flex-col items-center gap-2 cursor-pointer">
-                            <span class="text-xs font-bold text-slate-500">${i}</span>
-                            <input type="radio" name="topic-rating-${idx}" value="${i}" required class="w-5 h-5 text-emerald-800 focus:ring-emerald-800 border-slate-350 cursor-pointer accent-emerald-800">
-                        </label>
-                    `;
+                    opts += `<label class="flex flex-col items-center gap-1 cursor-pointer"><span class="text-xs font-bold text-slate-500">${i}</span><input type="radio" name="topic-rating-${idx}" value="${i}" required class="w-5 h-5 text-emerald-700 accent-emerald-700 cursor-pointer"></label>`;
                 }
-                div.innerHTML = `
-                    <p class="text-sm font-bold text-slate-800 mb-3">${idx+1}. ${topic} <span class="text-rose-500">*</span></p>
-                    <div class="flex items-center justify-between md:justify-center md:gap-12 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                        <span class="text-xs text-slate-400 font-bold self-end mb-1">น้อยที่สุด</span>
-                        <div class="flex gap-4 sm:gap-8">${opts}</div>
-                        <span class="text-xs text-slate-400 font-bold self-end mb-1">มากที่สุด</span>
-                    </div>
-                `;
+                div.innerHTML = `<p class="text-sm font-bold text-slate-800 mb-3">${idx+1}. ${topic}</p><div class="flex items-center justify-between px-2 sm:px-6 gap-2"><span class="text-[10px] text-slate-400 font-bold self-end mb-1">น้อยที่สุด</span>${opts}<span class="text-[10px] text-slate-400 font-bold self-end mb-1">มากที่สุด</span></div>`;
                 topicsContainer.appendChild(div);
             });
-            document.getElementById('evaluation-modal').classList.remove('hidden'); document.getElementById('evaluation-modal').classList.add('flex');
+            
+            document.getElementById('evaluation-modal').classList.remove('hidden'); 
+            document.getElementById('evaluation-modal').classList.add('flex');
         }
 
-        function closeEvaluationModal() { document.getElementById('evaluation-modal').classList.add('hidden'); document.getElementById('evaluation-modal').classList.remove('flex'); }
+        function closeEvaluationModal() { 
+            document.getElementById('evaluation-modal').classList.add('hidden'); 
+        }
 
         function submitEvaluationData(e) {
-            e.preventDefault(); const actId = document.getElementById('eval-modal-act-id').value;
-            const act = getActivities().find(a => a.id === actId); if (!act) return;
+            e.preventDefault();
+            const actId = document.getElementById('eval-modal-act-id').value;
+            const act = getActivities().find(a => a.id === actId); 
+            if (!act) return;
+            
             const round = document.getElementById('eval-modal-round-select').value;
             const role = document.querySelector('input[name="eval-role"]:checked').value;
             const suggestion = document.getElementById('eval-suggestion').value.trim();
 
-            const ratings = {};
+            const ratings = {}; 
             const evListForSheet = [];
             (act.topics || ["ความเห็นในภาพรวม"]).forEach((topic, idx) => {
                 const score = parseInt(document.querySelector(`input[name="topic-rating-${idx}"]:checked`).value);
                 ratings[topic] = score;
-                evListForSheet.push({
-                    activityId: actId,
-                    activityName: act.name,
-                    name: currentUser.name,
-                    role: role,
-                    round: round,
-                    topic: topic,
-                    rating: score,
-                    suggestion: suggestion
+                evListForSheet.push({ 
+                    activityId: actId, 
+                    activityName: act.name, 
+                    name: currentUser.name, 
+                    role, 
+                    round, 
+                    topic, 
+                    rating: score, 
+                    suggestion 
                 });
             });
 
             const evals = getEvaluations();
             evals.push({ activityId: actId, email: currentUser.email, name: currentUser.name, role, round, ratings, suggestion });
             localStorage.setItem('eval_submissions', JSON.stringify(evals));
-            
-            pushEvaluationToGoogleSheet(evListForSheet);
 
-            closeEvaluationModal(); showToast('ส่งผลการประเมินโครงการสำเร็จ', 'success'); loadEvaluationForms();
+            // Sync to Google Sheets via POST API
+            fetch(DEFAULT_GOOGLE_SHEET_URL, { 
+                method: "POST", 
+                body: JSON.stringify({ action: "submit_evaluation", evaluations: evListForSheet }) 
+            }).catch(err => console.error("Sheet sync error:", err));
+
+            closeEvaluationModal(); 
+            showToast('ส่งผลประเมินเรียบร้อย'); 
+            loadEvaluationForms();
         }
 
-        function loadReportList() {
-            const container = document.getElementById('reportList'); container.innerHTML = '';
-            
-            if (!currentUser) {
-                container.innerHTML = '<p class="text-center text-slate-400 py-12 text-sm">กรุณาเข้าสู่ระบบก่อนเรียกใช้รายงานสรุปผล</p>';
-                return;
-            }
-
-            const isAdmin = currentUser.role === 'Admin';
-            const isExecutive = currentUser.role === 'Executive';
-            const isHead = ['Head_Admin', 'Head_Academic', 'Head_QA', 'Head_Student'].includes(currentUser.role);
-
-            getActivities().forEach(act => {
-                const actEvals = getEvaluations().filter(e => e.activityId === act.id);
-                let satSum = 0, total = actEvals.length;
-                const topics = act.topics || ["ความเห็นในภาพรวม"];
-
-                topics.forEach(t => {
-                    let count = 0; actEvals.forEach(e => { if ((e.ratings?.[t] || 0) >= 4) count++; });
-                    satSum += total > 0 ? (count / total) * 100 : 0;
-                });
-                const rate = total > 0 ? (satSum / topics.length).toFixed(2) : "0.00";
-
-                const isOwner = act.owner && act.owner.toLowerCase() === currentUser.email.toLowerCase();
-                const isAuthorized = isAdmin || isOwner || isExecutive || isHead;
-
-                const card = document.createElement('div'); card.className = "bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-6";
-                
-                let evaluationRowsHtml = '';
-                actEvals.forEach(e => {
-                    let ratingsSummary = '';
-                    topics.forEach((topic, tidx) => {
-                        const score = e.ratings && e.ratings[topic] ? e.ratings[topic] : 0;
-                        ratingsSummary += `<div class="mb-1">${tidx+1}. <span class="font-bold ${score >= 4 ? 'text-emerald-800' : 'text-slate-500'} text-sm">${score}.0</span></div>`;
-                    });
-                    
-                    const userObj = getUsers().find(u => u.email.toLowerCase() === e.email.toLowerCase());
-                    const empIdText = userObj ? userObj.empId : '-';
-                    
-                    evaluationRowsHtml += `
-                        <tr class="hover:bg-slate-50 transition-colors">
-                            <td class="px-5 py-4">
-                                <div class="font-bold text-slate-800 text-sm md:text-base">${e.name}</div>
-                                <div class="text-xs text-slate-500 font-mono mt-1">ID: ${empIdText} • ${e.email}</div>
-                            </td>
-                            <td class="px-5 py-4 text-slate-700 text-sm font-medium">${e.role}</td>
-                            <td class="px-5 py-4 text-emerald-800 font-bold text-sm uppercase">${e.round || 'รอบปกติ'}</td>
-                            <td class="px-5 py-4 leading-snug font-medium text-slate-800 text-sm">${ratingsSummary}</td>
-                            <td class="px-5 py-4 italic text-slate-600 leading-relaxed text-sm">${e.suggestion || '-'}</td>
-                        </tr>
-                    `;
-                });
-
-                card.innerHTML = `
-                    <div class="flex justify-between border-b pb-3 mb-3 flex-wrap gap-2">
-                        <div><span class="text-xs font-mono font-bold bg-slate-50 p-1 border rounded">${act.id}</span><h3 class="text-base font-bold text-slate-800 mt-1">${act.name}</h3></div>
-                        <div class="bg-slate-50 px-4 py-2 border rounded-xl text-center"><span class="block text-[10px] text-slate-400 font-bold uppercase">พึงพอใจร้อยละ</span><span class="text-base font-bold text-emerald-800">${rate}%</span></div>
-                    </div>
-                    
-                    <div class="mb-4 mt-4">
-                        <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                            <svg class="w-4 h-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4l2 5h7a2 2 0 0 1 2 2z" />
-                            </svg>
-                            <span>📄 บันทึกข้อเสนอแนะเพื่อการพัฒนา (ไม่ระบุตัวตน):</span>
-                        </h4>
-                        <div class="space-y-2 max-h-32 overflow-y-auto">
-                            ${actEvals.filter(e => e.suggestion).length === 0 ? '<p class="text-xs text-slate-400 italic">ไม่ปรากฏข้อเสนอแนะเพิ่มเติมในโครงการนี้</p>' : actEvals.filter(e => e.suggestion).map(e => `<div class="bg-slate-50 p-2.5 border rounded text-xs font-medium"><span class="text-emerald-800 font-bold">[${e.round}]</span> "${e.suggestion}"</div>`).join('')}
-                        </div>
-                    </div>
-
-                    ${isAuthorized ? `
-                    <div class="bg-amber-50/20 border border-amber-200 rounded-xl p-5 mt-6 text-sm">
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4 border-b border-amber-100 pb-3">
-                            <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                                <svg class="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10" />
-                                    <line x1="12" y1="16" x2="12" y2="12" />
-                                    <line x1="12" y1="8" x2="12.01" y2="8" />
-                                </svg>
-                                <span>ตารางรายละเอียดคะแนนการประเมินและรายชื่อผู้ตอบรายบุคคล</span>
-                            </h4>
-                            <button onclick="exportToCSV('${act.id}')" class="bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-3.5 py-2.5 rounded-xl transition-all shadow active:scale-95 flex items-center gap-1.5 cursor-pointer">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4m4-5l5 5 5-5m-5 5V3" /></svg>
-                                <span>ส่งออกโครงการนี้ (CSV)</span>
-                            </button>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full text-sm text-left text-slate-700 border border-slate-200 bg-white rounded-xl shadow-sm overflow-hidden">
-                                <thead class="bg-amber-100/50 text-slate-800 uppercase font-bold border-b border-amber-100 text-xs">
-                                    <tr>
-                                        <th class="px-5 py-4 rounded-tl-xl">ผู้ประเมิน</th>
-                                        <th class="px-5 py-4">ตำแหน่ง</th>
-                                        <th class="px-5 py-4">ครั้งที่ประเมิน</th>
-                                        <th class="px-5 py-4">คะแนนรายข้อ (1-5)</th>
-                                        <th class="px-5 py-4 rounded-tr-xl">ข้อเสนอแนะ</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-100">
-                                    ${total === 0 ? '<tr><td colspan="5" class="px-5 py-5 text-center text-slate-400 italic">ยังไม่มีข้อมูลการส่งแบบประเมินในโครงการนี้</td></tr>' : evaluationRowsHtml}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>` : ''}
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function exportAllEvaluationsToCSV() {
-            const activities = getActivities();
-            const evaluations = getEvaluations();
-            if (evaluations.length === 0) {
-                showToast('ยังไม่มีข้อมูลการประเมินในระบบสำหรับดาวน์โหลด', 'error');
-                return;
-            }
-            let csvContent = "\uFEFF";
-            csvContent += "รหัสโครงการ,ชื่อโครงการ,รหัสพนักงาน,ผู้ประเมิน,ตำแหน่ง,ครั้งที่จัด,หัวข้อประเมิน,คะแนนโหวต,ข้อเสนอแนะเพิ่มเติม\n";
-
-            evaluations.forEach(e => {
-                const act = activities.find(a => a.id === e.activityId);
-                const actName = act ? act.name : "ไม่ระบุ";
-                const userObj = getUsers().find(u => u.email.toLowerCase() === e.email.toLowerCase());
-                const empId = userObj ? userObj.empId : '-';
-
-                for (let topic in e.ratings) {
-                    const score = e.ratings[topic];
-                    const safeTopic = topic.replace(/"/g, '""');
-                    const safeSuggestion = e.suggestion ? e.suggestion.replace(/\r?\n/g, ' ').replace(/"/g, '""') : "";
-                    csvContent += `"${e.activityId}","${actName.replace(/"/g, '""')}","${empId}","${e.name.replace(/"/g, '""')}","${e.role}","${e.round}","${safeTopic}",${score},"${safeSuggestion}"\n`;
-                }
-            });
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const blobUrl = URL.createObjectURL(blob);
-            const downloadAnchor = document.createElement("a");
-            downloadAnchor.setAttribute("href", blobUrl);
-            const fileDate = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'numeric', day: 'numeric' }).replace(/\//g, '-');
-            downloadAnchor.setAttribute("download", `รายงานผลการประเมินโครงการประกันคุณภาพ_วันที่-${fileDate}.csv`);
-            downloadAnchor.style.visibility = 'hidden';
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            document.body.removeChild(downloadAnchor);
-            showToast('ส่งออกผลรวมแบบประเมินเรียบร้อยแล้ว', 'success');
-        }
-
-        function loadHistoryReports() {
-            const container = document.getElementById('historyList'); container.innerHTML = '';
-            getActivities().forEach(act => {
-                const card = document.createElement('div'); card.className = "bg-white p-6 rounded-2xl border shadow-sm flex flex-col justify-between";
-                
-                const h2566 = act.history?.["2566"] || 85;
-                const h2567 = act.history?.["2567"] || 88;
-                const h2568 = act.history?.["2568"] || 92;
-
-                const actEvals = getEvaluations().filter(e => e.activityId === act.id);
-                const totalEvaluations = actEvals.length;
-                const topics = act.topics || ["ความเห็นในภาพรวม"];
-
-                let sumTopicPercentage = 0;
-                topics.forEach(topic => {
-                    let satisfiedCount = 0;
-                    actEvals.forEach(ev => {
-                        const score = ev.ratings && ev.ratings[topic] ? ev.ratings[topic] : 0;
-                        if (score >= 4) satisfiedCount++;
-                    });
-                    const pct = totalEvaluations > 0 ? (satisfiedCount / totalEvaluations) * 100 : 0;
-                    sumTopicPercentage += pct;
-                });
-                const h2569 = topics.length > 0 ? (sumTopicPercentage / topics.length) : 0;
-
-                const getBarHtml = (yearLabel, score, isCurrent = false) => {
-                    const formattedScore = score > 0 ? score.toFixed(1) + "%" : "0%";
-                    const barGradient = isCurrent 
-                        ? 'from-yellow-500 to-yellow-400 shadow-sm shadow-yellow-400/20' 
-                        : 'from-emerald-800 to-emerald-600';
-                    const textWeight = isCurrent ? 'text-emerald-900 font-extrabold' : 'text-slate-500 font-bold';
-                    const labelWeight = isCurrent ? 'text-emerald-900 font-extrabold' : 'text-slate-400 font-semibold';
-                    
-                    return `
-                        <div class="flex flex-col items-center flex-grow">
-                            <span class="text-[10px] ${textWeight} mb-2">${formattedScore}</span>
-                            <div class="w-8 bg-slate-100 rounded-t-lg h-28 flex items-end overflow-hidden shadow-inner relative border border-slate-200/50">
-                                <div class="w-full bg-gradient-to-t ${barGradient} transition-all duration-500" style="height: ${score}%"></div>
-                            </div>
-                            <span class="text-xs ${labelWeight} mt-2">${yearLabel}</span>
-                        </div>
-                    `;
-                };
-
-                card.innerHTML = `
-                    <div>
-                        <div class="flex items-start justify-between gap-2 mb-3">
-                            <div>
-                                <span class="text-xs font-mono bg-slate-50 border border-slate-200 px-2.5 py-1 rounded text-slate-500">${act.id}</span>
-                                <h4 class="text-base font-bold text-slate-800 mt-2 h-10 limit-2-lines leading-snug">${act.name}</h4>
-                            </div>
-                        </div>
-                        <p class="text-xs text-slate-400 mb-5 leading-relaxed">เปรียบเทียบร้อยละความพึงพอใจสะสมย้อนหลัง (เกณฑ์ระดับคะแนน 4-5)</p>
-                        
-                        <div class="flex items-end justify-around gap-2 px-2 pb-2 border-b border-dashed border-slate-200">
-                            ${getBarHtml("ปี 2566", h2566)}
-                            ${getBarHtml("ปี 2567", h2567)}
-                            ${getBarHtml("ปี 2568", h2568)}
-                            ${getBarHtml("ปีปัจจุบัน", h2569, true)}
-                        </div>
-                    </div>
-                    <div class="mt-4 pt-3 flex justify-between items-center text-[10px] text-slate-400">
-                        <span>เกณฑ์ความพึงพอใจร้อยละ (%) ประจำโครงการ</span>
-                        <span class="font-semibold text-emerald-800 flex items-center gap-1">
-                            <span class="w-2.5 h-2.5 rounded-full bg-yellow-400 inline-block shadow-sm"></span> 
-                            ปีปัจจุบัน
-                        </span>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
+        // --------------------------------------------------------------------------------
+        // 7. Admin Panel & Management Logic
+        // --------------------------------------------------------------------------------
         function loadAdminPanel() {
-            if (!currentUser) return;
-            const isAdmin = currentUser.role === 'Admin';
+            if (!currentUser || currentUser.role !== 'Admin') return;
             
-            const userAddSec = document.getElementById('admin-user-add-section');
-            const userListSec = document.getElementById('admin-user-list-section');
-            const resetSec = document.getElementById('admin-reset-section');
-            const sheetConfigSec = document.getElementById('admin-sheet-config');
-
-            if (!isAdmin) {
-                if (userAddSec) userAddSec.classList.add('hidden');
-                if (userListSec) userListSec.classList.add('hidden');
-                if (resetSec) resetSec.classList.add('hidden');
-                if (sheetConfigSec) sheetConfigSec.classList.add('hidden');
-            } else {
-                if (userAddSec) userAddSec.classList.remove('hidden');
-                if (userListSec) userListSec.classList.remove('hidden');
-                if (resetSec) resetSec.classList.remove('hidden');
-                if (sheetConfigSec) sheetConfigSec.classList.remove('hidden');
-            }
-
-            const activities = getActivities();
-            const users = getUsers();
-
-            const tbodyUsers = document.getElementById('adminUsersTable'); 
-            if (tbodyUsers) {
-                tbodyUsers.innerHTML = '';
-                if (isAdmin) {
-                    users.forEach(u => {
-                        let displayRole = 'คุณครู / บุคลากร';
-                        let badgeColor = 'bg-slate-100 text-slate-700 border border-slate-200';
-                        
-                        if (u.role === 'Admin') {
-                            displayRole = 'ผู้ดูแลระบบกลาง';
-                            badgeColor = 'bg-red-50 text-red-700 border border-red-200/50';
-                        } else if (u.role === 'Executive') {
-                            displayRole = 'ผู้บริหาร';
-                            badgeColor = 'bg-amber-50 text-amber-700 border border-amber-200/50';
-                        } else if (u.role === 'Head_Admin') {
-                            displayRole = 'หัวหน้าฝ่ายบริหารทั่วไป';
-                            badgeColor = 'bg-teal-50 text-teal-700 border border-teal-200/50';
-                        } else if (u.role === 'Head_Academic') {
-                            displayRole = 'หัวหน้าฝ่ายวิชาการ';
-                            badgeColor = 'bg-blue-50 text-blue-700 border border-blue-200/50';
-                        } else if (u.role === 'Head_QA') {
-                            displayRole = 'หัวหน้าฝ่ายประกันคุณภาพภายใน';
-                            badgeColor = 'bg-purple-50 text-purple-700 border border-purple-200/50';
-                        } else if (u.role === 'Head_Student') {
-                            displayRole = 'หัวหน้าฝ่ายกิจการนักเรียน';
-                            badgeColor = 'bg-indigo-50 text-indigo-700 border border-indigo-200/50';
-                        }
-
-                        const tr = document.createElement('tr'); tr.className = "hover:bg-slate-50 text-sm";
-                        tr.innerHTML = `
-                            <td class="px-5 py-3 font-mono font-bold">${u.empId}</td>
-                            <td class="px-5 py-3 font-semibold">${u.name}</td>
-                            <td class="px-5 py-3 font-mono">${u.email}</td>
-                            <td class="px-5 py-3"><span class="${badgeColor} text-xs px-3 py-1 rounded-full font-bold inline-block shadow-sm">${displayRole}</span></td>
-                            <td class="px-5 py-3 font-mono font-bold text-emerald-800">${u.password}</td>
-                            <td class="px-5 py-3 text-center flex items-center justify-center gap-1.5">
-                                <button onclick="openUserModal('${u.email}')" class="text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold px-3 py-1.5 rounded-xl cursor-pointer">แก้ไข</button>
-                                <button onclick="confirmDeleteUser('${u.email}')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold px-2.5 py-1.5 rounded-xl cursor-pointer">ลาออก / จำหน่าย</button>
-                            </td>
-                        `;
-                        tbodyUsers.appendChild(tr);
-                    });
-                }
-            }
-
-            const tbodyAct = document.getElementById('adminActivitiesTable'); tbodyAct.innerHTML = '';
-            const displayActivities = isAdmin ? activities : activities.filter(a => a.owner && a.owner.toLowerCase() === currentUser.email.toLowerCase());
-            displayActivities.forEach(act => {
-                const tr = document.createElement('tr'); tr.className = "hover:bg-slate-50 text-sm";
-                tr.innerHTML = `<td class="px-6 py-4 font-mono text-slate-500 font-bold">${act.id}</td><td class="px-6 py-4 font-semibold text-slate-700">${act.name}</td><td class="px-6 py-4 text-center font-bold text-xs text-amber-800">${act.rounds?.length || 1} ครั้ง</td><td class="px-6 py-4 font-mono">${act.owner}</td><td class="px-6 py-4 text-center"><button onclick="confirmDeleteActivity('${act.id}')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold px-3 py-1.5 rounded-xl border border-rose-200 cursor-pointer">ลบ</button></td>`;
-                tbodyAct.appendChild(tr);
+            // Populate Owners Dropdown
+            const ownerSelect = document.getElementById('newActOwner'); 
+            ownerSelect.innerHTML = '';
+            getUsers().forEach(u => { 
+                const opt = document.createElement('option'); 
+                opt.value = u.email; 
+                opt.innerText = `${u.name} (${u.email})`; 
+                ownerSelect.appendChild(opt); 
             });
 
-            const sheetUrlInput = document.getElementById('googleSheetUrl');
-            if (sheetUrlInput) {
-                sheetUrlInput.value = getGoogleSheetUrl();
-            }
-
-            const ownerSelect = document.getElementById('newActOwner'); ownerSelect.innerHTML = '';
-            getUsers().forEach(u => { const opt = document.createElement('option'); opt.value = u.email; opt.innerText = `${u.name} (${u.email})`; ownerSelect.appendChild(opt); });
-            if(!isAdmin) { ownerSelect.value = currentUser.email; ownerSelect.disabled = true; } else { ownerSelect.disabled = false; }
+            // Populate Users Table
+            const tbodyUsers = document.getElementById('adminUsersTable'); 
+            tbodyUsers.innerHTML = '';
+            getUsers().forEach(u => {
+                const tr = document.createElement('tr'); 
+                tr.className = "hover:bg-slate-50 transition-colors";
+                tr.innerHTML = `
+                    <td class="px-4 py-3 text-xs font-mono font-bold text-slate-500">${u.empId}</td>
+                    <td class="px-4 py-3 text-sm font-semibold text-slate-800">${u.name}</td>
+                    <td class="px-4 py-3 text-xs font-mono text-slate-500">${u.email}</td>
+                    <td class="px-4 py-3 text-xs text-slate-600">${u.role}</td>
+                    <td class="px-4 py-3 text-center">
+                        <button onclick="confirmDeleteUser('${u.email}', '${u.empId}', '${u.name}')" class="text-[10px] bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold px-3 py-1.5 rounded-lg border border-rose-200 transition-colors cursor-pointer">จำหน่ายออก</button>
+                    </td>
+                `;
+                tbodyUsers.appendChild(tr);
+            });
         }
 
         function createNewActivity(e) {
-            e.preventDefault(); const name = document.getElementById('newActName').value.trim();
-            const objectives = document.getElementById('newActObjectives').value.trim();
-            const topics = document.getElementById('newActTopics').value.trim().split('\n').map(t => t.trim()).filter(t => t);
+            e.preventDefault(); 
             const roundsArr = [];
             document.querySelectorAll('.round-row').forEach(row => {
-                const rName = row.querySelector('.round-name-input').value.trim();
-                const rDet = row.querySelector('.round-detail-input').value.trim();
-                if(rName) roundsArr.push(rDet ? `${rName} (${rDet})` : rName);
+                const rName = row.querySelector('input[type="text"]').value.trim();
+                if(rName) roundsArr.push(rName);
             });
 
-            const id = "ACT-" + Math.floor(100 + Math.random() * 900); const acts = getActivities();
-            acts.push({ id, name, owner: document.getElementById('newActOwner').value, poster: uploadedPosterBase64, objectives, topics, rounds: roundsArr.length > 0 ? roundsArr : undefined, history: { "2566": parseFloat(document.getElementById('history2566').value), "2567": parseFloat(document.getElementById('history2567').value), "2568": parseFloat(document.getElementById('history2568').value) } });
-            localStorage.setItem('eval_activities', JSON.stringify(acts)); document.getElementById('addActivityForm').reset(); uploadedPosterBase64 = "";
-            const builder = document.getElementById('rounds-builder-container'); if(builder) { builder.innerHTML = ''; addRoundRow("ครั้งที่ 1", "ระบุรายละเอียดการจัดกิจกรรม"); }
-            showToast('การลงทะเบียนแบบประเมินโครงการสำเร็จ', 'success'); loadAdminPanel();
-        }
-
-        function confirmDeleteUser(email) {
-            if (currentUser.role !== 'Admin') {
-                showToast('สิทธิ์การจัดการถูกจำกัดสำหรับผู้ดูแลระบบเท่านั้น', 'error');
-                return;
-            }
-            const u = getUsers().find(user => user.email.toLowerCase() === email.toLowerCase());
-            if (!u) return;
-
-            customConfirm(
-                "จำหน่ายออก / พ้นสภาพบุคลากร",
-                `ยืนยันการลบบัญชีและจำหน่ายคุณครู ${u.name} (${u.empId}) ออกจากระบบสารสนเทศสถาบัน?`,
-                "trash",
-                () => {
-                    let users = getUsers().filter(user => user.email.toLowerCase() !== email.toLowerCase());
-                    localStorage.setItem('eval_users', JSON.stringify(users));
-                    pushUserDeleteToGoogleSheet(u.email, u.empId);
-                    showToast(`จำหน่ายคุณครู ${u.name} ออกจากระบบเสร็จสิ้น`, 'success');
-                    loadAdminPanel();
-                },
-                true,
-                "ยืนยันจำหน่ายออก"
-            );
-        }
-
-        function openUserModal(email) {
-            if (currentUser.role !== 'Admin') {
-                showToast('สิทธิ์การจัดการข้อมูลถูกจำกัดสำหรับผู้ดูแลระบบเท่านั้น', 'error');
-                return;
-            }
-            const u = getUsers().find(user => user.email.toLowerCase() === email.toLowerCase()); if(!u) return;
-            document.getElementById('edit-user-original-email').value = u.email;
-            document.getElementById('edit-user-empId').value = u.empId; document.getElementById('edit-user-name').value = u.name;
-            document.getElementById('edit-user-email').value = u.email; document.getElementById('edit-user-role').value = u.role;
-            document.getElementById('edit-user-password').value = u.password;
-            document.getElementById('user-modal').classList.remove('hidden'); document.getElementById('user-modal').classList.add('flex');
-        }
-        function closeUserModal() { document.getElementById('user-modal').classList.add('hidden'); document.getElementById('user-modal').classList.remove('flex'); }
-        
-        function saveUserProfile() {
-            if (currentUser.role !== 'Admin') {
-                showToast('สิทธิ์การจัดการข้อมูลถูกจำกัด', 'error');
-                return;
-            }
-            const origEmail = document.getElementById('edit-user-original-email').value;
-            let updatedUser = null;
-            let users = getUsers().map(u => {
-                if(u.email.toLowerCase() === origEmail.toLowerCase()) {
-                    updatedUser = { 
-                        empId: document.getElementById('edit-user-empId').value.trim(), 
-                        name: document.getElementById('edit-user-name').value.trim(), 
-                        email: document.getElementById('edit-user-email').value.trim().toLowerCase(), 
-                        role: document.getElementById('edit-user-role').value, 
-                        password: document.getElementById('edit-user-password').value.trim() 
-                    };
-                    return updatedUser;
-                }
-                return u;
+            const id = "ACT-" + Math.floor(100 + Math.random() * 900); 
+            const acts = getActivities();
+            acts.push({ 
+                id, 
+                name: document.getElementById('newActName').value.trim(), 
+                owner: document.getElementById('newActOwner').value, 
+                poster: uploadedPosterBase64, 
+                objectives: document.getElementById('newActObjectives').value.trim(), 
+                topics: document.getElementById('newActTopics').value.trim().split('\n').map(t => t.trim()).filter(t => t), 
+                rounds: roundsArr.length > 0 ? roundsArr : undefined, 
+                history: { "2566": 0, "2567": 0, "2568": 0 } 
             });
-            localStorage.setItem('eval_users', JSON.stringify(users)); 
             
-            if (updatedUser) {
-                pushUserToGoogleSheet(updatedUser, origEmail);
-            }
-
-            showToast('ปรับปรุงข้อมูลบุคลากรเรียบร้อยแล้ว', 'success'); closeUserModal(); loadAdminPanel();
+            localStorage.setItem('eval_activities', JSON.stringify(acts)); 
+            document.getElementById('addActivityForm').reset(); 
+            uploadedPosterBase64 = "";
+            document.getElementById('rounds-builder-container').innerHTML = ''; 
+            addRoundRow("รอบปกติ");
+            showToast('ลงทะเบียนแบบประเมินโครงการใหม่สำเร็จ');
         }
 
-        function confirmDeleteActivity(actId) { customConfirm("ถอนทะเบียนแบบประเมิน", "ยืนยันการลบแบบประเมินและสถิติดำเนินการของโครงการนี้ออกจากระบบ?", "trash", () => { let acts = getActivities().filter(a => a.id !== actId); localStorage.setItem('eval_activities', JSON.stringify(acts)); showToast('ลบแบบประเมินโครงการเสร็จสิ้น', 'success'); loadAdminPanel(); }, true); }
-        function confirmResetSystem() { 
-            if (currentUser.role !== 'Admin') {
-                showToast('สิทธิ์ถูกปฏิเสธ: ท่านไม่มีสิทธิ์กู้คืนข้อมูลส่วนกลาง', 'error');
-                return;
-            }
-            customConfirm("กู้คืนข้อมูลระบบ", "ยืนยันการล้างข้อมูลบันทึกทั้งหมดเพื่อคืนค่าสารสนเทศเริ่มต้นของสถาบัน?", "danger", () => { localStorage.clear(); showToast('กู้คืนฐานข้อมูลเริ่มต้นสำเร็จ', 'success'); checkSession(); }, true); 
-        }
-        
-        function toggleImportArea() { document.getElementById('import-sheets-area').classList.toggle('hidden'); }
-
-        function importTeachersFromPaste() {
-            if (currentUser.role !== 'Admin') {
-                showToast('สิทธิ์การจัดการถูกจำกัดเฉพาะผู้ดูแลระบบเท่านั้น', 'error');
-                return;
-            }
-            const text = document.getElementById('importTeachersText').value.trim(); if (!text) return;
-            const lines = text.split('\n'); const users = getUsers(); let count = 0;
-
-            lines.forEach(line => {
-                const cols = line.split('\t');
-                if (cols.length >= 3) {
-                    const email = cols[2].trim().toLowerCase();
-                    if(email.endsWith('@yuwapat.ac.th') && !users.some(u => u.email.toLowerCase() === email)) {
-                        const tempUser = { empId: cols[0].trim(), name: cols[1].trim(), email, role: cols[3]?.trim() || 'Staff', password: cols[4]?.trim() || 'yw123456' };
-                        users.push(tempUser);
-                        count++;
-                    }
-                }
-            });
-            localStorage.setItem('eval_users', JSON.stringify(users)); 
-
-            showToast(`นำเข้ารายชื่อบุคลากรสำเร็จ ${count} ท่าน`, 'success');
-            document.getElementById('importTeachersText').value = ''; toggleImportArea(); loadAdminPanel();
-        }
-
-        function addRoundRow(name = "", detail = "") {
-            const container = document.getElementById('rounds-builder-container'); if(!container) return;
-            const div = document.createElement('div'); div.className = "round-row flex gap-2 items-center bg-white p-2 rounded-lg border";
-            div.innerHTML = `
-                <input type="text" placeholder="ครั้งที่ 1" value="${name}" class="round-name-input w-1/3 border rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800">
-                <input type="text" placeholder="รายละเอียดการจัดกิจกรรม" value="${detail}" class="round-detail-input w-2/3 border rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-800">
-                <button type="button" onclick="this.closest('.round-row').remove()" class="text-rose-600 hover:text-rose-800 p-2 cursor-pointer flex-shrink-0">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="3 6 5 6 21 6" />
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                        <line x1="10" y1="11" x2="10" y2="17" />
-                        <line x1="14" y1="11" x2="14" y2="17" />
-                    </svg>
-                </button>
-            `;
+        function addRoundRow(name = "") {
+            const container = document.getElementById('rounds-builder-container');
+            const div = document.createElement('div'); 
+            div.className = "round-row flex gap-2";
+            div.innerHTML = `<input type="text" value="${name}" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs focus:ring-1 focus:ring-emerald-700 bg-white" placeholder="ระบุชื่อรอบ"><button type="button" onclick="this.parentElement.remove()" class="text-rose-500 font-bold px-2 cursor-pointer">&times;</button>`;
             container.appendChild(div);
         }
 
-        function exportToCSV(actId) {
-            const activities = getActivities();
-            const evaluations = getEvaluations();
-            const act = activities.find(a => a.id === actId);
-            if (!act) return;
-
-            const actEvals = evaluations.filter(e => e.activityId === actId);
-            const topics = act.topics || ["ความเห็นในภาพรวม"];
-
-            let csvContent = "\uFEFF";
-            let headerRow = "รหัสพนักงาน,ชื่อ-นามสกุล,ตำแหน่งประเมิน,ครั้งที่ประเมิน,ที่อยู่อีเมล";
-            topics.forEach((topic, idx) => {
-                headerRow += `,คะแนนหัวข้อที่ ${idx+1} (${topic.replace(/,/g, ' ')})`;
-            });
-            headerRow += ",ข้อเสนอแนะเพิ่มเติม\n";
-            csvContent += headerRow;
-
-            actEvals.forEach(e => {
-                const userObj = getUsers().find(u => u.email.toLowerCase() === e.email.toLowerCase());
-                const empId = userObj ? userObj.empId : '-';
+        function confirmDeleteUser(email, empId, name) {
+            if (currentUser.role !== 'Admin') {
+                showToast('สิทธิ์การจัดการถูกจำกัดสำหรับผู้ดูแลระบบเท่านั้น', 'error'); 
+                return;
+            }
+            customConfirm("จำหน่ายบุคลากรออก", `ยืนยันการพ้นสภาพและลบข้อมูลบุคลากร คุณ${name} (${empId}) ออกจากระบบสารสนเทศสถาบัน?`, () => {
+                let users = getUsers().filter(user => user.email.toLowerCase() !== email.toLowerCase());
+                localStorage.setItem('eval_users', JSON.stringify(users));
                 
-                let row = `${empId},"${e.name.replace(/"/g, '""')}","${e.role.replace(/"/g, '""')}","${(e.round || 'รอบปกติ').replace(/"/g, '""')}","${e.email}"`;
-                
-                topics.forEach(topic => {
-                    const score = e.ratings && e.ratings[topic] ? e.ratings[topic] : 0;
-                    row += `,${score}`;
-                });
+                // Sync Deletion to Google Sheets
+                fetch(DEFAULT_GOOGLE_SHEET_URL, { 
+                    method: "POST", 
+                    body: JSON.stringify({ action: "delete_user", email: email, empId: empId }) 
+                }).then(res => res.json()).then(resData => {
+                    if (resData.status === "success") {
+                        showToast(`ซิงค์การจำหน่ายออกลง Google Sheet เรียบร้อยแล้ว`);
+                    }
+                }).catch(err => console.error(err));
 
-                const safeSuggestion = e.suggestion ? `"${e.suggestion.replace(/\r?\n/g, ' ').replace(/"/g, '""')}"` : "";
-                row += `,${safeSuggestion}\n`;
-                csvContent += row;
+                showToast(`จำหน่ายคุณครู ${name} ออกจากระบบเรียบร้อยแล้ว`); 
+                loadAdminPanel();
             });
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const blobUrl = URL.createObjectURL(blob);
-            const downloadAnchor = document.createElement("a");
-            downloadAnchor.setAttribute("href", blobUrl);
-            
-            const fileDate = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'numeric', day: 'numeric' }).replace(/\//g, '-');
-            downloadAnchor.setAttribute("download", `รายงานสถิติประเมิน_${act.id}_วันที่-${fileDate}.csv`);
-            downloadAnchor.style.visibility = 'hidden';
-            
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            document.body.removeChild(downloadAnchor);
-
-            showToast(`ส่งออกข้อมูลสถิติของโครงการ ${act.id} เรียบร้อยแล้ว`, 'success');
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        function syncTeachersFromGoogleSheets() {
+            showToast('กำลังดึงข้อมูลรายชื่อล่าสุด...', 'info');
+            fetch(DEFAULT_GOOGLE_SHEET_URL)
+                .then(res => res.json())
+                .then(data => {
+                    if (Array.isArray(data) && data.length > 0) {
+                        localStorage.setItem('eval_users', JSON.stringify(data));
+                        showToast(`ดึงรายชื่อสำเร็จ ${data.length} รายการ`); 
+                        loadAdminPanel();
+                    }
+                })
+                .catch(err => showToast('ไม่สามารถเชื่อมต่อ Google Sheets ได้', 'error'));
+        }
+
+        function exportAllEvaluationsToCSV() {
+            const evals = getEvaluations(); 
+            if (evals.length === 0) return showToast('ไม่มีข้อมูลการตอบประเมิน', 'error');
+            const acts = getActivities();
+            let csv = "\uFEFFรหัสโครงการ,ชื่อโครงการ,ผู้ประเมิน,ตำแหน่ง,ครั้งที่จัด,หัวข้อ,คะแนน,ข้อเสนอแนะ\n";
+            evals.forEach(e => {
+                const actName = acts.find(a => a.id === e.activityId)?.name || "";
+                for (let topic in e.ratings) {
+                    csv += `"${e.activityId}","${actName.replace(/"/g,'""')}","${e.name}","${e.role}","${e.round}","${topic}",${e.ratings[topic]},"${e.suggestion || ''}"\n`;
+                }
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const a = document.createElement("a"); 
+            a.href = URL.createObjectURL(blob);
+            a.download = `รายงานผลการประเมินโครงการ_${new Date().getTime()}.csv`; 
+            a.click();
+        }
+
+        // DOM Initialization
+        document.addEventListener('DOMContentLoaded', () => {
             const fInput = document.getElementById('newActPosterFile');
             if (fInput) {
-                fInput.addEventListener('change', function(e) {
+                fInput.addEventListener('change', e => {
                     const file = e.target.files[0];
-                    if (file) {
-                        const r = new FileReader();
-                        r.onload = function(evt) { uploadedPosterBase64 = evt.target.result; showToast('อัปโหลดไฟล์โปสเตอร์เรียบร้อยแล้ว', 'success'); };
-                        r.readAsDataURL(file);
+                    if (file) { 
+                        const r = new FileReader(); 
+                        r.onload = evt => uploadedPosterBase64 = evt.target.result; 
+                        r.readAsDataURL(file); 
                     }
                 });
             }
-            addRoundRow("ครั้งที่ 1", "ระบุรายละเอียดการจัดกิจกรรม");
-            document.getElementById('confirm-cancel-btn').addEventListener('click', () => document.getElementById('confirm-modal').classList.add('hidden'));
-            document.getElementById('confirm-ok-btn').addEventListener('click', () => { document.getElementById('confirm-modal').classList.add('hidden'); if(currentConfirmAction) currentConfirmAction(); });
+            addRoundRow("รอบปกติ");
             checkSession();
         });
     </script>
