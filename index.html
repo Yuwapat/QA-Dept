@@ -122,17 +122,26 @@
                     <span>ประวัติการสร้างแบบสอบถาม</span>
                 </button>
 
-                <button onclick="switchTab('input-history-tab')" id="btn-input-history-tab" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors sidebar-btn cursor-pointer hidden admin-only-btn">
+                <button onclick="switchTab('input-history-tab')" id="btn-input-history-tab" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors sidebar-btn cursor-pointer">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                     <span>ลงรายละเอียดคะแนนย้อนหลัง</span>
                 </button>
 
-                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2 mt-6 admin-only-btn hidden">การตั้งค่าระบบ</div>
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2 mt-6">การสร้างและจัดการโครงการ (ครูทุกคน)</div>
 
-                <button onclick="switchTab('admin-tab')" id="btn-admin-tab" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors sidebar-btn cursor-pointer hidden admin-only-btn">
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    <span>บริหารจัดการสารสนเทศ</span>
+                <button onclick="switchTab('admin-tab')" id="btn-admin-tab" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors sidebar-btn cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span>สร้างและจัดการแบบประเมิน</span>
                 </button>
+
+                <!-- Audit Log Navigation Link for Admin Only -->
+                <div id="admin-audit-menu-section" class="hidden">
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2 mt-6">ระบบความปลอดภัยและผู้ดูแล</div>
+                    <button onclick="switchTab('audit-log-tab')" id="btn-audit-log-tab" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors sidebar-btn cursor-pointer">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        <span>ประวัติการใช้งานระบบ (Audit Log)</span>
+                    </button>
+                </div>
             </nav>
 
             <!-- User Profile Area -->
@@ -180,7 +189,7 @@
                         </div>
                     </section>
 
-                    <!-- Tab 2: สรุปสถิติผลการประเมิน (ทุกคนเข้าถึงได้) -->
+                    <!-- Tab 2: สรุปสถิติผลการประเมิน -->
                     <section id="report-tab" class="tab-content hidden space-y-6">
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-5 rounded-2xl border border-slate-200 shadow-sm gap-4">
                             <div>
@@ -195,20 +204,25 @@
                         <div id="reportList" class="space-y-6"></div>
                     </section>
 
-                    <!-- Tab 3: สถิติดำเนินการย้อนหลัง 3 ปี -->
+                    <!-- Tab 3: สถิติดำเนินการย้อนหลัง -->
                     <section id="history-tab" class="tab-content hidden">
                         <div class="mb-6 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                             <h2 class="text-lg font-bold text-slate-800">แผนภูมิเปรียบเทียบร้อยละความพึงพอใจสะสมย้อนหลัง</h2>
-                            <p class="text-sm text-slate-500 mt-1">เปรียบเทียบสถิติร้อยละของผู้พึงพอใจ (เกณฑ์ระดับ 4-5) ย้อนหลัง 3 ปีการศึกษาล่าสุด</p>
+                            <p class="text-sm text-slate-500 mt-1">เปรียบเทียบสถิติร้อยละของผู้พึงพอใจ (เกณฑ์ระดับ 4-5) ย้อนหลังตามปีการศึกษาที่จัดเก็บ</p>
                         </div>
                         <div id="historyList" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
                     </section>
 
                     <!-- Tab 4: ประวัติการสร้างแบบสอบถาม -->
                     <section id="created-history-tab" class="tab-content hidden space-y-6">
-                        <div class="mb-2 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                            <h2 class="text-lg font-bold text-slate-800">ประวัติการสร้างแบบสอบถามของฉัน</h2>
-                            <p class="text-sm text-slate-500 mt-1">รายการโครงการและแบบประเมินทั้งหมดที่คุณรับผิดชอบและสร้างขึ้นในระบบ</p>
+                        <div class="mb-2 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-800">ประวัติการสร้างแบบสอบถามของคุณครู</h2>
+                                <p class="text-sm text-slate-500 mt-1">รายการโครงการและแบบประเมินทั้งหมดที่คุณรับผิดชอบและสร้างขึ้นในระบบ</p>
+                            </div>
+                            <button onclick="switchTab('admin-tab')" class="bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition-all active:scale-95 cursor-pointer flex-shrink-0">
+                                ＋ สร้างแบบประเมินโครงการใหม่
+                            </button>
                         </div>
                         <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
                             <div class="overflow-x-auto">
@@ -219,7 +233,7 @@
                                             <th class="px-6 py-4">ชื่อโครงการ</th>
                                             <th class="px-6 py-4 text-center">หัวข้อคำถาม</th>
                                             <th class="px-6 py-4 text-center">ผู้ตอบประเมินแล้ว</th>
-                                            <th class="px-6 py-4 text-center">สถานะ</th>
+                                            <th class="px-6 py-4 text-center">จัดการ</th>
                                         </tr>
                                     </thead>
                                     <tbody id="createdHistoryTable" class="divide-y divide-slate-100 bg-white"></tbody>
@@ -230,51 +244,40 @@
 
                     <!-- Tab 5: ลงรายละเอียดคะแนนย้อนหลัง -->
                     <section id="input-history-tab" class="tab-content hidden space-y-6">
-                        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg text-sm text-amber-900 leading-relaxed shadow-sm">
-                            <strong>ส่วนการจัดการสถิติย้อนหลัง:</strong> สำหรับกรอกผลคะแนนร้อยละความพึงพอใจของปีการศึกษาที่ผ่านมา (2566, 2567, 2568) เพื่อนำไปแสดงเป็นกราฟเปรียบเทียบในหน้าสถิติย้อนหลัง
+                        <div id="input-history-permission-banner" class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg text-sm text-amber-900 leading-relaxed shadow-sm">
+                            <strong>ส่วนการจัดการสถิติย้อนหลัง:</strong> สำหรับกรอกหรืออัปเดตผลคะแนนร้อยละความพึงพอใจของปีการศึกษาที่ผ่านมา (เช่น ปี 2563, 2564, 2565, 2566, 2567, 2568 เป็นต้น) โดยเปิดให้สิทธิ์เฉพาะผู้ดูแลระบบ ผู้บริหาร และหัวหน้าฝ่ายทุกท่าน
                         </div>
-                        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full text-sm text-left">
-                                    <thead class="bg-slate-50 text-slate-600 font-bold border-b text-[11px] tracking-wider uppercase">
-                                        <tr>
-                                            <th class="px-5 py-4 w-1/3">ชื่อโครงการ</th>
-                                            <th class="px-3 py-4 text-center">ปี 2566 (%)</th>
-                                            <th class="px-3 py-4 text-center">ปี 2567 (%)</th>
-                                            <th class="px-3 py-4 text-center">ปี 2568 (%)</th>
-                                            <th class="px-5 py-4 text-center">บันทึก</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="inputHistoryTable" class="divide-y divide-slate-100 bg-white"></tbody>
-                                </table>
-                            </div>
+                        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden p-6">
+                            <div id="inputHistoryContainer" class="space-y-6"></div>
                         </div>
                     </section>
 
-                    <!-- Tab 6: บริหารจัดการสารสนเทศ (เฉพาะผู้ดูแลระบบ) -->
+                    <!-- Tab 6: สร้างและจัดการแบบประเมิน (ครูทุกคนสร้างได้) -->
                     <section id="admin-tab" class="tab-content hidden space-y-8 pb-10">
-                        
-                        <!-- ฟอร์มสร้างทะเบียนประเมินโครงการใหม่ -->
+                        <div class="bg-emerald-50 border-l-4 border-emerald-600 p-4 rounded-r-lg text-sm text-emerald-900 leading-relaxed shadow-sm">
+                            <strong>การสร้างแบบประเมินโครงการ:</strong> คุณครูและบุคลากรทุกท่านสามารถลงทะเบียนสร้างแบบประเมินสำหรับโครงการหรือกิจกรรมที่ตนเองรับผิดชอบได้ทันที เมื่อบันทึกแล้ว แบบประเมินจะไปปรากฏในหน้าทำแบบประเมินของคุณครูทุกท่านโดยอัตโนมัติ
+                        </div>
+
                         <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm">
                             <h3 class="text-sm font-bold text-slate-900 mb-6 border-b pb-4 flex items-center gap-2 uppercase tracking-wider text-emerald-800">
                                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><line x1="12" y1="8" x2="12" y2="16" /><line x1="8" y1="12" x2="16" y2="12" /></svg>
-                                <span>ลงทะเบียนแบบประเมินโครงการใหม่</span>
+                                <span>ลงทะเบียนแบบประเมินโครงการใหม่ (สำหรับครูและบุคลากร)</span>
                             </h3>
                             <form id="addActivityForm" onsubmit="createNewActivity(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="md:col-span-2">
-                                    <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">ชื่อโครงการ / กิจกรรม</label>
-                                    <input type="text" id="newActName" required class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800 bg-slate-50/50">
+                                    <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">ชื่อโครงการ / กิจกรรม <span class="text-rose-500">*</span></label>
+                                    <input type="text" id="newActName" required placeholder="ระบุชื่อโครงการ เช่น โครงการส่งเสริมรักการอ่าน" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800 bg-slate-50/50">
                                 </div>
                                 <div class="md:col-span-1">
                                     <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">เป้าหมายและวัตถุประสงค์โครงการ</label>
-                                    <textarea id="newActObjectives" rows="4" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800 bg-slate-50/50"></textarea>
+                                    <textarea id="newActObjectives" rows="4" placeholder="ระบุวัตถุประสงค์สั้นๆ ของโครงการ..." class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800 bg-slate-50/50"></textarea>
                                 </div>
                                 <div class="md:col-span-1">
-                                    <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">หัวข้อการประเมินผล (ระบุบรรทัดละ 1 ข้อ)</label>
-                                    <textarea id="newActTopics" rows="4" required class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800 bg-slate-50/50"></textarea>
+                                    <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">หัวข้อการประเมินผล (ระบุบรรทัดละ 1 ข้อ) <span class="text-rose-500">*</span></label>
+                                    <textarea id="newActTopics" rows="4" required placeholder="ด้านสถานที่และระยะเวลา&#10;ด้านความรู้ที่ได้รับ&#10;ด้านการนำไปประยุกต์ใช้" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800 bg-slate-50/50"></textarea>
                                 </div>
                                 <div class="md:col-span-1 bg-slate-50/50 p-4 rounded-xl border border-slate-200">
-                                    <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">อัปโหลดโปสเตอร์ประชาสัมพันธ์</label>
+                                    <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">อัปโหลดโปสเตอร์ประชาสัมพันธ์ (ถ้ามี)</label>
                                     <input type="file" id="newActPosterFile" accept="image/*" class="w-full text-xs">
                                 </div>
                                 <div class="md:col-span-1 bg-slate-50/50 p-4 rounded-xl border border-slate-200 flex flex-col">
@@ -292,10 +295,10 @@
                             </form>
                         </div>
 
-                        <!-- ส่วนจัดการบุคลากร และ ตารางสิทธิ์บริหาร -->
-                        <div id="admin-user-list-section" class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm">
+                        <!-- ส่วนจัดการบุคลากร (สำหรับ Admin เท่านั้น) -->
+                        <div id="admin-user-list-section" class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm hidden">
                             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5">
-                                <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider text-emerald-800">ทะเบียนข้อมูลและแก้ไขสิทธิ์บุคลากร</h3>
+                                <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider text-emerald-800">ทะเบียนข้อมูลและแก้ไขสิทธิ์บุคลากร (เฉพาะผู้ดูแลระบบ)</h3>
                                 <div class="flex gap-2">
                                     <button type="button" onclick="openUserModal()" class="bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-3.5 py-2 rounded-lg shadow transition-colors cursor-pointer">＋ เพิ่มบุคลากร / ผู้บริหารใหม่</button>
                                     <button type="button" onclick="syncTeachersFromGoogleSheets()" class="bg-emerald-50 text-emerald-800 text-xs font-bold px-3 py-2 rounded-lg border border-emerald-200 hover:bg-emerald-100 transition-colors cursor-pointer">ดึงข้อมูลล่าสุดจาก Sheets</button>
@@ -316,8 +319,57 @@
                                 </table>
                             </div>
                         </div>
-
                     </section>
+
+                    <!-- Tab 7: ประวัติการใช้งานระบบ (System Activity Audit Log - แอดมินดูได้เท่านั้น) -->
+                    <section id="audit-log-tab" class="tab-content hidden space-y-6">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-5 rounded-2xl border border-slate-200 shadow-sm gap-4">
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-800">บันทึกประวัติการใช้งานและกิจกรรมในระบบ (Audit Log)</h2>
+                                <p class="text-sm text-slate-500 mt-1">ตรวจสอบประวัติการเข้าสู่ระบบ การสร้างแบบสอบถาม การลงคะแนน และการจัดการสิทธิ์ของบุคลากร</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="clearAuditLogs()" class="bg-rose-50 border border-rose-200 text-rose-700 hover:bg-rose-100 text-xs font-bold px-3 py-2 rounded-xl transition-colors cursor-pointer">
+                                    ล้างประวัติบันทึก
+                                </button>
+                                <button onclick="exportAuditLogsToCSV()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors shadow flex items-center gap-2 cursor-pointer">
+                                    <span>ส่งออกประวัติ (CSV)</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Audit Log Filter Bar -->
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
+                            <input type="text" id="auditSearchInput" oninput="renderAuditLogs()" placeholder="ค้นหาตามชื่อบุคลากร อีเมล หรือกิจกรรม..." class="w-full md:w-80 border border-slate-200 rounded-xl px-4 py-2 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-800">
+                            <select id="auditActionFilter" onchange="renderAuditLogs()" class="w-full md:w-56 border border-slate-200 rounded-xl px-4 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-800">
+                                <option value="ALL">ทุกประเภทการกระทำ</option>
+                                <option value="เข้าสู่ระบบ">เข้าสู่ระบบ (Login)</option>
+                                <option value="สร้างโครงการใหม่">ลงทะเบียนโครงการใหม่</option>
+                                <option value="ส่งผลประเมิน">ส่งผลการประเมิน</option>
+                                <option value="บันทึกคะแนนย้อนหลัง">อัปเดตคะแนนย้อนหลัง</option>
+                                <option value="จัดการบุคลากร">จัดการสิทธิ์บุคลากร</option>
+                            </select>
+                        </div>
+
+                        <!-- Log Table -->
+                        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full text-sm text-left">
+                                    <thead class="bg-slate-50 text-slate-600 font-bold border-b text-xs uppercase tracking-wider">
+                                        <tr>
+                                            <th class="px-5 py-3.5">วันเวลาทำรายการ</th>
+                                            <th class="px-5 py-3.5">ผู้ทำรายการ</th>
+                                            <th class="px-5 py-3.5">ตำแหน่ง/บทบาท</th>
+                                            <th class="px-5 py-3.5">การกระทำ</th>
+                                            <th class="px-5 py-3.5">รายละเอียดข้อมูล</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="auditLogTable" class="divide-y divide-slate-100 bg-white"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
                 </div>
                 
                 <!-- Footer -->
@@ -441,10 +493,8 @@
         </div>
     </div>
 
+    <!-- JavaScript Application Logic -->
     <script>
-        // --------------------------------------------------------------------------------
-        // 1. การตั้งค่า Google Sheets API และข้อมูลบุคลากรทางการ 40 ท่าน
-        // --------------------------------------------------------------------------------
         const DEFAULT_GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbwPu7_mDMokINwZe3BUQr6HdgOEP8YPbZpQ5BhJ0UT57Kg52k6QSwbK31W2wR_XrcY4/exec";
 
         const defaultUsers = [
@@ -487,11 +537,39 @@
             { empId: "YW-043", name: "กชพร มิ่งโสภา", email: "muay@yuwapat.ac.th", role: "Staff", password: "yw123456" },
             { empId: "YW-044", name: "พิมลาภัสร์ ราตรี", email: "toei@yuwapat.ac.th", role: "Admin", password: "yw123456" },
             { empId: "YW-045", name: "พัณณิตา เกลี้ยงล่ำ", email: "pop2@yuwapat.ac.th", role: "Staff", password: "yw123456" },
-            { empId: "YW-047", name: "อัญชลีพร เฮียะหลง", email: "fah@yuwapat.ac.th", role: "Staff", password: "yw123456" }
+            { empId: "YW-047", name: "อัญชลีพร เฮียะหลง", email: "fah@yuwapat.ac.th", role: "Staff", password: "yw123456" },
+            { empId: "AA", name: "กรณ์รัฐ มานะไพศาลวรกุล", email: "van@yuwapat.ac.th", role: "Executive", password: "yw123456" },
+            { empId: "AB", name: "ใกล้รุ่ง เกียรติขจรฤทธิ์", email: "ouan@yuwapat.ac.th", role: "Executive", password: "yw123456" }
         ];
 
         let currentUser = null;
         let uploadedPosterBase64 = "";
+
+        function logActivity(actionType, details) {
+            if (!currentUser) return;
+            let logs = JSON.parse(localStorage.getItem('eval_audit_logs')) || [];
+            const roleLabels = { 
+                'Admin': 'ผู้ดูแลระบบกลาง', 
+                'Head_Admin': 'หัวหน้าฝ่ายบริหารทั่วไป', 
+                'Head_Student':'หัวหน้าฝ่ายกิจการนักเรียน', 
+                'Head_QA':'หัวหน้าฝ่ายประกันคุณภาพ', 
+                'Head_Academic':'หัวหน้าฝ่ายวิชาการ', 
+                'Executive':'ผู้บริหาร / ผู้อำนวยการ', 
+                'Staff':'คุณครู/บุคลากร' 
+            };
+            const newLog = {
+                id: 'LOG-' + Date.now(),
+                timestamp: new Date().toLocaleString('th-TH', { dateStyle: 'medium', timeStyle: 'medium' }),
+                userEmail: currentUser.email,
+                userName: currentUser.name,
+                userRole: roleLabels[currentUser.role] || currentUser.role,
+                actionType: actionType,
+                details: details
+            };
+            logs.unshift(newLog);
+            if (logs.length > 500) logs = logs.slice(0, 500);
+            localStorage.setItem('eval_audit_logs', JSON.stringify(logs));
+        }
 
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
@@ -525,23 +603,21 @@
             }
         }
 
-        // ฟังก์ชันคำนวณสถิติ ค่าเฉลี่ย (Mean) และส่วนเบี่ยงเบนมาตรฐาน (S.D.)
+        function isHeaderOrAdmin(user) {
+            if (!user) return false;
+            const allowedRoles = ['Admin', 'Executive', 'Head_Admin', 'Head_Academic', 'Head_QA', 'Head_Student'];
+            return allowedRoles.includes(user.role);
+        }
+
         function calculateStatistics(scoresArray) {
             if (!scoresArray || scoresArray.length === 0) return { mean: "0.00", sd: "0.00", n: 0 };
             const n = scoresArray.length;
             const sum = scoresArray.reduce((acc, val) => acc + val, 0);
             const mean = sum / n;
-            
-            // Variance & Sample S.D. (n-1)
             const squaredDifferencesSum = scoresArray.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0);
             const variance = squaredDifferencesSum / (n > 1 ? n - 1 : 1);
             const sd = Math.sqrt(variance);
-
-            return { 
-                mean: mean.toFixed(2), 
-                sd: sd.toFixed(2), 
-                n: n 
-            };
+            return { mean: mean.toFixed(2), sd: sd.toFixed(2), n: n };
         }
 
         function getUsers() { 
@@ -550,7 +626,6 @@
                 users = defaultUsers; 
                 localStorage.setItem('eval_users', JSON.stringify(users));
             } else {
-                // Purge testing accounts
                 const mockEmailsToPurge = ["admin@yuwapat.ac.th", "director@yuwapat.ac.th", "somchai@yuwapat.ac.th", "somsri@yuwapat.ac.th", "executive2@yuwapat.ac.th", "head_admin@yuwapat.ac.th", "head_academic@yuwapat.ac.th", "head_qa@yuwapat.ac.th", "head_student@yuwapat.ac.th", "owner_ai@yuwapat.ac.th"];
                 users = users.filter(u => !mockEmailsToPurge.includes(u.email.toLowerCase()));
                 let updated = false;
@@ -584,7 +659,6 @@
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('main-dashboard').classList.remove('hidden');
                 
-                // Set sidebar profile
                 document.getElementById('sidebar-user-name').innerText = currentUser.name;
                 const roleLabels = { 
                     'Admin': 'ผู้ดูแลระบบกลาง', 
@@ -597,13 +671,13 @@
                 };
                 document.getElementById('sidebar-user-role').innerText = roleLabels[currentUser.role] || currentUser.role;
 
-                // Show/Hide Admin restricted tabs
-                const isAdmin = (currentUser.role === 'Admin');
-                document.querySelectorAll('.admin-only-btn').forEach(el => {
-                    if(isAdmin) el.classList.remove('hidden'); else el.classList.add('hidden');
-                });
+                const auditMenuSec = document.getElementById('admin-audit-menu-section');
+                if (currentUser.role === 'Admin') {
+                    if (auditMenuSec) auditMenuSec.classList.remove('hidden');
+                } else {
+                    if (auditMenuSec) auditMenuSec.classList.add('hidden');
+                }
 
-                // Restore active tab from sessionStorage if exists
                 const savedTab = sessionStorage.getItem('active_eval_tab') || 'evaluate-tab';
                 switchTab(savedTab);
             } else {
@@ -618,7 +692,9 @@
             const password = document.getElementById('login-password').value.trim();
             const found = getUsers().find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
             if (found) {
+                currentUser = found;
                 localStorage.setItem('current_logged_user', JSON.stringify(found));
+                logActivity('เข้าสู่ระบบ', 'เข้าสู่ระบบสารสนเทศสำเร็จ');
                 showToast('เข้าสู่ระบบสำเร็จ'); 
                 checkSession();
             } else { 
@@ -628,6 +704,7 @@
 
         function handleLogout() {
             customConfirm("ออกจากระบบ", "ต้องการออกจากระบบสารสนเทศใช่หรือไม่?", () => {
+                logActivity('ออกจากระบบ', 'ออกจากระบบสารสนเทศ');
                 localStorage.removeItem('current_logged_user'); 
                 sessionStorage.removeItem('active_eval_tab');
                 currentUser = null; 
@@ -638,15 +715,12 @@
         function switchTab(tabId) {
             sessionStorage.setItem('active_eval_tab', tabId);
 
-            // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            // Reset sidebar buttons styles
             document.querySelectorAll('.sidebar-btn').forEach(btn => {
                 btn.classList.remove('bg-emerald-50', 'text-emerald-800');
                 btn.classList.add('text-slate-500', 'hover:bg-slate-50');
             });
             
-            // Show target tab and style active button
             const targetTab = document.getElementById(tabId);
             const targetBtn = document.getElementById('btn-' + tabId);
             if (targetTab && targetBtn) {
@@ -655,19 +729,17 @@
                 targetBtn.classList.add('bg-emerald-50', 'text-emerald-800');
             }
 
-            // Close mobile sidebar on navigate
             if(window.innerWidth < 768) toggleSidebar();
 
-            // Load contextual data
             if (tabId === 'evaluate-tab') loadEvaluationForms();
             if (tabId === 'report-tab') loadReportList();
             if (tabId === 'history-tab') loadHistoryReports();
             if (tabId === 'created-history-tab') loadCreatedHistory();
             if (tabId === 'input-history-tab') loadInputHistory();
             if (tabId === 'admin-tab') loadAdminPanel();
+            if (tabId === 'audit-log-tab') renderAuditLogs();
         }
 
-        // 1. Tab: ทำแบบประเมิน (Evaluate)
         function loadEvaluationForms() {
             if (!currentUser) return;
             const activities = getActivities(); 
@@ -712,7 +784,6 @@
             });
         }
 
-        // 2. Tab: สรุปรายงานสถิติ (Public Reports with Mean & SD)
         function loadReportList() {
             const container = document.getElementById('reportList'); 
             container.innerHTML = '';
@@ -720,7 +791,7 @@
             const evaluations = getEvaluations();
 
             if (activities.length === 0) {
-                container.innerHTML = `<div class="bg-white p-12 rounded-2xl border border-slate-200 text-center text-sm text-slate-400">ยังไม่มีรายการโครงการในระบบสารสนเทศ (สามารถลงทะเบียนโครงการใหม่ได้ที่เมนู "บริหารจัดการสารสนเทศ")</div>`; 
+                container.innerHTML = `<div class="bg-white p-12 rounded-2xl border border-slate-200 text-center text-sm text-slate-400">ยังไม่มีรายการโครงการในระบบสารสนเทศ (คุณครูทุกท่านสามารถลงทะเบียนโครงการใหม่ได้ที่เมนู "สร้างและจัดการแบบประเมิน")</div>`; 
                 return;
             }
 
@@ -797,24 +868,21 @@
             });
         }
 
-        // 3. Tab: ประวัติการสร้างแบบสอบถาม (Created History)
         function loadCreatedHistory() {
             const tbody = document.getElementById('createdHistoryTable'); 
             tbody.innerHTML = '';
-            const activities = getActivities().filter(a => a.owner === currentUser.email);
+            const allActs = getActivities();
+            const userActs = currentUser.role === 'Admin' ? allActs : allActs.filter(a => a.owner === currentUser.email);
             const evaluations = getEvaluations();
 
-            if (activities.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-sm text-slate-400">คุณยังไม่ได้เป็นผู้รับผิดชอบหรือสร้างแบบประเมินโครงการใดๆ (สามารถสร้างโครงการใหม่ได้ที่เมนู "บริหารจัดการสารสนเทศ")</td></tr>`;
+            if (userActs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-sm text-slate-400">คุณยังไม่ได้สร้างแบบประเมินโครงการใดๆ (คุณครูทุกท่านสามารถสร้างแบบประเมินโครงการใหม่ได้ที่เมนู "สร้างและจัดการแบบประเมิน")</td></tr>`;
                 return;
             }
 
-            activities.forEach(act => {
+            userActs.forEach(act => {
                 const evalCount = evaluations.filter(e => e.activityId === act.id).length;
                 const topicCount = act.topics ? act.topics.length : 1;
-                const status = evalCount > 0 
-                    ? `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] px-2.5 py-1 rounded-full font-bold">ดำเนินการแล้ว</span>` 
-                    : `<span class="bg-slate-100 text-slate-500 border border-slate-200 text-[10px] px-2.5 py-1 rounded-full font-bold">รอประเมิน</span>`;
                 
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition-colors";
@@ -823,69 +891,150 @@
                     <td class="px-6 py-4 text-sm font-bold text-slate-800">${act.name}</td>
                     <td class="px-6 py-4 text-center text-sm">${topicCount} หัวข้อ</td>
                     <td class="px-6 py-4 text-center text-sm font-bold text-emerald-700">${evalCount} รายการ</td>
-                    <td class="px-6 py-4 text-center">${status}</td>
+                    <td class="px-6 py-4 text-center">
+                        <button onclick="confirmDeleteActivity('${act.id}')" class="text-[10px] bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold px-3 py-1.5 rounded-lg border border-rose-200 transition-colors cursor-pointer">ลบแบบสอบถาม</button>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        // 4. Tab: ลงรายละเอียดคะแนนย้อนหลัง (Input History)
-        function loadInputHistory() {
-            const tbody = document.getElementById('inputHistoryTable'); 
-            tbody.innerHTML = '';
-            const activities = getActivities();
-            
-            const visibleActivities = currentUser.role === 'Admin' ? activities : activities.filter(a => a.owner === currentUser.email);
+        function confirmDeleteActivity(actId) {
+            const act = getActivities().find(a => a.id === actId);
+            if (!act) return;
+            customConfirm("ลบแบบประเมินโครงการ", `ยืนยันการลบแบบประเมินโครงการ '${act.name}' (${actId}) ออกจากระบบสารสนเทศ?`, () => {
+                let acts = getActivities().filter(a => a.id !== actId);
+                localStorage.setItem('eval_activities', JSON.stringify(acts));
+                logActivity('ลบโครงการ', `ลบโครงการ '${act.name}' (${actId})`);
+                showToast('ลบแบบประเมินโครงการเรียบร้อยแล้ว');
+                loadCreatedHistory();
+                loadEvaluationForms();
+            });
+        }
 
-            if (visibleActivities.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-sm text-slate-400">ยังไม่มีรายการโครงการในระบบสารสนเทศ (สามารถลงทะเบียนโครงการใหม่ได้ที่เมนู "บริหารจัดการสารสนเทศ")</td></tr>`;
+        function loadInputHistory() {
+            const container = document.getElementById('inputHistoryContainer'); 
+            container.innerHTML = '';
+            const activities = getActivities();
+            const canEdit = isHeaderOrAdmin(currentUser);
+
+            const banner = document.getElementById('input-history-permission-banner');
+            if (!canEdit && banner) {
+                banner.className = "bg-rose-50 border-l-4 border-rose-500 p-4 rounded-r-lg text-sm text-rose-900 leading-relaxed shadow-sm mb-4";
+                banner.innerHTML = "<strong>ข้อจำกัดสิทธิ์การเข้าถึง:</strong> เฉพาะผู้ดูแลระบบ (Admin) ผู้บริหาร และหัวหน้าฝ่ายเท่านั้นที่มีสิทธิ์บันทึกหรือแก้ไขคะแนนย้อนหลัง บัญชีของคุณสามารถเข้าดูข้อมูลสถิติได้ในรูปแบบอ่านอย่างเดียว";
+            } else if (canEdit && banner) {
+                banner.className = "bg-emerald-50 border-l-4 border-emerald-600 p-4 rounded-r-lg text-sm text-emerald-900 leading-relaxed shadow-sm mb-4";
+                banner.innerHTML = `<strong>✅ ท่านกำลังใช้งานด้วยสิทธิ์บริหาร/จัดการระบบ (${currentUser.name}):</strong> ท่านสามารถลงคะแนนย้อนหลัง เพิ่มปีการศึกษา (2563, 2564, 2565, 2566, 2567, 2568 เป็นต้น) และบันทึกสถิติย้อนหลังของทุกโครงการได้เต็มรูปแบบ`;
+            }
+
+            if (activities.length === 0) {
+                container.innerHTML = `
+                    <div class="py-12 text-center space-y-4">
+                        <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
+                            <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+                        </div>
+                        <p class="text-sm text-slate-600 font-bold">ขณะนี้ยังไม่มีรายการโครงการ/กิจกรรมในฐานข้อมูลระบบ</p>
+                        <p class="text-xs text-slate-400">คุณครูทุกท่านสามารถเริ่มลงทะเบียนสร้างแบบประเมินโครงการใหม่ได้ทันที</p>
+                        <button onclick="switchTab('admin-tab')" class="inline-flex items-center gap-2 bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow transition-all active:scale-95 cursor-pointer">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                            <span>คลิกที่นี่เพื่อเริ่มสร้างโครงการ / กิจกรรมใหม่</span>
+                        </button>
+                    </div>
+                `;
                 return;
             }
 
-            visibleActivities.forEach(act => {
-                const h66 = act.history?.["2566"] || 0;
-                const h67 = act.history?.["2567"] || 0;
-                const h68 = act.history?.["2568"] || 0;
+            activities.forEach(act => {
+                const historyObj = act.history || { "2566": 0, "2567": 0, "2568": 0 };
+                const years = Object.keys(historyObj).sort();
 
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="px-5 py-4">
-                        <div class="text-xs font-mono text-slate-400 mb-0.5">${act.id}</div>
-                        <div class="text-sm font-bold text-slate-800 limit-2-lines">${act.name}</div>
-                    </td>
-                    <td class="px-3 py-4"><input type="number" id="inp-66-${act.id}" value="${h66}" step="0.1" max="100" min="0" class="w-20 border border-slate-200 rounded-xl p-2 text-center text-sm focus:ring-2 focus:ring-emerald-700 bg-slate-50/50 mx-auto block"></td>
-                    <td class="px-3 py-4"><input type="number" id="inp-67-${act.id}" value="${h67}" step="0.1" max="100" min="0" class="w-20 border border-slate-200 rounded-xl p-2 text-center text-sm focus:ring-2 focus:ring-emerald-700 bg-slate-50/50 mx-auto block"></td>
-                    <td class="px-3 py-4"><input type="number" id="inp-68-${act.id}" value="${h68}" step="0.1" max="100" min="0" class="w-20 border border-slate-200 rounded-xl p-2 text-center text-sm focus:ring-2 focus:ring-emerald-700 bg-slate-50/50 mx-auto block"></td>
-                    <td class="px-5 py-4 text-center">
-                        <button onclick="saveInputHistory('${act.id}')" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm active:scale-95 cursor-pointer">บันทึก</button>
-                    </td>
+                let yearsInputsHtml = '';
+                years.forEach(year => {
+                    const score = historyObj[year] || 0;
+                    yearsInputsHtml += `
+                        <div class="flex items-center gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                            <span class="text-xs font-bold text-slate-600">ปี ${year}:</span>
+                            <input type="number" id="hist-inp-${act.id}-${year}" value="${score}" step="0.1" max="100" min="0" ${!canEdit ? 'disabled' : ''} class="w-20 border border-slate-200 rounded-lg p-1.5 text-center text-xs font-bold focus:ring-2 focus:ring-emerald-700 bg-white">
+                            <span class="text-xs text-slate-400 font-semibold">%</span>
+                        </div>
+                    `;
+                });
+
+                const card = document.createElement('div');
+                card.className = "border border-slate-200 rounded-2xl p-5 bg-white shadow-sm space-y-4";
+                card.innerHTML = `
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b pb-3">
+                        <div>
+                            <span class="text-[10px] font-mono text-slate-400 border px-2 py-0.5 rounded bg-slate-50">${act.id}</span>
+                            <h4 class="text-sm font-bold text-slate-800 mt-1">${act.name}</h4>
+                        </div>
+                        ${canEdit ? `
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="add-year-val-${act.id}" placeholder="ระบุปี เช่น 2565" class="w-28 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-emerald-700 bg-slate-50">
+                            <button onclick="addYearToActivity('${act.id}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-bold px-3 py-1.5 rounded-lg transition-colors cursor-pointer">＋ เพิ่มปี</button>
+                            <button onclick="saveDynamicInputHistory('${act.id}')" class="bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-4 py-1.5 rounded-lg transition-all shadow active:scale-95 cursor-pointer ml-2">บันทึกทั้งหมด</button>
+                        </div>
+                        ` : '<span class="text-xs text-slate-400 font-semibold bg-slate-100 px-2.5 py-1 rounded-md">อ่านอย่างเดียว</span>'}
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        ${yearsInputsHtml}
+                    </div>
                 `;
-                tbody.appendChild(tr);
+                container.appendChild(card);
             });
         }
 
-        function saveInputHistory(actId) {
-            const h66 = parseFloat(document.getElementById(`inp-66-${actId}`).value) || 0;
-            const h67 = parseFloat(document.getElementById(`inp-67-${actId}`).value) || 0;
-            const h68 = parseFloat(document.getElementById(`inp-68-${actId}`).value) || 0;
+        function addYearToActivity(actId) {
+            const yearInp = document.getElementById(`add-year-val-${actId}`);
+            const yearVal = yearInp.value.trim();
+            if (!yearVal || isNaN(yearVal) || yearVal.length !== 4) {
+                return showToast('กรุณาระบุปีการศึกษาเป็นตัวเลข 4 หลัก เช่น 2565', 'error');
+            }
+
+            let activities = getActivities();
+            const actIndex = activities.findIndex(a => a.id === actId);
+            if (actIndex !== -1) {
+                if (!activities[actIndex].history) activities[actIndex].history = {};
+                if (activities[actIndex].history[yearVal] !== undefined) {
+                    return showToast(`ปีการศึกษา ${yearVal} มีอยู่ในระบบแล้ว`, 'error');
+                }
+                activities[actIndex].history[yearVal] = 0;
+                localStorage.setItem('eval_activities', JSON.stringify(activities));
+                showToast(`เพิ่มปีการศึกษา ${yearVal} ให้กับโครงการสำเร็จ`);
+                loadInputHistory();
+            }
+        }
+
+        function saveDynamicInputHistory(actId) {
+            if (!isHeaderOrAdmin(currentUser)) return showToast('สิทธิ์ถูกจำกัดเฉพาะผู้ดูแลระบบและหัวหน้าฝ่ายเท่านั้น', 'error');
 
             let activities = getActivities();
             const actIndex = activities.findIndex(a => a.id === actId);
             if(actIndex !== -1) {
-                activities[actIndex].history = { "2566": h66, "2567": h67, "2568": h68 };
+                const historyObj = activities[actIndex].history || {};
+                const years = Object.keys(historyObj);
+                
+                years.forEach(year => {
+                    const inp = document.getElementById(`hist-inp-${actId}-${year}`);
+                    if (inp) {
+                        historyObj[year] = parseFloat(inp.value) || 0;
+                    }
+                });
+
+                activities[actIndex].history = historyObj;
                 localStorage.setItem('eval_activities', JSON.stringify(activities));
+                logActivity('บันทึกคะแนนย้อนหลัง', `บันทึกคะแนนย้อนหลังโครงการ '${activities[actIndex].name}' (${actId})`);
                 showToast(`บันทึกคะแนนย้อนหลังของ ${actId} สำเร็จเรียบร้อย`);
             }
         }
 
-        // 5. Tab: สถิติดำเนินการย้อนหลัง 3 ปี (History Charts)
         function loadHistoryReports() {
             const container = document.getElementById('historyList'); 
             container.innerHTML = '';
             const activities = getActivities();
 
             if (activities.length === 0) {
-                container.innerHTML = `<div class="lg:col-span-2 bg-white p-12 rounded-2xl border border-slate-200 text-center text-sm text-slate-400">ยังไม่มีข้อมูลโครงการในระบบสารสนเทศ (สามารถลงทะเบียนโครงการใหม่ได้ที่เมนู "บริหารจัดการสารสนเทศ")</div>`;
+                container.innerHTML = `<div class="lg:col-span-2 bg-white p-12 rounded-2xl border border-slate-200 text-center text-sm text-slate-400">ยังไม่มีข้อมูลโครงการในระบบสารสนเทศ (คุณครูทุกท่านสามารถลงทะเบียนโครงการใหม่ได้ที่เมนู "สร้างและจัดการแบบประเมิน")</div>`;
                 return;
             }
 
@@ -904,24 +1053,33 @@
                     currentPercent = overallScores.length > 0 ? (satisfied / overallScores.length) * 100 : 0;
                 }
 
-                const h66 = act.history?.["2566"] || 0;
-                const h67 = act.history?.["2567"] || 0;
-                const h68 = act.history?.["2568"] || 0;
+                const historyObj = act.history || { "2566": 0, "2567": 0, "2568": 0 };
+                const sortedYears = Object.keys(historyObj).sort();
 
-                const getBarHtml = (yearLabel, score, isCurrent = false) => {
+                let barsHtml = '';
+                sortedYears.forEach(yearLabel => {
+                    const score = historyObj[yearLabel] || 0;
                     const formattedScore = score > 0 ? score.toFixed(1) + "%" : "0%";
-                    const bgClass = isCurrent ? 'bg-amber-400' : 'bg-emerald-700';
-                    const textClass = isCurrent ? 'text-amber-700 font-extrabold' : 'text-slate-500 font-bold';
-                    return `
+                    barsHtml += `
                         <div class="flex flex-col items-center flex-1">
-                            <span class="text-[10px] ${textClass} mb-1">${formattedScore}</span>
+                            <span class="text-[10px] text-slate-500 font-bold mb-1">${formattedScore}</span>
                             <div class="w-full max-w-[32px] bg-slate-100 rounded-t-lg h-32 flex items-end overflow-hidden border border-slate-200">
-                                <div class="w-full ${bgClass} transition-all duration-700" style="height: ${Math.min(score, 100)}%"></div>
+                                <div class="w-full bg-emerald-700 transition-all duration-700" style="height: ${Math.min(score, 100)}%"></div>
                             </div>
-                            <span class="text-[10px] text-slate-400 font-semibold mt-2">${yearLabel}</span>
+                            <span class="text-[10px] text-slate-400 font-semibold mt-2">ปี ${yearLabel}</span>
                         </div>
                     `;
-                };
+                });
+
+                barsHtml += `
+                    <div class="flex flex-col items-center flex-1">
+                        <span class="text-[10px] text-amber-700 font-extrabold mb-1">${currentPercent > 0 ? currentPercent.toFixed(1) + "%" : "0%"}</span>
+                        <div class="w-full max-w-[32px] bg-slate-100 rounded-t-lg h-32 flex items-end overflow-hidden border border-slate-200">
+                            <div class="w-full bg-amber-400 transition-all duration-700" style="height: ${Math.min(currentPercent, 100)}%"></div>
+                        </div>
+                        <span class="text-[10px] text-slate-400 font-semibold mt-2">ปัจจุบัน</span>
+                    </div>
+                `;
 
                 const card = document.createElement('div');
                 card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm";
@@ -931,17 +1089,13 @@
                         <h4 class="text-sm font-bold text-slate-800 mt-2 limit-2-lines h-10">${act.name}</h4>
                     </div>
                     <div class="flex items-end justify-between gap-2 px-2 pb-2 border-b border-dashed border-slate-200">
-                        ${getBarHtml("ปี 2566", h66)}
-                        ${getBarHtml("ปี 2567", h67)}
-                        ${getBarHtml("ปี 2568", h68)}
-                        ${getBarHtml("ปัจจุบัน", currentPercent, true)}
+                        ${barsHtml}
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
 
-        // 6. Modal & Evaluation Submission Logic
         function openEvaluationModal(actId) {
             const act = getActivities().find(a => a.id === actId); 
             if (!act) return;
@@ -1031,7 +1185,8 @@
             evals.push({ activityId: actId, email: currentUser.email, name: currentUser.name, role, round, ratings, suggestion });
             localStorage.setItem('eval_submissions', JSON.stringify(evals));
 
-            // Sync to Google Sheets via POST API
+            logActivity('ส่งผลประเมิน', `ส่งผลประเมินโครงการ '${act.name}' (${actId}) [รอบ: ${round}]`);
+
             fetch(DEFAULT_GOOGLE_SHEET_URL, { 
                 method: "POST", 
                 body: JSON.stringify({ action: "submit_evaluation", evaluations: evListForSheet }) 
@@ -1042,52 +1197,61 @@
             loadEvaluationForms();
         }
 
-        // 7. Admin Panel & User Roles Management Logic
         function loadAdminPanel() {
-            if (!currentUser || currentUser.role !== 'Admin') return;
+            if (!currentUser) return;
             
-            // Populate Owners Dropdown
             const ownerSelect = document.getElementById('newActOwner'); 
-            ownerSelect.innerHTML = '';
-            getUsers().forEach(u => { 
-                const opt = document.createElement('option'); 
-                opt.value = u.email; 
-                opt.innerText = `${u.name} (${u.email})`; 
-                ownerSelect.appendChild(opt); 
-            });
+            if (ownerSelect) {
+                ownerSelect.innerHTML = '';
+                getUsers().forEach(u => { 
+                    const opt = document.createElement('option'); 
+                    opt.value = u.email; 
+                    opt.innerText = `${u.name} (${u.email})`; 
+                    if (u.email.toLowerCase() === currentUser.email.toLowerCase()) {
+                        opt.selected = true;
+                    }
+                    ownerSelect.appendChild(opt); 
+                });
+            }
 
-            // Role display map
-            const roleLabels = { 
-                'Admin': 'ผู้ดูแลระบบกลาง', 
-                'Head_Admin': 'หัวหน้าฝ่ายบริหารทั่วไป', 
-                'Head_Student':'หัวหน้าฝ่ายกิจการนักเรียน', 
-                'Head_QA':'หัวหน้าฝ่ายประกันคุณภาพ', 
-                'Head_Academic':'หัวหน้าฝ่ายวิชาการ', 
-                'Executive':'ผู้บริหาร / ผู้อำนวยการ', 
-                'Staff':'คุณครู/บุคลากร' 
-            };
+            const userListSec = document.getElementById('admin-user-list-section');
+            if (currentUser.role === 'Admin') {
+                if (userListSec) userListSec.classList.remove('hidden');
 
-            // Populate Users Table
-            const tbodyUsers = document.getElementById('adminUsersTable'); 
-            tbodyUsers.innerHTML = '';
-            getUsers().forEach(u => {
-                const tr = document.createElement('tr'); 
-                tr.className = "hover:bg-slate-50 transition-colors";
-                tr.innerHTML = `
-                    <td class="px-4 py-3 text-xs font-mono font-bold text-slate-500">${u.empId}</td>
-                    <td class="px-4 py-3 text-sm font-semibold text-slate-800">${u.name}</td>
-                    <td class="px-4 py-3 text-xs font-mono text-slate-500">${u.email}</td>
-                    <td class="px-4 py-3 text-xs font-semibold text-emerald-800">${roleLabels[u.role] || u.role}</td>
-                    <td class="px-4 py-3 text-center flex justify-center gap-2">
-                        <button onclick="openUserModal('${u.email}')" class="text-[10px] bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-3 py-1.5 rounded-lg border border-slate-200 transition-colors cursor-pointer">แก้ไขสิทธิ์</button>
-                        <button onclick="confirmDeleteUser('${u.email}', '${u.empId}', '${u.name}')" class="text-[10px] bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold px-3 py-1.5 rounded-lg border border-rose-200 transition-colors cursor-pointer">จำหน่ายออก</button>
-                    </td>
-                `;
-                tbodyUsers.appendChild(tr);
-            });
+                const roleLabels = { 
+                    'Admin': 'ผู้ดูแลระบบกลาง', 
+                    'Head_Admin': 'หัวหน้าฝ่ายบริหารทั่วไป', 
+                    'Head_Student':'หัวหน้าฝ่ายกิจการนักเรียน', 
+                    'Head_QA':'หัวหน้าฝ่ายประกันคุณภาพ', 
+                    'Head_Academic':'หัวหน้าฝ่ายวิชาการ', 
+                    'Executive':'ผู้บริหาร / ผู้อำนวยการ', 
+                    'Staff':'คุณครู/บุคลากร' 
+                };
+
+                const tbodyUsers = document.getElementById('adminUsersTable'); 
+                if (tbodyUsers) {
+                    tbodyUsers.innerHTML = '';
+                    getUsers().forEach(u => {
+                        const tr = document.createElement('tr'); 
+                        tr.className = "hover:bg-slate-50 transition-colors";
+                        tr.innerHTML = `
+                            <td class="px-4 py-3 text-xs font-mono font-bold text-slate-500">${u.empId}</td>
+                            <td class="px-4 py-3 text-sm font-semibold text-slate-800">${u.name}</td>
+                            <td class="px-4 py-3 text-xs font-mono text-slate-500">${u.email}</td>
+                            <td class="px-4 py-3 text-xs font-semibold text-emerald-800">${roleLabels[u.role] || u.role}</td>
+                            <td class="px-4 py-3 text-center flex justify-center gap-2">
+                                <button onclick="openUserModal('${u.email}')" class="text-[10px] bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-3 py-1.5 rounded-lg border border-slate-200 transition-colors cursor-pointer">แก้ไขสิทธิ์</button>
+                                <button onclick="confirmDeleteUser('${u.email}', '${u.empId}', '${u.name}')" class="text-[10px] bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold px-3 py-1.5 rounded-lg border border-rose-200 transition-colors cursor-pointer">จำหน่ายออก</button>
+                            </td>
+                        `;
+                        tbodyUsers.appendChild(tr);
+                    });
+                }
+            } else {
+                if (userListSec) userListSec.classList.add('hidden');
+            }
         }
 
-        // Add / Edit User Modal Controls
         function openUserModal(email = null) {
             const modal = document.getElementById('user-modal');
             const form = document.getElementById('userForm');
@@ -1129,13 +1293,11 @@
 
             let users = getUsers();
             if (origEmail) {
-                // Edit existing
                 const index = users.findIndex(u => u.email.toLowerCase() === origEmail.toLowerCase());
                 if (index !== -1) {
                     users[index] = { empId, name, email, role, password };
                 }
             } else {
-                // Add new
                 const exists = users.some(u => u.email.toLowerCase() === email.toLowerCase());
                 if (exists) {
                     showToast('ที่อยู่อีเมลนี้มีอยู่ในระบบแล้ว', 'error');
@@ -1145,8 +1307,8 @@
             }
 
             localStorage.setItem('eval_users', JSON.stringify(users));
+            logActivity('จัดการบุคลากร', `อัปเดตข้อมูลสิทธิ์ของคุณ ${name} (${empId}) ตำแหน่ง [${role}]`);
 
-            // Sync to Google Sheets
             fetch(DEFAULT_GOOGLE_SHEET_URL, {
                 method: "POST",
                 body: JSON.stringify({
@@ -1172,11 +1334,12 @@
             });
 
             const id = "ACT-" + Math.floor(100 + Math.random() * 900); 
+            const actName = document.getElementById('newActName').value.trim();
             const acts = getActivities();
             acts.push({ 
                 id, 
-                name: document.getElementById('newActName').value.trim(), 
-                owner: document.getElementById('newActOwner').value, 
+                name: actName, 
+                owner: document.getElementById('newActOwner').value || currentUser.email, 
                 poster: uploadedPosterBase64, 
                 objectives: document.getElementById('newActObjectives').value.trim(), 
                 topics: document.getElementById('newActTopics').value.trim().split('\n').map(t => t.trim()).filter(t => t), 
@@ -1185,11 +1348,14 @@
             });
             
             localStorage.setItem('eval_activities', JSON.stringify(acts)); 
+            logActivity('สร้างโครงการใหม่', `ลงทะเบียนแบบประเมินโครงการใหม่ '${actName}' (${id})`);
+
             document.getElementById('addActivityForm').reset(); 
             uploadedPosterBase64 = "";
             document.getElementById('rounds-builder-container').innerHTML = ''; 
             addRoundRow("รอบปกติ");
             showToast('ลงทะเบียนแบบประเมินโครงการใหม่สำเร็จ');
+            switchTab('created-history-tab');
         }
 
         function addRoundRow(name = "") {
@@ -1208,8 +1374,8 @@
             customConfirm("จำหน่ายบุคลากรออก", `ยืนยันการพ้นสภาพและลบข้อมูลบุคลากร คุณ${name} (${empId}) ออกจากระบบสารสนเทศสถาบัน?`, () => {
                 let users = getUsers().filter(user => user.email.toLowerCase() !== email.toLowerCase());
                 localStorage.setItem('eval_users', JSON.stringify(users));
+                logActivity('จัดการบุคลากร', `จำหน่ายคุณ ${name} (${empId}) ออกจากระบบ`);
                 
-                // Sync Deletion to Google Sheets
                 fetch(DEFAULT_GOOGLE_SHEET_URL, { 
                     method: "POST", 
                     body: JSON.stringify({ action: "delete_user", email: email, empId: empId }) 
@@ -1231,6 +1397,7 @@
                 .then(data => {
                     if (Array.isArray(data) && data.length > 0) {
                         localStorage.setItem('eval_users', JSON.stringify(data));
+                        logActivity('จัดการบุคลากร', `ดึงข้อมูลซิงค์รายชื่อจาก Google Sheets (${data.length} รายการ)`);
                         showToast(`ดึงรายชื่อสำเร็จ ${data.length} รายการ`); 
                         loadAdminPanel();
                     }
@@ -1256,7 +1423,81 @@
             a.click();
         }
 
-        // DOM Initialization
+        function renderAuditLogs() {
+            if (currentUser.role !== 'Admin') return;
+            const tbody = document.getElementById('auditLogTable');
+            if (!tbody) return;
+
+            let logs = JSON.parse(localStorage.getItem('eval_audit_logs')) || [];
+            const searchKeyword = (document.getElementById('auditSearchInput')?.value || '').toLowerCase().trim();
+            const actionFilter = document.getElementById('auditActionFilter')?.value || 'ALL';
+
+            if (actionFilter !== 'ALL') {
+                logs = logs.filter(l => l.actionType === actionFilter);
+            }
+
+            if (searchKeyword) {
+                logs = logs.filter(l => 
+                    l.userName.toLowerCase().includes(searchKeyword) ||
+                    l.userEmail.toLowerCase().includes(searchKeyword) ||
+                    l.details.toLowerCase().includes(searchKeyword)
+                );
+            }
+
+            tbody.innerHTML = '';
+            if (logs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-sm text-slate-400">ยังไม่มีรายการบันทึกประวัติกิจกรรมตามเงื่อนไขที่เลือก</td></tr>`;
+                return;
+            }
+
+            logs.forEach(log => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition-colors";
+                
+                let actionBadgeClass = "bg-slate-100 text-slate-700";
+                if (log.actionType === 'เข้าสู่ระบบ') actionBadgeClass = "bg-blue-50 text-blue-700 border border-blue-200";
+                if (log.actionType === 'สร้างโครงการใหม่') actionBadgeClass = "bg-emerald-50 text-emerald-800 border border-emerald-200";
+                if (log.actionType === 'ส่งผลประเมิน') actionBadgeClass = "bg-purple-50 text-purple-700 border border-purple-200";
+                if (log.actionType === 'บันทึกคะแนนย้อนหลัง') actionBadgeClass = "bg-amber-50 text-amber-800 border border-amber-200";
+                if (log.actionType === 'จัดการบุคลากร') actionBadgeClass = "bg-rose-50 text-rose-800 border border-rose-200";
+
+                tr.innerHTML = `
+                    <td class="px-5 py-3.5 text-xs font-mono text-slate-500 whitespace-nowrap">${log.timestamp}</td>
+                    <td class="px-5 py-3.5 text-xs font-bold text-slate-800">${log.userName}<div class="text-[10px] font-mono font-normal text-slate-400">${log.userEmail}</div></td>
+                    <td class="px-5 py-3.5 text-xs font-semibold text-slate-600">${log.userRole}</td>
+                    <td class="px-5 py-3.5"><span class="text-[10px] px-2.5 py-1 rounded-full font-bold ${actionBadgeClass}">${log.actionType}</span></td>
+                    <td class="px-5 py-3.5 text-xs text-slate-700 leading-relaxed">${log.details}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function clearAuditLogs() {
+            if (currentUser.role !== 'Admin') return;
+            customConfirm("ล้างประวัติการใช้งาน", "คุณต้องการลบประวัติบันทึกการใช้งานทั้งหมดในระบบใช่หรือไม่?", () => {
+                localStorage.removeItem('eval_audit_logs');
+                showToast('ล้างประวัติบันทึกเรียบร้อยแล้ว');
+                renderAuditLogs();
+            });
+        }
+
+        function exportAuditLogsToCSV() {
+            if (currentUser.role !== 'Admin') return;
+            let logs = JSON.parse(localStorage.getItem('eval_audit_logs')) || [];
+            if (logs.length === 0) return showToast('ไม่มีประวัติการใช้งาน', 'error');
+
+            let csv = "\uFEFFวันเวลา,ชื่อบุคลากร,อีเมล,ตำแหน่ง,ประเภทการกระทำ,รายละเอียด\n";
+            logs.forEach(l => {
+                csv += `"${l.timestamp}","${l.userName}","${l.userEmail}","${l.userRole}","${l.actionType}","${(l.details || '').replace(/"/g,'""')}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const a = document.createElement("a"); 
+            a.href = URL.createObjectURL(blob);
+            a.download = `ประวัติการใช้งานระบบ_AuditLog_${new Date().getTime()}.csv`; 
+            a.click();
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const fInput = document.getElementById('newActPosterFile');
             if (fInput) {
